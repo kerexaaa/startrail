@@ -214,6 +214,7 @@ export default function Home() {
   useEffect(() => {
     if (focusedPlanet) {
       toast(`Tracking ${searchTarget}. Press Q to exit`, {
+        toastId: "focus-toast",
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: true,
@@ -226,7 +227,8 @@ export default function Home() {
     if (focusedPlanet) {
       targetZoomRef.current = focusZoom || 6;
     }
-  }, [focusedPlanet, searchTarget, focusZoom]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusedPlanet, focusZoom]);
 
   return (
     <main className="h-full w-full flex items-center justify-center bg-black">
