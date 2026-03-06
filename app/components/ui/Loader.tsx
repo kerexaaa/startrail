@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { loaderData } from "../assets/phrases/loader";
+import { loaderData } from "../../assets/phrases/loader";
 import { useProgress } from "@react-three/drei";
 
 function getRandom() {

@@ -1,10 +1,10 @@
 import swapIcon from "@/app/assets/icons/light/swap.svg";
-import FloatingInput from "./Inputs/FloatingInput";
+import FloatingInput from "./FloatingInput";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { PLANETARY_BODIES } from "../constants";
+import { PLANETARY_BODIES } from "../../constants";
 import TelescopeData from "./TelescopeData";
-import { usePlanetStore } from "./states/usePlanetStore";
+import { usePlanetStore } from "../../states/usePlanetStore";
 
 export default function SearchPanel() {
   const [fromValue, setFromValue] = useState("");

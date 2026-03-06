@@ -3,8 +3,8 @@ import {
   DISTANCE_SCALE,
   EARTH_ROTATION,
   RADIUS_SCALE,
-} from "../constants";
-import Planet from "./planets/Planet";
+} from "../../constants";
+import Planet from "./Planet";
 
 export default function PlanetSystem() {
   return (

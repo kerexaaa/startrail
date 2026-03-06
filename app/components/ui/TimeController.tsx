@@ -1,13 +1,13 @@
-import IconButton from "./Buttons/IconButton";
+import IconButton from "./IconButton";
 import Image from "next/image";
 import slowIcon from "@/app/assets/icons/light/slow.svg";
 import speedIcon from "@/app/assets/icons/light/speed.svg";
 import pauseIcon from "@/app/assets/icons/light/pause.svg";
 import playIcon from "@/app/assets/icons/light/play.svg";
 import resetIcon from "@/app/assets/icons/light/reset.svg";
-import { usePlanetStore } from "./states/usePlanetStore";
+import { usePlanetStore } from "../../states/usePlanetStore";
 import { useState, useMemo } from "react";
-import { SPEED_STEPS } from "../constants";
+import { SPEED_STEPS } from "../../constants";
 
 export default function TimeController() {
   const { setTimeMultiplier, timeMultiplier, triggerTimeReset } =

@@ -17,6 +17,9 @@ interface PlanetStore {
 
   timeResetTrigger: number;
   triggerTimeReset: () => void;
+
+  targetZoom: number;
+  setTargetZoom: (val: number | ((prev: number) => number)) => void;
 }
 
 export const usePlanetStore = create<PlanetStore>((set) => ({
@@ -42,5 +45,11 @@ export const usePlanetStore = create<PlanetStore>((set) => ({
     set((state) => ({
       timeResetTrigger: state.timeResetTrigger + 1,
       timeMultiplier: 1,
+    })),
+
+  targetZoom: 50,
+  setTargetZoom: (val) =>
+    set((state) => ({
+      targetZoom: typeof val === "function" ? val(state.targetZoom) : val,
     })),
 }));

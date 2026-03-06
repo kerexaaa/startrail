@@ -3,10 +3,10 @@ import { useTexture, Outlines } from "@react-three/drei";
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import OrbitPath from "../OrbitPath";
-import { usePlanetStore } from "../states/usePlanetStore";
+import OrbitPath from "./OrbitPath";
+import { usePlanetStore } from "../../states/usePlanetStore";
 import * as Astronomy from "astronomy-engine";
-import { getBody } from "../TelescopeData";
+import { getBody } from "@/app/hooks/useAstroCalcs";
 
 interface PlanetProps {
   name: string;
