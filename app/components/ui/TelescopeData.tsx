@@ -65,7 +65,7 @@ export default function TelescopeData({
 
           <div className="absolute top-4 right-4">
             <button
-              onClick={handleReset}
+              onClick={() => handleReset()}
               className="text-white/50 hover:text-white transition-colors cursor-pointer"
             >
               <svg

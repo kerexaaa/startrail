@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className={`antialiased relative ${InterFont.className}`}>
         {children}
         <SpeedInsights />
-        <ToastContainer toastClassName={"glassmorphism text-white"} />
+        <ToastContainer toastClassName={"glassmorphism text-white"} position="top-center"/>
       </body>
     </html>
   );

@@ -12,6 +12,7 @@ import { useUIStore } from "./states/useUIStore";
 import Scene from "./components/3d/Scene";
 import { useIdleTimer } from "./hooks/useIdleTimer";
 import { useAppHotkeys } from "./hooks/useAppHotkeys";
+import BodyInfo from "./components/ui/BodyInfo";
 
 export default function Home() {
   const { isFreeCam, setIsLoading, isLoading } = useUIStore();
@@ -25,7 +26,6 @@ export default function Home() {
     if (focusedPlanet) {
       toast(`Tracking ${searchTarget}. Press Q to exit`, {
         toastId: "focus-toast",
-        position: "top-right",
         autoClose: 2000,
         hideProgressBar: true,
         closeOnClick: true,
@@ -82,6 +82,9 @@ export default function Home() {
 
         <div className="pointer-events-auto">
           <TimeController />
+        </div>
+        <div className="pointer-events-auto">
+          <BodyInfo />
         </div>
       </div>
     </main>

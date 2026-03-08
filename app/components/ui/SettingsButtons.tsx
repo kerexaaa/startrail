@@ -52,7 +52,6 @@ function SettingsButtons({ children, ...props }: DivProps) {
           onClick={() => {
             setIsFreeCam(true);
             toast("Press F1 to exit Freecam", {
-              position: "top-right",
               autoClose: 2000,
               hideProgressBar: true,
               closeOnClick: true,

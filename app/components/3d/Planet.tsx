@@ -7,6 +7,7 @@ import OrbitPath from "./OrbitPath";
 import { usePlanetStore } from "../../states/usePlanetStore";
 import * as Astronomy from "astronomy-engine";
 import { getBody } from "@/app/hooks/useAstroCalcs";
+import BodyName from "./BodyName";
 
 interface PlanetProps {
   name: string;
@@ -33,6 +34,7 @@ export default function Planet({
   const orbitRef = useRef<THREE.Group>(null);
   const planetRef = useRef<THREE.Mesh>(null);
   const [shiny, setShiny] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
   const ringTexture = useTexture(
     ringTexturePath || "/textures/planets/placeholder.png",
@@ -112,11 +114,13 @@ export default function Planet({
               e.stopPropagation();
               document.body.style.cursor = "pointer";
               setShiny(true);
+              setHovered(true);
             }}
             onPointerLeave={(e) => {
               e.stopPropagation();
               document.body.style.cursor = "auto";
               setShiny(false);
+              setHovered(false);
             }}
             onClick={(e) => {
               e.stopPropagation();
@@ -126,6 +130,7 @@ export default function Planet({
           >
             <sphereGeometry args={[radius, 64, 64]} />{" "}
             <meshStandardMaterial map={texture} />
+            <BodyName name={name} isVisible={hovered} />
             {ringGeo && ringTexture && (
               <mesh rotation={[Math.PI / 2, 0, 0]} geometry={ringGeo}>
                 <meshStandardMaterial

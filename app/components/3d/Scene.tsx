@@ -9,9 +9,9 @@ export default function Scene() {
 
   return (
     <>
-      <ambientLight intensity={0.1} />
-      <hemisphereLight args={["#333", "#000", 0.5]} position={[0, 0, 0]} />
-      <pointLight args={["#fff", 5, 100]} position={[0, 0, 0]} />
+      <ambientLight intensity={0.2} />
+      <hemisphereLight args={["#333", "#000", 1]} position={[0, 0, 0]} />
+      <pointLight args={["#fff", 500, 0]} position={[0, 0, 0]} />
 
       <Sun />
       <PlanetSystem />
