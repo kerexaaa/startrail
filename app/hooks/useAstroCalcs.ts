@@ -45,7 +45,9 @@ export function useAstroCalculations(fromValue: string, toValue: string) {
 
     if (fromValue === "My Location" || fromValue === "Current Location") {
       if (!navigator.geolocation) {
-        toast.error("Geolocation is not supported");
+        toast.error("Geolocation is not supported", {
+          toastId: "geo-support",
+        });
         setIsLoading(false);
         return;
       }
@@ -78,7 +80,9 @@ export function useAstroCalculations(fromValue: string, toValue: string) {
         },
         (error) => {
           if (isMounted) {
-            toast.error(`GPS Error: ${error.message}`);
+            toast.error(`GPS Error: ${error.message}`, {
+              toastId: "gps-error",
+            });
             setIsLoading(false);
           }
         },
