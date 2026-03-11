@@ -59,9 +59,12 @@ export default function BodyInfo() {
                 className="overflow-hidden"
               >
                 <div className="contents flex-col gap-3 text-sm shrink-0 pt-2">
-                  <div className="flex justify-between border-b border-white/10 pb-2">
+                  <div className="flex justify-between border-b border-white/10 pb-2 pt-2">
                     <span className="text-white/50">Mass</span>
-                    <span className="font-mono text-right">{info.mass}</span>
+                    <span className="font-mono text-right">
+                      {info.mass.massValue} &times; 10
+                      <sup>{info.mass.massExponent}</sup> kg
+                    </span>
                   </div>
                   <div className="flex justify-between border-b border-white/10 pb-2 pt-2">
                     <span className="text-white/50">Avg Temp</span>

@@ -39,7 +39,10 @@ export const SPEED_STEPS = [
 
 type BodyDataType = {
   type: string;
-  mass: string;
+  mass: {
+    massValue: number;
+    massExponent: number;
+  };
   temp: string;
   fact: string;
   description: string;
@@ -48,7 +51,7 @@ type BodyDataType = {
 export const BODY_DATA: Record<string, BodyDataType> = {
   Sun: {
     type: "Yellow Dwarf Star",
-    mass: "1.989 × 10^30 kg",
+    mass: { massValue: 1.989, massExponent: 30 },
     temp: "5,500 °C",
     fact: "Contains 99.86% of the mass in the entire Solar System.",
     description:
@@ -56,7 +59,7 @@ export const BODY_DATA: Record<string, BodyDataType> = {
   },
   Mercury: {
     type: "Terrestrial Planet",
-    mass: "3.301 × 10^23 kg",
+    mass: { massValue: 3.301, massExponent: 23 },
     temp: "167 °C",
     fact: "Mercury has no moons and no rings.",
     description:
@@ -64,7 +67,7 @@ export const BODY_DATA: Record<string, BodyDataType> = {
   },
   Venus: {
     type: "Terrestrial Planet",
-    mass: "4.867 × 10^24 kg",
+    mass: { massValue: 4.867, massExponent: 24 },
     temp: "464 °C",
     fact: "The hottest planet in our solar system.",
     description:
@@ -72,7 +75,7 @@ export const BODY_DATA: Record<string, BodyDataType> = {
   },
   Earth: {
     type: "Terrestrial Planet",
-    mass: "5.972 × 10^24 kg",
+    mass: { massValue: 5.972, massExponent: 24 },
     temp: "15 °C",
     fact: "The only known planet in the universe to support life.",
     description:
@@ -80,7 +83,7 @@ export const BODY_DATA: Record<string, BodyDataType> = {
   },
   Mars: {
     type: "Terrestrial Planet",
-    mass: "6.39 × 10^23 kg",
+    mass: { massValue: 6.39, massExponent: 23 },
     temp: "-65 °C",
     fact: "Home to Olympus Mons, the highest mountain in our solar system.",
     description:
@@ -88,7 +91,7 @@ export const BODY_DATA: Record<string, BodyDataType> = {
   },
   Jupiter: {
     type: "Gas Giant",
-    mass: "1.898 × 10^27 kg",
+    mass: { massValue: 1.898, massExponent: 27 },
     temp: "-110 °C",
     fact: "So large that all other planets could fit inside it.",
     description:
@@ -96,7 +99,7 @@ export const BODY_DATA: Record<string, BodyDataType> = {
   },
   Saturn: {
     type: "Gas Giant",
-    mass: "5.683 × 10^26 kg",
+    mass: { massValue: 5.683, massExponent: 26 },
     temp: "-140 °C",
     fact: "Has the most spectacular and complex ring system.",
     description:
@@ -104,7 +107,7 @@ export const BODY_DATA: Record<string, BodyDataType> = {
   },
   Uranus: {
     type: "Ice Giant",
-    mass: "8.681 × 10^25 kg",
+    mass: { massValue: 8.681, massExponent: 25 },
     temp: "-195 °C",
     fact: "Rotates on its side.",
     description:
@@ -112,7 +115,7 @@ export const BODY_DATA: Record<string, BodyDataType> = {
   },
   Neptune: {
     type: "Ice Giant",
-    mass: "1.024 × 10^26 kg",
+    mass: { massValue: 1.024, massExponent: 26 },
     temp: "-200 °C",
     fact: "The only planet not visible to the naked eye.",
     description:
