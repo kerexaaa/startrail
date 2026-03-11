@@ -33,12 +33,10 @@ export default function Home() {
         draggable: true,
         transition: Slide,
       });
-    }
-    if (focusedPlanet) {
       setTargetZoom(focusZoom || 6);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focusedPlanet, focusZoom]);
+  }, [focusedPlanet]);
 
   const Handle = () => {
     useEffect(() => {
