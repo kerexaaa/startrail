@@ -72,16 +72,10 @@ export default function Home() {
           isFreeCam ? "opacity-0" : "opacity-100"
         }`}
       >
-        <SettingsButtons className="pointer-events-auto absolute bottom-8 right-8 flex flex-col gap-3 overflow-hidden" />
-
         <div className="pointer-events-auto">
+          <SettingsButtons className="absolute bottom-8 right-8 flex flex-col gap-3 overflow-hidden" />
           <SearchPanel />
-        </div>
-
-        <div className="pointer-events-auto">
           <TimeController />
-        </div>
-        <div className="pointer-events-auto">
           <BodyInfo />
         </div>
       </div>
