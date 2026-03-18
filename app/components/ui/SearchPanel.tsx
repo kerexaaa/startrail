@@ -35,10 +35,17 @@ export default function SearchPanel() {
   }, []);
 
   const handleSwap = () => {
-    setFromValue((prevFrom) => {
-      setToValue(prevFrom);
-      return toValue;
-    });
+    const oldFrom = fromValue;
+    const oldTo = toValue;
+
+    setFromValue(oldTo);
+    setToValue(oldFrom);
+
+    if (planetRefs[oldFrom]) {
+      setFocusedPlanet(planetRefs[oldFrom]);
+    } else {
+      setFocusedPlanet(null);
+    }
   };
 
   return (
@@ -68,7 +75,12 @@ export default function SearchPanel() {
           <FloatingInput
             id="input-to"
             value={toValue}
-            onChange={(e) => setToValue(e.target.value)}
+            onChange={(e) => {
+              setToValue(e.target.value);
+              if (planetRefs[e.target.value]) {
+                setFocusedPlanet(planetRefs[e.target.value]);
+              }
+            }}
             yDelta={30}
             isOpen={activeDropdown === "to"}
             onToggle={() =>

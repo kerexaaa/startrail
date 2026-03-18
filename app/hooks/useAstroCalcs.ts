@@ -7,6 +7,7 @@ export type AstroDataType =
   | { mode: "interplanetary"; dist: number; lightTime: number };
 
 export const getBody = (name: string): Astronomy.Body | null => {
+  name = name.toLowerCase().charAt(0).toUpperCase() + name.slice(1);
   const map: Record<string, Astronomy.Body> = {
     Sun: Astronomy.Body.Sun,
     Moon: Astronomy.Body.Moon,
@@ -52,6 +53,7 @@ export function useAstroCalculations(fromValue: string, toValue: string) {
         return;
       }
 
+      setIsLoading(true);
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
           if (!isMounted) return;

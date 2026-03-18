@@ -1,7 +1,7 @@
 import { usePlanetStore } from "@/app/states/usePlanetStore";
 import { Outlines, useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import * as THREE from "three";
 import BodyName from "./BodyName";
@@ -12,7 +12,8 @@ export default function Sun() {
   const [shiny, setShiny] = useState(false);
   const [hovered, setHovered] = useState(false);
 
-  const { setFocusedPlanet, setSearchTarget } = usePlanetStore();
+  const { setFocusedPlanet, setSearchTarget, registerPlanetRef } =
+    usePlanetStore();
 
   useFrame(({ clock }) => {
     const time = clock.getElapsedTime();
@@ -21,6 +22,10 @@ export default function Sun() {
       sunRef.current.rotation.y = (time * 0.5) / 27;
     }
   });
+
+  useEffect(() => {
+    if (sunRef.current) registerPlanetRef("Sun", sunRef.current);
+  }, [registerPlanetRef]);
 
   return (
     <group ref={sunRef}>
@@ -46,7 +51,7 @@ export default function Sun() {
       >
         <sphereGeometry args={[10, 64, 64]} />
         <BodyName name={"Sun"} isVisible={hovered} />
-        <meshBasicMaterial map={texture} /> 
+        <meshBasicMaterial map={texture} />
         {shiny && <Outlines thickness={1} color="red" />}
       </mesh>
     </group>

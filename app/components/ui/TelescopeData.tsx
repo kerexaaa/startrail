@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { usePlanetStore } from "../../states/usePlanetStore";
-import { useAstroCalculations } from "../../hooks/useAstroCalcs";
+import { getBody, useAstroCalculations } from "../../hooks/useAstroCalcs";
 
 interface TelescopeDataProps {
   fromValue: string;
@@ -48,7 +48,10 @@ export default function TelescopeData({
             <div className="h-3 bg-white/10 rounded w-1/2"></div>
           </div>
         </motion.div>
-      ) : astroData ? (
+      ) : astroData &&
+        fromValue !== toValue &&
+        getBody(toValue) &&
+        (getBody(fromValue) || fromValue === "My Location") ? (
         <motion.div
           key="data"
           className="absolute top-40 left-8 mt-4 p-4 glassmorphism rounded-[20px] flex flex-col gap-3 text-white z-10 w-72"
@@ -59,8 +62,14 @@ export default function TelescopeData({
         >
           <div className="text-sm text-white/50 border-b border-white/10 pb-2 leading-relaxed pr-6">
             Tracking:{" "}
-            <span className="text-white font-semibold">{toValue}</span> <br />
-            from <span className="text-white font-medium">{locationName}</span>
+            <span className="text-white font-semibold capitalize">
+              {toValue}
+            </span>{" "}
+            <br />
+            from{" "}
+            <span className="text-white font-medium capitalize">
+              {locationName}
+            </span>
           </div>
 
           <div className="absolute top-4 right-4">
