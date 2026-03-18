@@ -1,11 +1,29 @@
 import Sun from "./Sun";
 import PlanetSystem from "./PlanetSystem";
-import { OrbitControls, Stars } from "@react-three/drei";
+import { FlyControls, OrbitControls, Stars } from "@react-three/drei";
 import SmoothZoom from "./SmoothZoom";
 import { useUIStore } from "@/app/states/useUIStore";
+import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
+
+const tempDir = new THREE.Vector3();
+const tempTarget = new THREE.Vector3();
+
+function DroneLeveler() {
+  useFrame(({ camera }) => {
+    camera.getWorldDirection(tempDir);
+
+    tempTarget.copy(camera.position).add(tempDir);
+
+    camera.up.set(0, 1, 0);
+
+    camera.lookAt(tempTarget);
+  });
+  return null;
+}
 
 export default function Scene() {
-  const { isUserIdle } = useUIStore();
+  const { isUserIdle, isFreeCam } = useUIStore();
 
   return (
     <>
@@ -17,15 +35,28 @@ export default function Scene() {
       <PlanetSystem />
       <Stars />
 
-      <OrbitControls
-        makeDefault
-        autoRotate={isUserIdle}
-        autoRotateSpeed={0.2}
-        enableZoom={false}
-        enablePan={false}
-        minDistance={2}
-        maxDistance={100}
-      />
+      {isFreeCam ? (
+        <>
+          <FlyControls
+            dragToLook={true}
+            movementSpeed={20}
+            rollSpeed={0.5}
+            makeDefault
+          />
+          <DroneLeveler />
+        </>
+      ) : (
+        <OrbitControls
+          makeDefault
+          autoRotate={isUserIdle}
+          autoRotateSpeed={0.2}
+          enableZoom={false}
+          enablePan={false}
+          minDistance={2}
+          maxDistance={100}
+        />
+      )}
+
       <SmoothZoom />
     </>
   );

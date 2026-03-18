@@ -8,6 +8,7 @@ import { usePlanetStore } from "../../states/usePlanetStore";
 import * as Astronomy from "astronomy-engine";
 import { getBody } from "@/app/hooks/useAstroCalcs";
 import BodyName from "./BodyName";
+import { useUIStore } from "@/app/states/useUIStore";
 
 interface PlanetProps {
   name: string;
@@ -39,6 +40,8 @@ export default function Planet({
   const ringTexture = useTexture(
     ringTexturePath || "/textures/planets/placeholder.png",
   );
+
+  const { isFreeCam } = useUIStore();
 
   const simTime = useRef(0);
   const {
@@ -123,6 +126,7 @@ export default function Planet({
               setHovered(false);
             }}
             onClick={(e) => {
+              if (isFreeCam) return;
               e.stopPropagation();
               setFocusedPlanet(orbitRef.current, Math.max(1.5, radius * 4));
               setSearchTarget(name);

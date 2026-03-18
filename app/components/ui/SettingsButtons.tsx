@@ -24,7 +24,7 @@ function SettingsButtons({ children, ...props }: DivProps) {
     setIsVisible,
   } = useUIStore();
 
-  const { setTargetZoom } = usePlanetStore();
+  const { setTargetZoom, setSearchTarget, setFocusedPlanet } = usePlanetStore();
 
   const handleTBA = () => {
     toast.info("This button does nothing, for now");
@@ -51,6 +51,8 @@ function SettingsButtons({ children, ...props }: DivProps) {
         <IconButton
           onClick={() => {
             setIsFreeCam(true);
+            setFocusedPlanet(null);
+            setSearchTarget("");
             toast("Press F1 to exit Freecam", {
               autoClose: 2000,
               hideProgressBar: true,

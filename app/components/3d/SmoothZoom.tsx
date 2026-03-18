@@ -10,18 +10,18 @@ const tempDirection = new THREE.Vector3();
 const origin = new THREE.Vector3(0, 0, 0);
 
 export default function SmoothZoom() {
-  const { isUserIdle } = useUIStore();
+  const { isUserIdle, isFreeCam } = useUIStore();
   const { focusedPlanet, targetZoom } = usePlanetStore();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const controls = useThree((state) => state.controls as any);
 
   useFrame(() => {
-    if (!controls) return;
+    if (!controls || isFreeCam) return;
 
     const camera: THREE.Camera = controls.object;
     const currentDistance = controls.getDistance();
-
+    
     if (focusedPlanet) {
       tempPlanetPos.set(focusedPlanet.position.x, 0, focusedPlanet.position.z);
 

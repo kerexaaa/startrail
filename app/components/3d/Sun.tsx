@@ -5,12 +5,15 @@ import { useEffect, useRef, useState } from "react";
 
 import * as THREE from "three";
 import BodyName from "./BodyName";
+import { useUIStore } from "@/app/states/useUIStore";
 
 export default function Sun() {
   const texture = useTexture("/textures/stars/sun/sun_8k.jpg");
   const sunRef = useRef<THREE.Group>(null);
   const [shiny, setShiny] = useState(false);
   const [hovered, setHovered] = useState(false);
+
+  const { isFreeCam } = useUIStore();
 
   const { setFocusedPlanet, setSearchTarget, registerPlanetRef } =
     usePlanetStore();
@@ -31,6 +34,7 @@ export default function Sun() {
     <group ref={sunRef}>
       <mesh
         onClick={(e) => {
+          if (isFreeCam) return;
           e.stopPropagation();
           setFocusedPlanet(sunRef.current, Math.max(1.5, 10 * 4));
           setSearchTarget("Sun");
