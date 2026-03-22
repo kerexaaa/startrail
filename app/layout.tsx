@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 import { Inter } from "next/font/google";
 import { ToastContainer } from "react-toastify";
@@ -22,7 +23,11 @@ export default function RootLayout({
       <body className={`antialiased relative ${InterFont.className}`}>
         {children}
         <SpeedInsights />
-        <ToastContainer toastClassName={"glassmorphism text-white"} position="top-center"/>
+        <Analytics />
+        <ToastContainer
+          toastClassName={"glassmorphism text-white"}
+          position="top-center"
+        />
       </body>
     </html>
   );
