@@ -3,8 +3,21 @@ import * as Astronomy from "astronomy-engine";
 import { toast } from "react-toastify";
 
 export type AstroDataType =
-  | { mode: "telescope"; az: number; alt: number; dist: number }
-  | { mode: "interplanetary"; dist: number; lightTime: number };
+  | {
+      mode: "telescope";
+      az: number;
+      alt: number;
+      dist: number;
+      constellation: string;
+      magnitude: number;
+    }
+  | {
+      mode: "interplanetary";
+      dist: number;
+      lightTime: number;
+      speed: number;
+      pingTime: number;
+    };
 
 export const getBody = (name: string): Astronomy.Body | null => {
   name = name.toLowerCase().charAt(0).toUpperCase() + name.slice(1);
@@ -116,6 +129,12 @@ export function useAstroCalculations(fromValue: string, toValue: string) {
       const date = new Date();
 
       if (isFromEarth && coords) {
+        if (targetBody === "Earth") {
+          toast.error("Earth can't be selected as target here", {
+            toastId: "earth-selected",
+          });
+          return;
+        }
         const observer = new Astronomy.Observer(coords.lat, coords.lon, 0);
         const equator = Astronomy.Equator(
           targetBody,
@@ -132,11 +151,20 @@ export function useAstroCalculations(fromValue: string, toValue: string) {
           "normal",
         );
 
+        const constellation = Astronomy.Constellation(
+          equator.ra,
+          equator.dec,
+        ).name;
+
+        const magnitude = Astronomy.Illumination(targetBody, date).mag;
+
         setAstroData({
           mode: "telescope",
           az: horizon.azimuth,
           alt: horizon.altitude,
           dist: equator.dist,
+          constellation,
+          magnitude,
         });
       } else {
         const fromBody = getBody(fromValue);
@@ -144,18 +172,32 @@ export function useAstroCalculations(fromValue: string, toValue: string) {
           const hv1 = Astronomy.HelioVector(fromBody, date);
           const hv2 = Astronomy.HelioVector(targetBody, date);
 
+          const st1 = Astronomy.HelioState(fromBody, date);
+          const st2 = Astronomy.HelioState(targetBody, date);
+
           const dx = hv2.x - hv1.x;
           const dy = hv2.y - hv1.y;
           const dz = hv2.z - hv1.z;
+
+          const vx = st2.vx - st1.vx;
+          const vy = st2.vy - st1.vy;
+          const vz = st2.vz - st1.vz;
+
+          const speedDifAU = Math.sqrt(vx * vx + vy * vy + vz * vz);
+          console.log(`${targetBody} faster than ${fromBody}: `, speedDifAU);
 
           const distAU = Math.sqrt(dx * dx + dy * dy + dz * dz);
           const distKm = distAU * 149597870.7;
           const lightSeconds = distKm / 299792.458;
 
+          const pingTime = lightSeconds * 2;
+
           setAstroData({
             mode: "interplanetary",
             dist: distAU,
             lightTime: lightSeconds,
+            speed: speedDifAU,
+            pingTime,
           });
         }
       }

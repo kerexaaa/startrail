@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { usePlanetStore } from "../../states/usePlanetStore";
 import { getBody, useAstroCalculations } from "../../hooks/useAstroCalcs";
+import { Tooltip } from "react-tooltip";
 
 interface TelescopeDataProps {
   fromValue: string;
@@ -15,7 +16,7 @@ export default function TelescopeData({
   setFromValue,
   setToValue,
 }: TelescopeDataProps) {
-  const { setSearchTarget, setFocusedPlanet } = usePlanetStore();
+  const { setSearchTarget, setFocusedPlanet, searchTarget } = usePlanetStore();
 
   const { astroData, setAstroData, locationName, isLoading } =
     useAstroCalculations(fromValue, toValue);
@@ -93,7 +94,7 @@ export default function TelescopeData({
           </div>
 
           {astroData.mode === "telescope" && (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-2">
               <div>
                 <div className="text-xs text-white/50">Azimuth</div>
                 <div className="text-xl font-mono">
@@ -111,17 +112,70 @@ export default function TelescopeData({
                   )}
                 </div>
               </div>
+              <div>
+                <div className="text-xs text-white/50">Constellation</div>
+                <div className="text-xl font-mono">
+                  {astroData.constellation}
+                </div>
+              </div>
+              <div id="magnitudeTooltip" className="w-fit">
+                <div className="text-xs text-white/50">Magnitude</div>
+                <div className="text-xl font-mono underline decoration-wavy">
+                  {astroData.magnitude.toFixed(2)}
+                </div>
+                <Tooltip
+                  anchorSelect="#magnitudeTooltip"
+                  className="z-50 max-w-xs text-center"
+                >
+                  {astroData.magnitude < 1 &&
+                    "Very bright, easily visible to the naked eye."}
+                  {astroData.magnitude >= 1 &&
+                    astroData.magnitude <= 6 &&
+                    "Visible to the naked eye in a dark, clear sky."}
+                  {astroData.magnitude > 6 &&
+                    "Requires a telescope or good binoculars to see."}
+                </Tooltip>
+              </div>
             </div>
           )}
 
           {astroData.mode === "interplanetary" && (
-            <div className="bg-white/5 p-2 rounded-lg">
-              <div className="text-xs text-white/50">Light Travel Time</div>
-              <div className="text-lg font-mono text-blue-300">
-                {Math.floor(astroData.lightTime / 60)}m{" "}
-                {(astroData.lightTime % 60).toFixed(0)}s
+            <>
+              <div className="bg-white/5 p-2 rounded-lg grid grid-cols-2 gap-2">
+                <div>
+                  <div className="text-xs text-white/50">Light Travel Time</div>
+                  <div className="text-lg font-mono text-blue-300">
+                    {Math.floor(astroData.lightTime / 60)}m{" "}
+                    {(astroData.lightTime % 60).toFixed(0)}s
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-white/50">Signal Ping:</div>
+                  <div className="text-lg font-mono text-blue-300">
+                    {Math.floor(astroData.pingTime / 60)}m{" "}
+                    {(astroData.pingTime % 60).toFixed(0)}s
+                  </div>
+                </div>
               </div>
-            </div>
+              <div>
+                <div className="text-xs text-white/50">
+                  {searchTarget} Relative Speed (vs {fromValue})
+                </div>
+                <div className="text-lg font-mono text-blue-300">
+                  {((astroData.speed * 149597870.7) / 86400).toLocaleString(
+                    "en-US",
+                    {
+                      maximumFractionDigits: 2,
+                    },
+                  )}{" "}
+                  km/s
+                  <br />
+                  <span className="text-[10px] text-white/30">
+                    {astroData.speed.toFixed(4)} AU/day
+                  </span>
+                </div>
+              </div>
+            </>
           )}
 
           <div className="mt-1 text-xs text-white/50">
