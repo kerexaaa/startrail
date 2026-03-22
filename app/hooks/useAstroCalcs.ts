@@ -184,7 +184,6 @@ export function useAstroCalculations(fromValue: string, toValue: string) {
           const vz = st2.vz - st1.vz;
 
           const speedDifAU = Math.sqrt(vx * vx + vy * vy + vz * vz);
-          console.log(`${targetBody} faster than ${fromBody}: `, speedDifAU);
 
           const distAU = Math.sqrt(dx * dx + dy * dy + dz * dz);
           const distKm = distAU * 149597870.7;
