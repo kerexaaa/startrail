@@ -13,6 +13,7 @@ import Scene from "./components/3d/Scene";
 import { useIdleTimer } from "./hooks/useIdleTimer";
 import { useAppHotkeys } from "./hooks/useAppHotkeys";
 import BodyInfo from "./components/ui/BodyInfo";
+import InfoModal from "./components/ui/InfoModal";
 
 export default function Home() {
   const { isFreeCam, setIsLoading, isLoading } = useUIStore();
@@ -77,6 +78,7 @@ export default function Home() {
           <SearchPanel />
           <TimeController />
           <BodyInfo />
+          <InfoModal />
         </div>
       </div>
     </main>

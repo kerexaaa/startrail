@@ -22,13 +22,10 @@ function SettingsButtons({ children, ...props }: DivProps) {
     isFullscreen,
     isVisible,
     setIsVisible,
+    setIsInfoOpen,
   } = useUIStore();
 
   const { setTargetZoom, setSearchTarget, setFocusedPlanet } = usePlanetStore();
-
-  const handleTBA = () => {
-    toast.info("This button does nothing, for now");
-  };
 
   return (
     <div {...props}>
@@ -37,7 +34,7 @@ function SettingsButtons({ children, ...props }: DivProps) {
         className={`flex select-none flex-col gap-3 transition-all relative ${isVisible ? "opacity-100 right-0" : "opacity-0 pointer-events-none -right-40"}`}
       >
         <IconButton
-          onClick={handleTBA}
+          onClick={() => setIsInfoOpen(true)}
           icon={<Image width={16} height={16} src={infoIcon} alt="Info" />}
         />
         <IconButton

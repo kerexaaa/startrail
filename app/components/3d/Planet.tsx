@@ -41,7 +41,7 @@ export default function Planet({
     ringTexturePath || "/textures/planets/placeholder.png",
   );
 
-  const { isFreeCam } = useUIStore();
+  const { isFreeCam, showOrbits } = useUIStore();
 
   const simTime = useRef(0);
   const {
@@ -106,9 +106,11 @@ export default function Planet({
 
   return (
     <>
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <OrbitPath distance={distance} />
-      </mesh>
+      {showOrbits && (
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <OrbitPath distance={distance} />
+        </mesh>
+      )}
       <group ref={orbitRef}>
         <group rotation={[0, 0, (tilt * Math.PI) / 180]}>
           <mesh

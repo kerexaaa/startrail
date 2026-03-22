@@ -15,6 +15,12 @@ interface UIStore {
 
   isVisible: boolean;
   setIsVisible: (val: boolean | ((prev: boolean) => boolean)) => void;
+
+  isInfoOpen: boolean;
+  setIsInfoOpen: (val: boolean) => void;
+
+  showOrbits: boolean;
+  setShowOrbits: (val: boolean) => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -35,4 +41,10 @@ export const useUIStore = create<UIStore>((set) => ({
     set((state) => ({
       isVisible: typeof val === "function" ? val(state.isVisible) : val,
     })),
+
+  isInfoOpen: false,
+  setIsInfoOpen: (val) => set({ isInfoOpen: val }),
+
+  showOrbits: true,
+  setShowOrbits: (val) => set({ showOrbits: val }),
 }));
