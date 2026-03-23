@@ -27,8 +27,7 @@ export default function Scene() {
 
   return (
     <>
-      <ambientLight intensity={0.2} />
-      <hemisphereLight args={["#333", "#000", 1]} position={[0, 0, 0]} />
+      <ambientLight intensity={0.05} />
       <pointLight args={["#fff", 500, 0]} position={[0, 0, 0]} />
 
       <Sun />

@@ -9,37 +9,33 @@ import * as Astronomy from "astronomy-engine";
 import { getBody } from "@/app/hooks/useAstroCalcs";
 import BodyName from "./BodyName";
 import { useUIStore } from "@/app/states/useUIStore";
+import { getBodyTextureUrls } from "@/app/utils/textures";
+import Rings from "./Rings";
 
 interface PlanetProps {
   name: string;
-  texturePath: string;
   radius: number;
   distance: number;
   rotationSpeed: number;
   travelSpeed: number;
   tilt: number;
-  ringTexturePath?: string;
 }
 
 export default function Planet({
   name,
-  texturePath,
   radius,
   distance,
   rotationSpeed,
   travelSpeed,
   tilt,
-  ringTexturePath,
 }: PlanetProps) {
-  const texture = useTexture(texturePath);
   const orbitRef = useRef<THREE.Group>(null);
   const planetRef = useRef<THREE.Mesh>(null);
   const [shiny, setShiny] = useState(false);
   const [hovered, setHovered] = useState(false);
 
-  const ringTexture = useTexture(
-    ringTexturePath || "/textures/planets/placeholder.png",
-  );
+  const { bodyUrl, ringUrl, ringScales } = getBodyTextureUrls(name);
+  const bodyTexture = useTexture(bodyUrl);
 
   const { isFreeCam, showOrbits } = useUIStore();
 
@@ -83,27 +79,6 @@ export default function Planet({
     }
   });
 
-  const ringGeo = useMemo(() => {
-    if (!ringTexturePath) return null;
-
-    const inner = radius * 1.4;
-    const outer = radius * 2.4;
-    const geometry = new THREE.RingGeometry(inner, outer, 128);
-
-    const pos = geometry.attributes.position;
-    const uvs = geometry.attributes.uv;
-
-    for (let i = 0; i < pos.count; i++) {
-      const x = pos.getX(i);
-      const y = pos.getY(i);
-      const dist = Math.sqrt(x * x + y * y);
-
-      const u = (dist - inner) / (outer - inner);
-      uvs.setXY(i, u, 0.5);
-    }
-    return geometry;
-  }, [radius, ringTexturePath]);
-
   return (
     <>
       {showOrbits && (
@@ -134,18 +109,15 @@ export default function Planet({
               setSearchTarget(name);
             }}
           >
-            <sphereGeometry args={[radius, 64, 64]} />{" "}
-            <meshStandardMaterial map={texture} />
+            <sphereGeometry args={[radius, 64, 64]} />
+            <meshStandardMaterial map={bodyTexture} />
             <BodyName name={name} isVisible={hovered} />
-            {ringGeo && ringTexture && (
-              <mesh rotation={[Math.PI / 2, 0, 0]} geometry={ringGeo}>
-                <meshStandardMaterial
-                  map={ringTexture}
-                  transparent={true}
-                  opacity={0.9}
-                  side={THREE.DoubleSide}
-                />
-              </mesh>
+            {ringUrl && (
+              <Rings
+                radius={radius}
+                ringUrl={ringUrl}
+                ringScales={ringScales!}
+              />
             )}
             {shiny && <Outlines thickness={1} color="red" />}
           </mesh>

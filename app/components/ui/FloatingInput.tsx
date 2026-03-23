@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
-import dropdownIcon from "@/app/assets/icons/light/dropdown.svg";
+import dropdownIcon from "@/app/assets/icons/dark/dropdown.svg";
 import Dropdown from "../ui/Dropdown";
 
 interface FloatingInputProps {

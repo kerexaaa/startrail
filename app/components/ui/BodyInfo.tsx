@@ -3,7 +3,7 @@ import { usePlanetStore } from "@/app/states/usePlanetStore";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
-import dropdownIcon from "@/app/assets/icons/light/dropdown.svg";
+import dropdownIcon from "@/app/assets/icons/dark/dropdown.svg";
 
 export default function BodyInfo() {
   const { focusedPlanet, searchTarget } = usePlanetStore();
@@ -35,7 +35,7 @@ export default function BodyInfo() {
               {info.type}
             </div>
 
-            <div className="absolute top-0 right-0 z-20">
+            <div className="absolute top-0 right-0 z-20 flex justify-center items-center hover:bg-white/10 transition-colors rounded-full cursor-pointer p-2 user-select-none">
               <button
                 onClick={handleHide}
                 className="text-white/50 hover:text-white transition-colors cursor-pointer"
