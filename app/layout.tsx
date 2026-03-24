@@ -11,6 +11,10 @@ const InterFont = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Startrail",
   description: "track your stars",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function RootLayout({
