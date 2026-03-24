@@ -3,11 +3,11 @@ import { useUIStore } from "@/app/states/useUIStore";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
-const tempPlanetPos = new THREE.Vector3();
 const tempOutDir = new THREE.Vector3();
 const tempCinematicPos = new THREE.Vector3();
 const tempDirection = new THREE.Vector3();
 const origin = new THREE.Vector3(0, 0, 0);
+const vWorldPos = new THREE.Vector3();
 
 export default function SmoothZoom() {
   const { isUserIdle, isFreeCam } = useUIStore();
@@ -21,19 +21,19 @@ export default function SmoothZoom() {
 
     const camera: THREE.Camera = controls.object;
     const currentDistance = controls.getDistance();
-    
-    if (focusedPlanet) {
-      tempPlanetPos.set(focusedPlanet.position.x, 0, focusedPlanet.position.z);
 
-      controls.target.lerp(tempPlanetPos, 0.08);
+    if (focusedPlanet) {
+      focusedPlanet.getWorldPosition(vWorldPos);
+
+      controls.target.lerp(vWorldPos, 0.08);
 
       if (isUserIdle) {
-        tempOutDir.copy(tempPlanetPos).normalize();
+        tempOutDir.copy(vWorldPos).normalize();
 
         const distance = targetZoom;
 
         tempCinematicPos
-          .copy(tempPlanetPos)
+          .copy(vWorldPos)
           .add(
             tempDirection.set(
               tempOutDir.x * distance,

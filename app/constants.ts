@@ -8,6 +8,7 @@ export const DISTANCE_SCALE = 4;
 export const RADIUS_SCALE = 0.5;
 
 export const BASE_SPEED = (2 * Math.PI) / 365;
+export const MIN_CLICK_RADIUS = 1.5;
 
 export const PLANETARY_BODIES = [
   "Sun",
