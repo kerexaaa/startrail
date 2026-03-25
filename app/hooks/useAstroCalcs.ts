@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import * as Astronomy from "astronomy-engine";
 import { toast } from "react-toastify";
+import { BODY_DATA } from "../constants";
+import { usePlanetStore } from "../states/usePlanetStore";
 
 export type AstroDataType =
   | {
@@ -17,13 +19,15 @@ export type AstroDataType =
       lightTime: number;
       speed: number;
       pingTime: number;
+    }
+  | {
+      mode: "satellites";
     };
 
 export const getBody = (name: string): Astronomy.Body | null => {
   name = name.toLowerCase().charAt(0).toUpperCase() + name.slice(1);
   const map: Record<string, Astronomy.Body> = {
     Sun: Astronomy.Body.Sun,
-    Moon: Astronomy.Body.Moon,
     Mercury: Astronomy.Body.Mercury,
     Venus: Astronomy.Body.Venus,
     Earth: Astronomy.Body.Earth,
@@ -43,12 +47,17 @@ export function useAstroCalculations(fromValue: string, toValue: string) {
   const [astroData, setAstroData] = useState<AstroDataType | null>(null);
   const [locationName, setLocationName] = useState("My Location");
   const [isLoading, setIsLoading] = useState(false);
+  const { apiMoons } = usePlanetStore();
 
   useEffect(() => {
     let isMounted = true;
 
-    if (!fromValue || !toValue) return;
+    if (!fromValue || !toValue) {
+      setAstroData(null);
+      return;
+    }
     if (fromValue === toValue) {
+      setAstroData(null);
       toast.error("Please select different bodies to track.", {
         toastId: "same-body",
       });
@@ -120,16 +129,38 @@ export function useAstroCalculations(fromValue: string, toValue: string) {
     const targetBody = getBody(toValue);
     const isFromEarth =
       fromValue === "My Location" || fromValue === "Current Location";
+    const isApiMoon = apiMoons.some((item) => item.englishName === toValue);
 
-    if (!targetBody || (isFromEarth && !coords) || isLoading) {
+    if (!toValue || toValue.length < 3) {
+      setAstroData(null);
+      return;
+    }
+
+    if (!targetBody && !isApiMoon) {
+      setAstroData(null);
+      return;
+    }
+
+    if (isLoading || (isFromEarth && !coords)) {
       return;
     }
 
     const calculate = () => {
+      if (isApiMoon && !targetBody) {
+        setAstroData({ mode: "satellites" });
+        return;
+      }
+
+      if (!targetBody) {
+        setAstroData(null);
+        return;
+      }
+
       const date = new Date();
 
       if (isFromEarth && coords) {
         if (targetBody === "Earth") {
+          setAstroData(null);
           toast.error("Earth can't be selected as target here", {
             toastId: "earth-selected",
           });
@@ -166,7 +197,7 @@ export function useAstroCalculations(fromValue: string, toValue: string) {
           constellation,
           magnitude,
         });
-      } else {
+      } else if (BODY_DATA[targetBody] && !isFromEarth) {
         const fromBody = getBody(fromValue);
         if (fromBody && fromBody !== targetBody) {
           const hv1 = Astronomy.HelioVector(fromBody, date);
@@ -198,15 +229,24 @@ export function useAstroCalculations(fromValue: string, toValue: string) {
             speed: speedDifAU,
             pingTime,
           });
+        } else {
+          setAstroData(null);
         }
+      } else {
+        setAstroData(null);
       }
     };
 
     calculate();
+
+    if (isApiMoon && !targetBody) {
+      return;
+    }
+
     const interval = setInterval(calculate, 1000);
 
     return () => clearInterval(interval);
-  }, [coords, toValue, fromValue, isLoading]);
+  }, [coords, toValue, fromValue, isLoading, apiMoons]);
 
   return { astroData, setAstroData, locationName, isLoading };
 }

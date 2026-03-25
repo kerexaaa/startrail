@@ -49,6 +49,15 @@ type BodyDataType = {
   description: string;
 };
 
+export const PLANET_IDS = {
+  Earth: "terre",
+  Mars: "mars",
+  Jupiter: "jupiter",
+  Saturn: "saturne",
+  Uranus: "uranus",
+  Neptune: "neptune",
+};
+
 export const BODY_DATA: Record<string, BodyDataType> = {
   Sun: {
     type: "Yellow Dwarf Star",
@@ -121,5 +130,53 @@ export const BODY_DATA: Record<string, BodyDataType> = {
     fact: "The only planet not visible to the naked eye.",
     description:
       "Neptune is the eighth and farthest planet from the Sun. It is a dark, cold world with the strongest winds in the Solar System, reaching speeds of up to 2,100 km/h. Neptune was the first planet to be discovered through mathematical calculations rather than visual observations.",
+  },
+  Moon: {
+    type: "Natural Satellite",
+    mass: { massValue: 7.342, massExponent: 22 },
+    temp: "-53 °C",
+    fact: "Always shows the same face to Earth due to tidal locking.",
+    description:
+      "The Moon is Earth's only natural satellite. It is the fifth largest satellite in the Solar System. Its surface is covered in dead volcanoes, impact craters, and ancient lava flows. The gravitational pull of the Moon is largely responsible for Earth's ocean tides.",
+  },
+  Io: {
+    type: "Volcanic Moon",
+    mass: { massValue: 8.931, massExponent: 22 },
+    temp: "-130 °C",
+    fact: "The most geologically active object in the Solar System.",
+    description:
+      "Io is the innermost of the four Galilean moons of Jupiter. Caught in a gravitational tug-of-war between Jupiter and the other moons, Io's interior is intensely heated by tidal friction. This results in endless volcanic eruptions that paint its surface in bright shades of yellow, red, and sulfur.",
+  },
+  Europa: {
+    type: "Ice Moon",
+    mass: { massValue: 4.799, massExponent: 22 },
+    temp: "-160 °C",
+    fact: "Hides a massive subsurface ocean of liquid water beneath its icy crust.",
+    description:
+      "Europa is the smallest of the four Galilean moons orbiting Jupiter. Its surface is essentially a thick layer of water ice crisscrossed by deep cracks and streaks. Scientists strongly believe there is a vast ocean of liquid water beneath the ice, making Europa one of the most promising places to search for extraterrestrial life.",
+  },
+  Ganymede: {
+    type: "Ice Giant Moon",
+    mass: { massValue: 1.481, massExponent: 23 },
+    temp: "-163 °C",
+    fact: "The largest moon in the Solar System and the only one with its own magnetic field.",
+    description:
+      "Ganymede is a massive satellite of Jupiter, larger even than the planet Mercury. It consists of roughly equal amounts of silicate rock and water ice. It features a fully differentiated body with a liquid iron core, and a subterranean ocean that may contain more water than all of Earth's oceans combined.",
+  },
+  Callisto: {
+    type: "Ice/Rock Moon",
+    mass: { massValue: 1.075, massExponent: 23 },
+    temp: "-139 °C",
+    fact: "Has the oldest and most heavily cratered surface in the Solar System.",
+    description:
+      "Callisto is Jupiter's second-largest moon. Unlike the other Galilean moons, it shows almost no signs of internal geological activity. Its ancient surface is completely saturated with impact craters, perfectly preserving a deeply frozen record of the early Solar System's violent history.",
+  },
+  Titan: {
+    type: "Atmospheric Moon",
+    mass: { massValue: 1.345, massExponent: 23 },
+    temp: "-179 °C",
+    fact: "The only moon in the Solar System with a dense atmosphere and liquid lakes.",
+    description:
+      "Titan is the largest moon of Saturn and an extraordinary world enveloped in a thick, hazy atmosphere rich in nitrogen and organics. It is the only place besides Earth known to have stable bodies of liquid on its surface—though its lakes and seas are filled with liquid methane and ethane, not water.",
   },
 };

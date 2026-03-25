@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import * as THREE from "three";
+import { MoonData } from "../types/astronomy";
 
 interface PlanetStore {
   focusedPlanet: THREE.Group | null;
@@ -20,6 +21,9 @@ interface PlanetStore {
 
   targetZoom: number;
   setTargetZoom: (val: number | ((prev: number) => number)) => void;
+
+  apiMoons: MoonData[];
+  setApiMoons: (val: MoonData[]) => void;
 }
 
 export const usePlanetStore = create<PlanetStore>((set) => ({
@@ -52,4 +56,6 @@ export const usePlanetStore = create<PlanetStore>((set) => ({
     set((state) => ({
       targetZoom: typeof val === "function" ? val(state.targetZoom) : val,
     })),
+  apiMoons: [],
+  setApiMoons: (val) => set({ apiMoons: val }),
 }));

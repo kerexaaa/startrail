@@ -1,14 +1,51 @@
-import { BODY_DATA } from "@/app/constants";
+import { BODY_DATA, PLANET_IDS } from "@/app/constants";
 import { usePlanetStore } from "@/app/states/usePlanetStore";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import dropdownIcon from "@/app/assets/icons/dark/dropdown.svg";
 
 export default function BodyInfo() {
-  const { focusedPlanet, searchTarget } = usePlanetStore();
-  const info = BODY_DATA[searchTarget] || null;
+  const { focusedPlanet, searchTarget, apiMoons } = usePlanetStore();
   const [hidden, setHidden] = useState(false);
+
+  const info = useMemo(() => {
+    if (!searchTarget) return null;
+
+    if (BODY_DATA[searchTarget]) {
+      return BODY_DATA[searchTarget];
+    }
+
+    const apiMoon = apiMoons.find(
+      (m) => m.englishName === searchTarget || m.name === searchTarget,
+    );
+
+    if (apiMoon) {
+      let parentName = apiMoon.aroundPlanet?.planet || "unknown planet";
+      const englishParent = Object.keys(PLANET_IDS).find(
+        (key) => PLANET_IDS[key as keyof typeof PLANET_IDS] === parentName,
+      );
+      parentName = englishParent || parentName;
+
+      return {
+        type: "Minor Satellite",
+        mass: apiMoon.mass || { massValue: 0, massExponent: 0 },
+        temp: apiMoon.avgTemp ? `${apiMoon.avgTemp} K` : "Unknown",
+        fact: apiMoon.discoveredBy
+          ? `Discovered by ${apiMoon.discoveredBy} in ${apiMoon.discoveryDate}.`
+          : `A minor celestial body orbiting ${parentName}.`,
+        description: `${searchTarget} is a small natural satellite orbiting ${parentName}. It takes approximately ${Math.abs(
+          apiMoon.sideralOrbit || 0,
+        ).toFixed(
+          2,
+        )} days to complete one full revolution around its parent planet. With a mean radius of roughly ${
+          apiMoon.meanRadius
+        } km, it is one of the many minor bodies in the outer solar system.`,
+      };
+    }
+
+    return null;
+  }, [searchTarget, apiMoons]);
 
   const handleHide = () => {
     setHidden((prev) => !prev);
@@ -30,7 +67,9 @@ export default function BodyInfo() {
               {searchTarget}
             </h2>
             <div
-              className={`text-blue-300 font-medium transition-all ${!hidden ? "mb-5" : "mb-0"}`}
+              className={`text-blue-300 font-medium transition-all ${
+                !hidden ? "mb-5" : "mb-0"
+              }`}
             >
               {info.type}
             </div>
@@ -43,7 +82,9 @@ export default function BodyInfo() {
                 <Image
                   src={dropdownIcon}
                   alt="visibility"
-                  className={`transition-all duration-300 ${!hidden ? "rotate-180" : "rotate-0"}`}
+                  className={`transition-all duration-300 ${
+                    !hidden ? "rotate-180" : "rotate-0"
+                  }`}
                 />
               </button>
             </div>
@@ -62,8 +103,14 @@ export default function BodyInfo() {
                   <div className="flex justify-between border-b border-white/10 pb-2 pt-2">
                     <span className="text-white/50">Mass</span>
                     <span className="font-mono text-right">
-                      {info.mass.massValue} &times; 10
-                      <sup>{info.mass.massExponent}</sup> kg
+                      {info.mass.massValue > 0 ? (
+                        <>
+                          {info.mass.massValue} &times; 10
+                          <sup>{info.mass.massExponent}</sup> kg
+                        </>
+                      ) : (
+                        "Unknown"
+                      )}
                     </span>
                   </div>
                   <div className="flex justify-between border-b border-white/10 pb-2 pt-2">
