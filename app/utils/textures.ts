@@ -1,3 +1,5 @@
+import { useTexture } from "@react-three/drei";
+
 const CDN_URL = "https://cdn.startrail.codes/textures";
 
 interface BodyTexturesConfig {
@@ -45,3 +47,18 @@ export function getBodyTextureUrls(name: string) {
     ringScales: config.ringScales,
   };
 }
+
+export function getMoonTint(name: string) {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  const h = Math.abs(hash) % 360;
+  const s = 5 + (Math.abs(hash >> 8) % 20);
+  const l = 50 + (Math.abs(hash >> 16) % 30);
+
+  return `hsl(${h}, ${s}%, ${l}%)`;
+}
+
+useTexture.preload(`${CDN_URL}/generic_moon.jpg`);

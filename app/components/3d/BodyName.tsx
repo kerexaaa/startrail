@@ -9,7 +9,6 @@ export default function BodyName({ name, isVisible }: BodyNameProps) {
   return (
     <Html
       center
-    //   distanceFactor={focusZoom}
       zIndexRange={[100, 0]}
       className="pointer-events-none"
     >

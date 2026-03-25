@@ -35,9 +35,8 @@ export default function Rings({
     <mesh rotation={[Math.PI / 2, 0, 0]} geometry={ringGeo}>
       <meshBasicMaterial
         map={ringTexture}
-        color="#ffffff"
         transparent={true}
-        opacity={0.4}
+        opacity={0.5}
         side={THREE.DoubleSide}
         depthWrite={false}
       />

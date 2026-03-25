@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { usePlanetStore } from "../../states/usePlanetStore";
 import { getBody, useAstroCalculations } from "../../hooks/useAstroCalcs";
 import { Tooltip } from "react-tooltip";
+import { PLANET_IDS } from "@/app/constants";
 
 interface TelescopeDataProps {
   fromValue: string;
@@ -16,10 +17,27 @@ export default function TelescopeData({
   setFromValue,
   setToValue,
 }: TelescopeDataProps) {
-  const { setSearchTarget, setFocusedPlanet, searchTarget } = usePlanetStore();
-
+  const {
+    setSearchTarget,
+    setFocusedPlanet,
+    searchTarget,
+    apiMoons,
+    planetRefs,
+  } = usePlanetStore();
   const { astroData, setAstroData, locationName, isLoading } =
     useAstroCalculations(fromValue, toValue);
+
+  const foundOriginPlanet = (val: string): string => {
+    const moon = apiMoons.find((item) => item.englishName === val);
+    if (moon?.aroundPlanet) {
+      const frenchId = moon.aroundPlanet.planet;
+      const englishName = Object.keys(PLANET_IDS).find(
+        (key) => PLANET_IDS[key as keyof typeof PLANET_IDS] === frenchId,
+      );
+      return englishName || frenchId;
+    }
+    return "";
+  };
 
   const handleReset = () => {
     setAstroData(null);
@@ -29,9 +47,21 @@ export default function TelescopeData({
     setFocusedPlanet(null);
   };
 
+  const isSkeleton = isLoading && fromValue && toValue && fromValue !== toValue;
+  const isSatellitesMode = astroData?.mode === "satellites" && toValue;
+  const isTrackingMode =
+    astroData &&
+    astroData.mode !== "satellites" &&
+    fromValue !== toValue &&
+    getBody(toValue);
+  const showDataCard = isSatellitesMode || isTrackingMode;
+  const currentMoon = isSatellitesMode
+    ? apiMoons.find((item) => item.englishName === toValue)
+    : null;
+
   return (
     <AnimatePresence mode="wait">
-      {isLoading && fromValue && toValue && fromValue !== toValue ? (
+      {isSkeleton ? (
         <motion.div
           key="skeleton"
           className="absolute top-40 left-8 mt-4 p-4 glassmorphism rounded-[20px] flex flex-col gap-4 w-72 text-white z-10"
@@ -49,10 +79,7 @@ export default function TelescopeData({
             <div className="h-3 bg-white/10 rounded w-1/2"></div>
           </div>
         </motion.div>
-      ) : astroData &&
-        fromValue !== toValue &&
-        getBody(toValue) &&
-        (getBody(fromValue) || fromValue === "My Location") ? (
+      ) : showDataCard ? (
         <motion.div
           key="data"
           className="absolute top-40 left-8 mt-4 p-4 glassmorphism rounded-[20px] flex flex-col gap-3 text-white z-10 w-72"
@@ -62,14 +89,34 @@ export default function TelescopeData({
           transition={{ duration: 0.2 }}
         >
           <div className="text-sm text-white/50 border-b border-white/10 pb-2 leading-relaxed pr-6">
-            Tracking:{" "}
+            {astroData.mode === "satellites" ? "Satellite: " : "Tracking: "}
             <span className="text-white font-semibold capitalize">
               {toValue}
             </span>{" "}
             <br />
-            from{" "}
-            <span className="text-white font-medium capitalize">
-              {locationName}
+            {astroData.mode === "satellites" ? "Origin planet: " : "from: "}
+            <span
+              className={`text-white font-medium capitalize ${
+                astroData.mode === "satellites"
+                  ? "underline decoration-wavy cursor-pointer "
+                  : ""
+              }`}
+              onClick={() => {
+                if (astroData.mode !== "satellites") return;
+
+                const parentName = foundOriginPlanet(toValue);
+                const parentRef = planetRefs[parentName];
+
+                if (parentRef) {
+                  setFocusedPlanet(parentRef, 20);
+                  setSearchTarget(parentName);
+                  setToValue(parentName);
+                }
+              }}
+            >
+              {astroData.mode === "satellites"
+                ? foundOriginPlanet(toValue)
+                : locationName}
             </span>
           </div>
 
@@ -92,6 +139,34 @@ export default function TelescopeData({
               </svg>
             </button>
           </div>
+
+          {astroData.mode === "satellites" && currentMoon && (
+            <div className="bg-white/5 p-3 rounded-lg flex flex-col gap-3">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <div className="text-xs text-white/50">Radius</div>
+                  <div className="text-lg font-mono text-blue-300">
+                    {currentMoon.meanRadius.toLocaleString()} km
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-white/50">Orbital Period</div>
+                  <div className="text-lg font-mono text-blue-300">
+                    {Math.abs(currentMoon.sideralOrbit).toFixed(2)} days
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t border-white/10 pt-2">
+                <div className="text-xs text-white/50">
+                  Distance from {foundOriginPlanet(toValue)}
+                </div>
+                <div className="text-lg font-mono text-blue-300">
+                  {currentMoon.semimajorAxis.toLocaleString()} km
+                </div>
+              </div>
+            </div>
+          )}
 
           {astroData.mode === "telescope" && (
             <div className="grid grid-cols-2 gap-2">
@@ -178,16 +253,19 @@ export default function TelescopeData({
             </>
           )}
 
-          <div className="mt-1 text-xs text-white/50">
-            Distance:&nbsp;
-            {(astroData.dist * 149597870.7).toLocaleString("en-US", {
-              maximumFractionDigits: 0,
-            })}{" "}
-            km <br />
-            <span className="text-[10px] text-white/30">
-              {astroData.dist.toFixed(4)} AU
-            </span>
-          </div>
+          {(astroData.mode === "interplanetary" ||
+            astroData.mode === "telescope") && (
+            <div className="mt-1 text-xs text-white/50">
+              Distance:&nbsp;
+              {(astroData.dist * 149597870.7).toLocaleString("en-US", {
+                maximumFractionDigits: 0,
+              })}{" "}
+              km <br />
+              <span className="text-[10px] text-white/30">
+                {astroData.dist.toFixed(4)} AU
+              </span>
+            </div>
+          )}
         </motion.div>
       ) : null}
     </AnimatePresence>
