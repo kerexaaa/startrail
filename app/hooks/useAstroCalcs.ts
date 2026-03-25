@@ -131,7 +131,7 @@ export function useAstroCalculations(fromValue: string, toValue: string) {
       fromValue === "My Location" || fromValue === "Current Location";
     const isApiMoon = apiMoons.some((item) => item.englishName === toValue);
 
-    if (!toValue || toValue.length < 3) {
+    if (!toValue || toValue.length < 1) {
       setAstroData(null);
       return;
     }
