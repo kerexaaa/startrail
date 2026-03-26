@@ -45,9 +45,6 @@ To run this project locally:
 
 (Upcoming Features)
 - Mobile responsiveness and touch-friendly controls.
-- Implement Earth's Moon and other planetary satellites with complex orbital paths.
-- Add an interactive Info/Guide menu for users.
-- Expand the Telescope mode with deeper astronomical data (phases, constellations).
 
 Author:
 [GitHub](https://github.com/kerexaaa)
