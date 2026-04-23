@@ -1,4 +1,4 @@
-import { BODY_DATA, PLANET_IDS } from "@/app/constants";
+import { BODY_DATA, DEFAULT_TRANSITION_DURATION, PLANET_IDS } from "../../constants/index";
 import { usePlanetStore } from "@/app/states/usePlanetStore";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
@@ -59,7 +59,7 @@ export default function BodyInfo() {
           initial={{ opacity: 0, x: 32 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 32 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: DEFAULT_TRANSITION_DURATION }}
           className="absolute top-8 right-8 w-80 p-5 glassmorphism rounded-[20px] text-white z-10 pointer-events-auto shadow-2xl flex flex-col"
         >
           <div className="relative">
@@ -96,7 +96,7 @@ export default function BodyInfo() {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
+                transition={{ duration: DEFAULT_TRANSITION_DURATION, ease: "easeInOut" }}
                 className="overflow-hidden"
               >
                 <div className="contents flex-col gap-3 text-sm shrink-0 pt-2">

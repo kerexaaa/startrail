@@ -10,6 +10,7 @@ import smallscreenIcon from "@/app/assets/icons/dark/smallscreen.svg";
 import { Slide, toast } from "react-toastify";
 import { useUIStore } from "@/app/states/useUIStore";
 import { usePlanetStore } from "@/app/states/usePlanetStore";
+import { MIN_ZOOM, MAX_ZOOM } from "../../constants/index";
 
 interface DivProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
@@ -38,11 +39,11 @@ function SettingsButtons({ children, ...props }: DivProps) {
           icon={<Image width={16} height={16} src={infoIcon} alt="Info" />}
         />
         <IconButton
-          onClick={() => setTargetZoom((prev) => Math.max(2, prev - 2))}
+          onClick={() => setTargetZoom((prev) => Math.max(MIN_ZOOM, prev - 2))}
           icon={<Image width={16} height={16} src={plusIcon} alt="Zoom In" />}
         />
         <IconButton
-          onClick={() => setTargetZoom((prev) => Math.min(100, prev + 2))}
+          onClick={() => setTargetZoom((prev) => Math.min(MAX_ZOOM, prev + 2))}
           icon={<Image width={16} height={16} src={minusIcon} alt="Zoom Out" />}
         />
         <IconButton

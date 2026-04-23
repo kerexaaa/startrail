@@ -2,7 +2,7 @@ import swapIcon from "@/app/assets/icons/dark/swap.svg";
 import FloatingInput from "./FloatingInput";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { PLANETARY_BODIES } from "../../constants";
+import { PLANETARY_BODIES } from "../../constants/index";
 import TelescopeData from "./TelescopeData";
 import { usePlanetStore } from "../../states/usePlanetStore";
 

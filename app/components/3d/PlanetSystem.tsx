@@ -1,16 +1,22 @@
 import { Suspense, useEffect } from "react";
-import {
-  BASE_SPEED,
-  DISTANCE_SCALE,
-  EARTH_ROTATION,
-  PLANET_IDS,
-  RADIUS_SCALE,
-} from "../../constants";
 import CelestialBody from "./CelestialBody";
-import { MoonApiResponse } from "@/app/types/astronomy";
+import { MoonApiResponse, PlanetConfig } from "@/app/types/astronomy";
 import { getBodyTextureUrls } from "@/app/utils/textures";
 import { usePlanetStore } from "@/app/states/usePlanetStore";
 import { toast } from "react-toastify";
+import {
+  BASE_SPEED,
+  RADIUS_SCALE,
+  EARTH_RADIUS_KM,
+  EARTH_TO_MOON_DISTANCE_KM,
+  GENERIC_MOON_RADIUS,
+  MOON_DISTANCE_SCALE,
+  MOON_ORBIT_PERIOD,
+  PLANETS_CONFIG,
+  RANDOM_OFFSET_RANGE,
+  UNASSIGNED_MOON_RADIUS,
+  YEAR_IN_DAYS,
+} from "../../constants/index";
 
 export default function PlanetSystem() {
   const { setApiMoons, apiMoons } = usePlanetStore();
@@ -64,16 +70,22 @@ export default function PlanetSystem() {
 
       const radius = Math.max(
         0.02,
-        (moon.meanRadius / 6371) * RADIUS_SCALE * (isGeneric ? 1.5 : 1.0),
+        (moon.meanRadius / EARTH_RADIUS_KM) *
+          RADIUS_SCALE *
+          (isGeneric ? GENERIC_MOON_RADIUS : UNASSIGNED_MOON_RADIUS),
       );
 
       const distance =
-        planetRadius * 1.5 + Math.pow(moon.semimajorAxis / 384400, 0.5) * 2.0;
+        planetRadius * MOON_DISTANCE_SCALE +
+        Math.pow(moon.semimajorAxis / EARTH_TO_MOON_DISTANCE_KM, 0.5) * 2.0;
 
-      const orbitalPeriod = Math.max(0.1, moon.sideralOrbit || 300);
-      const travelSpeed = (365 / orbitalPeriod) * BASE_SPEED;
+      const orbitalPeriod = Math.max(
+        0.1,
+        moon.sideralOrbit || MOON_ORBIT_PERIOD,
+      );
+      const travelSpeed = (YEAR_IN_DAYS / orbitalPeriod) * BASE_SPEED;
 
-      const randomOffset = (name.length * 10) % (Math.PI * 2);
+      const randomOffset = (name.length * RANDOM_OFFSET_RANGE) % (Math.PI * 2);
       const orbitTilt = (moon.inclination * Math.PI) / 180;
 
       return (
@@ -94,95 +106,23 @@ export default function PlanetSystem() {
 
   return (
     <>
-      <CelestialBody
-        name="Mercury"
-        distance={0.39 * DISTANCE_SCALE * 8}
-        radius={0.38 * RADIUS_SCALE}
-        rotationSpeed={1 / 7}
-        travelSpeed={(1 / 0.24) * BASE_SPEED}
-        tilt={2.04}
-      />
-      <CelestialBody
-        name="Venus"
-        distance={0.72 * DISTANCE_SCALE * 6}
-        radius={0.95 * RADIUS_SCALE}
-        rotationSpeed={1 / 4}
-        travelSpeed={(1 / 0.61) * BASE_SPEED}
-        tilt={2.04}
-      />
-      <CelestialBody
-        name="Earth"
-        distance={1.0 * DISTANCE_SCALE * 6}
-        radius={1.0 * RADIUS_SCALE}
-        rotationSpeed={EARTH_ROTATION}
-        travelSpeed={1 * BASE_SPEED}
-        tilt={23.5}
-      >
-        <Suspense fallback={null}>
-          {renderMoons(PLANET_IDS.Earth, 1.0 * RADIUS_SCALE)}
-        </Suspense>
-      </CelestialBody>
-      <CelestialBody
-        name="Mars"
-        distance={1.52 * DISTANCE_SCALE * 5}
-        radius={0.53 * RADIUS_SCALE}
-        rotationSpeed={1.1}
-        travelSpeed={(1 / 1.88) * BASE_SPEED}
-        tilt={25.2}
-      >
-        <Suspense fallback={null}>
-          {renderMoons(PLANET_IDS.Mars, 0.53 * RADIUS_SCALE)}
-        </Suspense>
-      </CelestialBody>
-
-      <CelestialBody
-        name="Jupiter"
-        distance={3.2 * DISTANCE_SCALE * 3}
-        radius={5.5 * RADIUS_SCALE}
-        rotationSpeed={0.44}
-        travelSpeed={(1 / 11.86) * BASE_SPEED}
-        tilt={3.13}
-      >
-        <Suspense fallback={null}>
-          {renderMoons(PLANET_IDS.Jupiter, 5.5 * RADIUS_SCALE)}
-        </Suspense>
-      </CelestialBody>
-      <CelestialBody
-        name="Saturn"
-        distance={4.5 * DISTANCE_SCALE * 3}
-        radius={6.5 * RADIUS_SCALE}
-        rotationSpeed={0.45}
-        travelSpeed={(1 / 29) * BASE_SPEED}
-        tilt={26.7}
-      >
-        <Suspense fallback={null}>
-          {renderMoons(PLANET_IDS.Saturn, 6.5 * RADIUS_SCALE)}
-        </Suspense>
-      </CelestialBody>
-      <CelestialBody
-        name="Uranus"
-        distance={7.2 * DISTANCE_SCALE * 2.5}
-        radius={3 * RADIUS_SCALE}
-        rotationSpeed={0.72}
-        travelSpeed={(1 / 84) * BASE_SPEED}
-        tilt={98}
-      >
-        <Suspense fallback={null}>
-          {renderMoons(PLANET_IDS.Uranus, 3 * RADIUS_SCALE)}
-        </Suspense>
-      </CelestialBody>
-      <CelestialBody
-        name="Neptune"
-        distance={10 * DISTANCE_SCALE * 2.5}
-        radius={2.8 * RADIUS_SCALE}
-        rotationSpeed={0.69}
-        travelSpeed={(1 / 165) * BASE_SPEED}
-        tilt={28.32}
-      >
-        <Suspense fallback={null}>
-          {renderMoons(PLANET_IDS.Neptune, 2.8 * RADIUS_SCALE)}
-        </Suspense>
-      </CelestialBody>
+      {PLANETS_CONFIG.map((planet: PlanetConfig) => (
+        <CelestialBody
+          key={planet.name}
+          name={planet.name}
+          distance={planet.distance}
+          radius={planet.radius}
+          rotationSpeed={planet.rotationSpeed}
+          travelSpeed={planet.travelSpeed}
+          tilt={planet.tilt}
+        >
+          {planet.planetId && (
+            <Suspense fallback={null}>
+              {renderMoons(planet.planetId, planet.radius)}
+            </Suspense>
+          )}
+        </CelestialBody>
+      ))}
     </>
   );
 }

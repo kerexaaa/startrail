@@ -2,7 +2,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { usePlanetStore } from "../../states/usePlanetStore";
 import { getBody, useAstroCalculations } from "../../hooks/useAstroCalcs";
 import { Tooltip } from "react-tooltip";
-import { PLANET_IDS } from "@/app/constants";
+import { getSphereParams } from "../../utils/getSphereParams";
+import {
+  AU_IN_KM,
+  DAY_IN_SECONDS,
+  MIN_ZOOM,
+  ZOOM_SCALE,
+  DEFAULT_TRANSITION_DURATION,
+  PLANET_IDS,
+} from "../../constants/index";
 
 interface TelescopeDataProps {
   fromValue: string;
@@ -68,7 +76,7 @@ export default function TelescopeData({
           initial={{ opacity: 0, y: 10, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -10, scale: 0.95 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: DEFAULT_TRANSITION_DURATION }}
         >
           <div className="animate-pulse flex flex-col gap-4">
             <div className="h-4 bg-white/20 rounded w-2/3"></div>
@@ -86,7 +94,7 @@ export default function TelescopeData({
           initial={{ opacity: 0, y: 10, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 10, scale: 0.95 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: DEFAULT_TRANSITION_DURATION }}
         >
           <div className="text-sm text-white/50 border-b border-white/10 pb-2 leading-relaxed pr-6">
             {astroData.mode === "satellites" ? "Satellite: " : "Tracking: "}
@@ -108,7 +116,13 @@ export default function TelescopeData({
                 const parentRef = planetRefs[parentName];
 
                 if (parentRef) {
-                  setFocusedPlanet(parentRef, 20);
+                  const sphereParams = getSphereParams(parentRef);
+                  if (sphereParams) {
+                    setFocusedPlanet(
+                      parentRef,
+                      Math.max(MIN_ZOOM, sphereParams.radius * ZOOM_SCALE),
+                    );
+                  }
                   setSearchTarget(parentName);
                   setToValue(parentName);
                 }
@@ -237,16 +251,16 @@ export default function TelescopeData({
                   {searchTarget} Relative Speed (vs {fromValue})
                 </div>
                 <div className="text-lg font-mono text-blue-300">
-                  {((astroData.speed * 149597870.7) / 86400).toLocaleString(
-                    "en-US",
-                    {
-                      maximumFractionDigits: 2,
-                    },
-                  )}{" "}
+                  {(
+                    (astroData.speed * AU_IN_KM) /
+                    DAY_IN_SECONDS
+                  ).toLocaleString("en-US", {
+                    maximumFractionDigits: 2,
+                  })}{" "}
                   km/s
                   <br />
                   <span className="text-[10px] text-white/30">
-                    {astroData.speed.toFixed(4)} AU/day
+                    {astroData.speed.toFixed(2)} AU/day
                   </span>
                 </div>
               </div>
@@ -257,12 +271,12 @@ export default function TelescopeData({
             astroData.mode === "telescope") && (
             <div className="mt-1 text-xs text-white/50">
               Distance:&nbsp;
-              {(astroData.dist * 149597870.7).toLocaleString("en-US", {
-                maximumFractionDigits: 0,
+              {(astroData.dist * AU_IN_KM).toLocaleString("en-US", {
+                maximumFractionDigits: 2,
               })}{" "}
               km <br />
               <span className="text-[10px] text-white/30">
-                {astroData.dist.toFixed(4)} AU
+                {astroData.dist.toFixed(2)} AU
               </span>
             </div>
           )}

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useUIStore } from "../states/useUIStore";
+import { IDLE_TIMEOUT } from '../constants/index';
 
 export function useIdleTimer() {
   const { setIsUserIdle } = useUIStore();
@@ -13,7 +14,7 @@ export function useIdleTimer() {
 
       idleTimer = setTimeout(() => {
         setIsUserIdle(true);
-      }, 10000);
+      }, IDLE_TIMEOUT);
     };
 
     resetIdleTimer();

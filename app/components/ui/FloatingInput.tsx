@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import dropdownIcon from "@/app/assets/icons/dark/dropdown.svg";
 import Dropdown from "../ui/Dropdown";
+import { DEFAULT_TRANSITION_DURATION } from "@/app/constants";
 
 interface FloatingInputProps {
   children: React.ReactNode;
@@ -37,7 +38,7 @@ export default function FloatingInput({
             initial={{ opacity: 0, y: yDelta ?? 30 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: yDelta ?? 30 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: DEFAULT_TRANSITION_DURATION }}
             className="absolute -translate-y-1/2 top-1/2 text-white pointer-events-none"
             htmlFor={id}
           >

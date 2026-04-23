@@ -2,6 +2,7 @@ import { usePlanetStore } from "@/app/states/usePlanetStore";
 import { useUIStore } from "@/app/states/useUIStore";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { ZOOM_LERP_FACTOR } from "../../constants/index";
 
 const tempOutDir = new THREE.Vector3();
 const tempCinematicPos = new THREE.Vector3();
@@ -25,7 +26,7 @@ export default function SmoothZoom() {
     if (focusedPlanet) {
       focusedPlanet.getWorldPosition(vWorldPos);
 
-      controls.target.lerp(vWorldPos, 0.08);
+      controls.target.lerp(vWorldPos, ZOOM_LERP_FACTOR);
 
       if (isUserIdle) {
         tempOutDir.copy(vWorldPos).normalize();
@@ -38,16 +39,16 @@ export default function SmoothZoom() {
             tempDirection.set(
               tempOutDir.x * distance,
               distance * 0.5,
-              tempOutDir.z * distance + distance * 0.3,
+              tempOutDir.z * distance + distance,
             ),
           );
 
-        camera.position.lerp(tempCinematicPos, 0.04);
+        camera.position.lerp(tempCinematicPos, ZOOM_LERP_FACTOR);
       } else {
         const newDistance = THREE.MathUtils.lerp(
           currentDistance,
           targetZoom,
-          0.05,
+          ZOOM_LERP_FACTOR,
         );
 
         tempDirection
@@ -59,12 +60,12 @@ export default function SmoothZoom() {
         camera.position.copy(controls.target).add(tempDirection);
       }
     } else {
-      controls.target.lerp(origin, 0.08);
+      controls.target.lerp(origin, ZOOM_LERP_FACTOR);
 
       const newDistance = THREE.MathUtils.lerp(
         currentDistance,
         targetZoom,
-        0.06,
+        ZOOM_LERP_FACTOR,
       );
 
       tempDirection

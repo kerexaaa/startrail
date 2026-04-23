@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { usePlanetStore } from "../states/usePlanetStore";
 import { toast } from "react-toastify";
 import { useUIStore } from "../states/useUIStore";
+import { MIN_ZOOM, MAX_ZOOM } from "../constants/index";
 
 export function useAppHotkeys() {
   const { setFocusedPlanet, setTargetZoom, focusedPlanet } = usePlanetStore();
@@ -54,7 +55,7 @@ export function useAppHotkeys() {
     const handleWheel = (event: WheelEvent) => {
       event.preventDefault();
       const delta = event.deltaY > 0 ? 1 : -1;
-      setTargetZoom((prev) => Math.max(2, Math.min(100, prev + delta)));
+      setTargetZoom((prev) => Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, prev + delta)));
     };
 
     window.addEventListener("keydown", handleKeyDown);
