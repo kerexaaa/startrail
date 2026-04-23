@@ -7,7 +7,7 @@ import playIcon from "@/app/assets/icons/dark/play.svg";
 import resetIcon from "@/app/assets/icons/dark/reset.svg";
 import { usePlanetStore } from "../../states/usePlanetStore";
 import { useState, useMemo } from "react";
-import { SPEED_STEPS } from "../../constants";
+import { SPEED_STEPS } from "../../constants/index";
 
 export default function TimeController() {
   const { setTimeMultiplier, timeMultiplier, triggerTimeReset } =

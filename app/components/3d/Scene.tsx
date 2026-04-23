@@ -5,6 +5,7 @@ import SmoothZoom from "./SmoothZoom";
 import { useUIStore } from "@/app/states/useUIStore";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { MIN_ZOOM, MAX_ZOOM } from "../../constants/index";
 
 const tempDir = new THREE.Vector3();
 const tempTarget = new THREE.Vector3();
@@ -51,8 +52,8 @@ export default function Scene() {
           autoRotateSpeed={0.2}
           enableZoom={false}
           enablePan={false}
-          minDistance={2}
-          maxDistance={100}
+          minDistance={MIN_ZOOM}
+          maxDistance={MAX_ZOOM}
         />
       )}
 

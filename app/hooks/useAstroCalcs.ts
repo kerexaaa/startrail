@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import * as Astronomy from "astronomy-engine";
 import { toast } from "react-toastify";
-import { BODY_DATA } from "../constants";
 import { usePlanetStore } from "../states/usePlanetStore";
+import { AU_IN_KM, BODY_DATA, SPEED_OF_LIGHT_KM_S } from "../constants/index";
 
 export type AstroDataType =
   | {
@@ -217,8 +217,8 @@ export function useAstroCalculations(fromValue: string, toValue: string) {
           const speedDifAU = Math.sqrt(vx * vx + vy * vy + vz * vz);
 
           const distAU = Math.sqrt(dx * dx + dy * dy + dz * dz);
-          const distKm = distAU * 149597870.7;
-          const lightSeconds = distKm / 299792.458;
+          const distKm = distAU * AU_IN_KM;
+          const lightSeconds = distKm / SPEED_OF_LIGHT_KM_S;
 
           const pingTime = lightSeconds * 2;
 

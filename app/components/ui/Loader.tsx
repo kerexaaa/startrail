@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { loaderData } from "@/app/utils/loader";
 import { useProgress } from "@react-three/drei";
+import { LOADER_CHANGE } from "../../constants/index";
 
 function getRandom() {
   return Math.floor(Math.random() * loaderData.phrases.length);
@@ -17,7 +18,7 @@ export default function Loader() {
   useEffect(() => {
     const interval = setInterval(() => {
       setPhrase(changePhrase());
-    }, 1500);
+    }, LOADER_CHANGE);
 
     return () => clearInterval(interval);
   }, []);

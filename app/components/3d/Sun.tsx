@@ -7,6 +7,7 @@ import * as THREE from "three";
 import BodyName from "./BodyName";
 import { useUIStore } from "@/app/states/useUIStore";
 import { getBodyTextureUrls } from "@/app/utils/textures";
+import { MIN_ZOOM, SUN_RADIUS, SUN_ROTATION_SPEED } from "../../constants/index";
 
 export default function Sun() {
   const sunRef = useRef<THREE.Group>(null);
@@ -23,7 +24,7 @@ export default function Sun() {
     const time = clock.getElapsedTime();
 
     if (sunRef.current) {
-      sunRef.current.rotation.y = (time * 0.5) / 27;
+      sunRef.current.rotation.y = (time * 0.5) / SUN_ROTATION_SPEED;
     }
   });
 
@@ -37,7 +38,7 @@ export default function Sun() {
         onClick={(e) => {
           if (isFreeCam) return;
           e.stopPropagation();
-          setFocusedPlanet(sunRef.current, Math.max(1.5, 10 * 4));
+          setFocusedPlanet(sunRef.current, Math.max(MIN_ZOOM, SUN_RADIUS * 4));
           setSearchTarget("Sun");
         }}
         onPointerEnter={(e) => {
@@ -54,7 +55,7 @@ export default function Sun() {
         }}
         position={[0, 0, 0]}
       >
-        <sphereGeometry args={[10, 64, 64]} />
+        <sphereGeometry args={[SUN_RADIUS, 64, 64]} />
         <BodyName name={"Sun"} isVisible={hovered} />
         <meshBasicMaterial map={texture} />
         {shiny && <Outlines thickness={1} color="red" />}

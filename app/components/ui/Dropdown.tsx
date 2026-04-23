@@ -1,3 +1,4 @@
+import { DEFAULT_TRANSITION_DURATION } from "@/app/constants";
 import { AnimatePresence, motion } from "framer-motion";
 
 interface DropdownProps {
@@ -20,7 +21,7 @@ export default function Dropdown({
           initial={{ opacity: 0, y: 10, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 10, scale: 0.95 }}
-          transition={{ duration: 0.15, ease: "easeOut" }}
+          transition={{ duration: DEFAULT_TRANSITION_DURATION, ease: "easeOut" }}
           className="absolute top-full left-0 rounded-xl w-full flex flex-col mt-2 p-1 z-50 bg-black/60 backdrop-blur-2xl border border-white/10 shadow-2xl overflow-hidden"
           onWheelCapture={(e) => e.stopPropagation()}
         >

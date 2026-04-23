@@ -112,7 +112,7 @@ export default function CelestialBody({
         <group ref={orbitGroupRef}>
           {children}
           <group ref={tiltGroupRef} rotation={[0, 0, (tilt * Math.PI) / 180]}>
-            <mesh ref={bodyMeshRef}>
+            <mesh ref={bodyMeshRef} name="planet">
               <sphereGeometry args={[radius, segments, segments]} />
               <meshStandardMaterial
                 map={texture}
@@ -138,7 +138,7 @@ export default function CelestialBody({
                 e.stopPropagation();
                 setFocusedPlanet(
                   orbitGroupRef.current,
-                  Math.max(1.5, radius * 3),
+                  Math.max(MIN_CLICK_RADIUS, radius * 3),
                 );
                 setSearchTarget(name);
               }}

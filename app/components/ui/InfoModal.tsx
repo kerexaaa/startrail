@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useUIStore } from "@/app/states/useUIStore";
+import { DEFAULT_TRANSITION_DURATION } from '../../constants/ui';
 
 export default function InfoModal() {
   const { isInfoOpen, setIsInfoOpen, showOrbits, setShowOrbits } = useUIStore();
@@ -20,7 +21,7 @@ export default function InfoModal() {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ type: "spring", bounce: 0.3, duration: 0.4 }}
+            transition={{ type: "spring", bounce: 0.3, duration: DEFAULT_TRANSITION_DURATION }}
             className="relative w-150 max-w-[90vw] max-h-[85vh] flex flex-col glassmorphism rounded-2xl text-white shadow-2xl overflow-hidden"
             onWheelCapture={(e) => e.stopPropagation()}
           >
@@ -141,7 +142,7 @@ export default function InfoModal() {
                   className="w-4 h-4 bg-white rounded-full absolute top-1"
                   initial={false}
                   animate={{ left: showOrbits ? "26px" : "4px" }}
-                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 30, duration: DEFAULT_TRANSITION_DURATION }}
                 />
               </button>
             </div>
