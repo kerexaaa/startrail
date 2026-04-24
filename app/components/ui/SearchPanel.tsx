@@ -1,52 +1,22 @@
 import swapIcon from "@/app/assets/icons/dark/swap.svg";
 import FloatingInput from "./FloatingInput";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
 import { PLANETARY_BODIES } from "../../constants/index";
-import TelescopeData from "./TelescopeData";
-import { usePlanetStore } from "../../states/usePlanetStore";
+import TelescopeData from "./TelescopeData/TelescopeData";
+import { useSearchPanel } from "@/app/hooks/useSearchPanel";
 
 export default function SearchPanel() {
-  const [fromValue, setFromValue] = useState("");
-
   const {
-    searchTarget: toValue,
-    setSearchTarget: setToValue,
-    planetRefs,
-    setFocusedPlanet,
-  } = usePlanetStore();
-
-  const [activeDropdown, setActiveDropdown] = useState<"from" | "to" | null>(
-    null,
-  );
-  const panelRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        panelRef.current &&
-        !panelRef.current.contains(event.target as Node)
-      ) {
-        setActiveDropdown(null);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleSwap = () => {
-    const oldFrom = fromValue;
-    const oldTo = toValue;
-
-    setFromValue(oldTo);
-    setToValue(oldFrom);
-
-    if (planetRefs[oldFrom]) {
-      setFocusedPlanet(planetRefs[oldFrom]);
-    } else {
-      setFocusedPlanet(null);
-    }
-  };
+    activeDropdown,
+    setActiveDropdown,
+    panelRef,
+    fromValue,
+    setFromValue,
+    handleSwap,
+    handleFromSelect,
+    handleToSelect,
+    toValue,
+  } = useSearchPanel();
 
   return (
     <>
@@ -64,10 +34,7 @@ export default function SearchPanel() {
             onToggle={() =>
               setActiveDropdown(activeDropdown === "from" ? null : "from")
             }
-            onSelect={(val: string) => {
-              setFromValue(val);
-              setActiveDropdown(null);
-            }}
+            onSelect={handleFromSelect}
             options={["My Location", ...PLANETARY_BODIES]}
           >
             From...
@@ -75,24 +42,13 @@ export default function SearchPanel() {
           <FloatingInput
             id="input-to"
             value={toValue}
-            onChange={(e) => {
-              setToValue(e.target.value);
-              if (planetRefs[e.target.value]) {
-                setFocusedPlanet(planetRefs[e.target.value]);
-              }
-            }}
+            onChange={(e) => handleToSelect(e.target.value)}
             yDelta={30}
             isOpen={activeDropdown === "to"}
             onToggle={() =>
               setActiveDropdown(activeDropdown === "to" ? null : "to")
             }
-            onSelect={(val: string) => {
-              setToValue(val);
-              setActiveDropdown(null);
-              if (planetRefs[val]) {
-                setFocusedPlanet(planetRefs[val]);
-              }
-            }}
+            onSelect={handleToSelect}
             options={PLANETARY_BODIES}
           >
             To...
@@ -109,7 +65,7 @@ export default function SearchPanel() {
         fromValue={fromValue}
         toValue={toValue}
         setFromValue={setFromValue}
-        setToValue={setToValue}
+        setToValue={handleToSelect}
       />
     </>
   );

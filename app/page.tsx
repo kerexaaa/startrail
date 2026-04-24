@@ -12,7 +12,7 @@ import { useUIStore } from "./states/useUIStore";
 import Scene from "./components/3d/Scene";
 import { useIdleTimer } from "./hooks/useIdleTimer";
 import { useAppHotkeys } from "./hooks/useAppHotkeys";
-import BodyInfo from "./components/ui/BodyInfo";
+import BodyInfo from "./components/ui/BodyInfo/BodyInfo";
 import InfoModal from "./components/ui/InfoModal";
 
 export default function Home() {

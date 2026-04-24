@@ -21,6 +21,9 @@ interface UIStore {
 
   showOrbits: boolean;
   setShowOrbits: (val: boolean) => void;
+
+  showLabels: boolean;
+  setShowLabels: (val: boolean) => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -47,4 +50,7 @@ export const useUIStore = create<UIStore>((set) => ({
 
   showOrbits: true,
   setShowOrbits: (val) => set({ showOrbits: val }),
+
+  showLabels: true,
+  setShowLabels: (val) => set({ showLabels: val }),
 }));
