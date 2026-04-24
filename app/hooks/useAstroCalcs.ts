@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import * as Astronomy from "astronomy-engine";
 import { toast } from "react-toastify";
 import { usePlanetStore } from "../states/usePlanetStore";
-import { AU_IN_KM, BODY_DATA, SPEED_OF_LIGHT_KM_S } from "../constants/index";
+import {
+  AU_IN_KM,
+  BODY_DATA,
+  PLANET_IDS,
+  SPEED_OF_LIGHT_KM_S,
+} from "../constants/index";
 
 export type AstroDataType =
   | {
@@ -40,14 +45,47 @@ export const getBody = (name: string): Astronomy.Body | null => {
   return map[name] || null;
 };
 
-export function useAstroCalculations(fromValue: string, toValue: string) {
+interface UseAstroCalculationsProps {
+  fromValue: string;
+  toValue: string;
+  setFromValue: (val: string) => void;
+  setToValue: (val: string) => void;
+}
+
+export function useAstroCalculations({
+  fromValue,
+  toValue,
+  setFromValue,
+  setToValue,
+}: UseAstroCalculationsProps) {
+  const foundOriginPlanet = (val: string): string => {
+    const moon = apiMoons.find((item) => item.englishName === val);
+    if (moon?.aroundPlanet) {
+      const frenchId = moon.aroundPlanet.planet;
+      const englishName = Object.keys(PLANET_IDS).find(
+        (key) => PLANET_IDS[key as keyof typeof PLANET_IDS] === frenchId,
+      );
+      return englishName || frenchId;
+    }
+    return "";
+  };
+
   const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(
     null,
   );
   const [astroData, setAstroData] = useState<AstroDataType | null>(null);
+  const { setSearchTarget, setFocusedPlanet } = usePlanetStore();
   const [locationName, setLocationName] = useState("My Location");
   const [isLoading, setIsLoading] = useState(false);
   const { apiMoons } = usePlanetStore();
+
+  const handleReset = () => {
+    setAstroData(null);
+    setFromValue("");
+    setToValue("");
+    setSearchTarget("");
+    setFocusedPlanet(null);
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -248,5 +286,12 @@ export function useAstroCalculations(fromValue: string, toValue: string) {
     return () => clearInterval(interval);
   }, [coords, toValue, fromValue, isLoading, apiMoons]);
 
-  return { astroData, setAstroData, locationName, isLoading };
+  return {
+    astroData,
+    setAstroData,
+    locationName,
+    isLoading,
+    foundOriginPlanet,
+    handleReset,
+  };
 }

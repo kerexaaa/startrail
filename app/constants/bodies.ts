@@ -134,7 +134,7 @@ export const BODY_DATA: Record<string, BodyDataType> = {
 
 export const PLANETARY_BODIES = [
   "Sun",
-  "Moon",
+  // "Moon",
   "Mercury",
   "Venus",
   "Earth",

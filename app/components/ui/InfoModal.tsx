@@ -1,9 +1,70 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useUIStore } from "@/app/states/useUIStore";
-import { DEFAULT_TRANSITION_DURATION } from '../../constants/ui';
+import { DEFAULT_TRANSITION_DURATION } from "../../constants/ui";
+
+//export later
+
+const ToggleSwitch = ({
+  label,
+  checked,
+  onChange,
+}: {
+  label: string;
+  checked: boolean;
+  onChange: () => void;
+}) => (
+  <>
+    <span className="text-sm text-white/80 font-medium">{label}</span>
+    <button
+      onClick={onChange}
+      className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${checked ? "bg-blue-500" : "bg-white/20"}`}
+    >
+      <motion.div
+        layout
+        className="w-4 h-4 bg-white rounded-full absolute top-1"
+        initial={false}
+        animate={{ left: checked ? "26px" : "4px" }}
+        transition={{
+          type: "spring",
+          stiffness: 500,
+          damping: 30,
+          duration: DEFAULT_TRANSITION_DURATION,
+        }}
+      />
+    </button>
+  </>
+);
+//export later
+const Keybind = ({
+  keys,
+  label,
+  color = "text-white",
+}: {
+  keys: string;
+  label: string;
+  color?: string;
+}) => (
+  <div className="text-sm text-white/80 flex items-center">
+    {keys && (
+      <span
+        className={`font-mono bg-white/10 px-2 py-1 rounded mr-3 text-xs text-center ${color}`}
+      >
+        {keys}
+      </span>
+    )}
+    {label}
+  </div>
+);
 
 export default function InfoModal() {
-  const { isInfoOpen, setIsInfoOpen, showOrbits, setShowOrbits } = useUIStore();
+  const {
+    isInfoOpen,
+    setIsInfoOpen,
+    showOrbits,
+    setShowOrbits,
+    setShowLabels,
+    showLabels,
+  } = useUIStore();
 
   return (
     <AnimatePresence>
@@ -21,7 +82,11 @@ export default function InfoModal() {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ type: "spring", bounce: 0.3, duration: DEFAULT_TRANSITION_DURATION }}
+            transition={{
+              type: "spring",
+              bounce: 0.3,
+              duration: DEFAULT_TRANSITION_DURATION,
+            }}
             className="relative w-150 max-w-[90vw] max-h-[85vh] flex flex-col glassmorphism rounded-2xl text-white shadow-2xl overflow-hidden"
             onWheelCapture={(e) => e.stopPropagation()}
           >
@@ -83,68 +148,45 @@ export default function InfoModal() {
                   Controls & Keybinds
                 </h3>
                 <div className="grid grid-cols-2 gap-y-3 gap-x-6">
-                  <div className="text-sm text-white/80 flex items-center">
-                    <span className="font-mono bg-white/10 px-2 py-1 rounded mr-3 text-xs min-w-10 text-center">
-                      LMB
-                    </span>
-                    Focus (On body)
-                  </div>
-                  <div className="text-sm text-white/80 flex items-center">
-                    <span className="font-mono bg-white/10 px-2 py-1 rounded mr-3 text-xs min-w-10 text-center">
-                      Scroll
-                    </span>
-                    Zoom In/Out
-                  </div>
-                  <div className="text-sm text-white/80 flex items-center">
-                    <span className="font-mono bg-white/10 px-2 py-1 rounded mr-3 text-xs min-w-10 text-center text-red-400">
-                      F
-                    </span>
-                    Enter/Exit Fullscreen
-                  </div>
-                  <div className="text-sm text-white/80 flex items-center">
-                    <span className="font-mono bg-white/10 px-2 py-1 rounded mr-3 text-xs min-w-10 text-center text-red-400">
-                      F1
-                    </span>
-                    Exit Freecam
-                  </div>
-                  <div className="text-sm text-white/80 flex items-center">
-                    <span className="font-mono bg-white/10 px-2 py-1 rounded mr-3 text-xs min-w-10 text-center text-red-400">
-                      Q
-                    </span>
-                    Exit Focus
-                  </div>
-                  <div className="text-sm text-white/80 flex items-center col-span-2">
-                    <span className="font-mono bg-white/10 px-2 py-1 rounded mr-3 text-xs min-w-16 text-center text-blue-300">
-                      WASD
-                    </span>
-                    Move Drone (Freecam Mode only)
-                  </div>
-                  <div className="text-sm text-white/80 flex items-center col-span-2">
-                    <span className="font-mono bg-white/10 px-2 py-1 rounded mr-3 text-xs min-w-16 text-center text-blue-300">
-                      LMB Hold
-                    </span>
-                    Rotate Drone (Freecam Mode only)
-                  </div>
+                  <Keybind keys="LMB" label="Focus (On body)" />
+                  <Keybind keys="Scroll" label="Zoom In/Out" />
+                  <Keybind
+                    keys="F"
+                    label="Enter/Exit Fullscreen"
+                    color="text-red-400"
+                  />
+                  <Keybind
+                    keys="F1"
+                    label="Exit Freecam"
+                    color="text-red-400"
+                  />
+                  <Keybind keys="Q" label="Exit Focus" color="text-red-400" />
+                  <Keybind keys="" label="" color="transparent" />
+                  <Keybind
+                    keys="WASD"
+                    label="Move Drone (Freecam Mode only)"
+                    color="text-blue-300"
+                  />
+                  <Keybind
+                    keys="LMB Hold"
+                    label="Rotate Drone (Freecam Mode only)"
+                    color="text-blue-300"
+                  />
                 </div>
               </div>
             </div>
 
             <div className="shrink-0 p-6 px-8 border-t border-white/10 bg-black/20 flex items-center justify-between">
-              <span className="text-sm text-white/80 font-medium">
-                Show Orbital Paths
-              </span>
-              <button
-                onClick={() => setShowOrbits(!showOrbits)}
-                className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${showOrbits ? "bg-blue-500" : "bg-white/20"}`}
-              >
-                <motion.div
-                  layout
-                  className="w-4 h-4 bg-white rounded-full absolute top-1"
-                  initial={false}
-                  animate={{ left: showOrbits ? "26px" : "4px" }}
-                  transition={{ type: "spring", stiffness: 500, damping: 30, duration: DEFAULT_TRANSITION_DURATION }}
-                />
-              </button>
+              <ToggleSwitch
+                label="Show Orbital Paths"
+                checked={showOrbits}
+                onChange={() => setShowOrbits(!showOrbits)}
+              />
+              <ToggleSwitch
+                label="Show Planet Labels"
+                checked={showLabels}
+                onChange={() => setShowLabels(!showLabels)}
+              />
             </div>
           </motion.div>
         </div>

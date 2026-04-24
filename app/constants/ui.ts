@@ -21,4 +21,4 @@ export const SPEED_STEPS = [
   { label: "5 years/sec", value: 365 * 5 },
 ];
 
-export const DEFAULT_TRANSITION_DURATION = 0.200;
+export const DEFAULT_TRANSITION_DURATION = 0.2;

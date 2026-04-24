@@ -1,27 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
-import { loaderData } from "@/app/utils/loader";
 import { useProgress } from "@react-three/drei";
-import { LOADER_CHANGE } from "../../constants/index";
-
-function getRandom() {
-  return Math.floor(Math.random() * loaderData.phrases.length);
-}
-
-function changePhrase() {
-  return loaderData.phrases[getRandom()];
-}
+import { useLoaderPhrase } from "@/app/hooks/useLoaderPhrase";
 
 export default function Loader() {
-  const [phrase, setPhrase] = useState(changePhrase());
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPhrase(changePhrase());
-    }, LOADER_CHANGE);
-
-    return () => clearInterval(interval);
-  }, []);
+  const phrase = useLoaderPhrase();
 
   const { progress } = useProgress();
 

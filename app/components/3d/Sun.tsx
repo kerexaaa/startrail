@@ -5,20 +5,23 @@ import { useEffect, useRef, useState } from "react";
 
 import * as THREE from "three";
 import BodyName from "./BodyName";
-import { useUIStore } from "@/app/states/useUIStore";
 import { getBodyTextureUrls } from "@/app/utils/textures";
-import { MIN_ZOOM, SUN_RADIUS, SUN_ROTATION_SPEED } from "../../constants/index";
+import InteractionZone from "./InteractionZone";
+import {
+  MIN_CLICK_RADIUS,
+  SUN_RADIUS,
+  SUN_ROTATION_SPEED,
+} from "../../constants/index";
+import { useUIStore } from "@/app/states/useUIStore";
 
 export default function Sun() {
   const sunRef = useRef<THREE.Group>(null);
-  const [shiny, setShiny] = useState(false);
   const [hovered, setHovered] = useState(false);
   const { bodyUrl } = getBodyTextureUrls("Sun");
-  const { isFreeCam } = useUIStore();
   const texture = useTexture(bodyUrl);
+  const { showLabels } = useUIStore();
 
-  const { setFocusedPlanet, setSearchTarget, registerPlanetRef } =
-    usePlanetStore();
+  const { registerPlanetRef } = usePlanetStore();
 
   useFrame(({ clock }) => {
     const time = clock.getElapsedTime();
@@ -34,32 +37,24 @@ export default function Sun() {
 
   return (
     <group ref={sunRef}>
-      <mesh
-        onClick={(e) => {
-          if (isFreeCam) return;
-          e.stopPropagation();
-          setFocusedPlanet(sunRef.current, Math.max(MIN_ZOOM, SUN_RADIUS * 4));
-          setSearchTarget("Sun");
-        }}
-        onPointerEnter={(e) => {
-          e.stopPropagation();
-          document.body.style.cursor = "pointer";
-          setShiny(true);
-          setHovered(true);
-        }}
-        onPointerLeave={(e) => {
-          e.stopPropagation();
-          document.body.style.cursor = "auto";
-          setShiny(false);
-          setHovered(false);
-        }}
-        position={[0, 0, 0]}
+      <InteractionZone
+        name="Sun"
+        onHover={setHovered}
+        orbitGroupRef={sunRef}
+        proxyRadius={MIN_CLICK_RADIUS}
+        radius={SUN_RADIUS}
       >
         <sphereGeometry args={[SUN_RADIUS, 64, 64]} />
-        <BodyName name={"Sun"} isVisible={hovered} />
+        <BodyName
+          name={"Sun"}
+          isVisible={hovered}
+          isVIP={true}
+          radius={SUN_RADIUS}
+          showLabels={showLabels}
+        />
         <meshBasicMaterial map={texture} />
-        {shiny && <Outlines thickness={1} color="red" />}
-      </mesh>
+        {hovered && <Outlines thickness={1} color="red" />}
+      </InteractionZone>
     </group>
   );
 }
