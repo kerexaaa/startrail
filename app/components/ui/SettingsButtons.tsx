@@ -1,16 +1,18 @@
-import Image from "next/image";
-import IconButton from "./IconButton";
-import freecamIcon from "@/app/assets/icons/dark/freecam.svg";
-import infoIcon from "@/app/assets/icons/dark/info.svg";
-import minusIcon from "@/app/assets/icons/dark/minus.svg";
-import optionsIcon from "@/app/assets/icons/dark/options.svg";
-import plusIcon from "@/app/assets/icons/dark/plus.svg";
-import fullscreenIcon from "@/app/assets/icons/dark/fullscreen.svg";
-import smallscreenIcon from "@/app/assets/icons/dark/smallscreen.svg";
+import Button from "./common/Button";
+import {
+  freecamIcon,
+  infoIcon,
+  minusIcon,
+  optionsIcon,
+  plusIcon,
+  fullscreenIcon,
+  smallscreenIcon,
+} from "@/app/assets/icons/index";
 import { Slide, toast } from "react-toastify";
 import { useUIStore } from "@/app/states/useUIStore";
 import { usePlanetStore } from "@/app/states/usePlanetStore";
 import { MIN_ZOOM, MAX_ZOOM } from "../../constants/index";
+import Icon from "./common/Icon";
 
 interface DivProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
@@ -25,7 +27,6 @@ function SettingsButtons({ children, ...props }: DivProps) {
     setIsVisible,
     setIsInfoOpen,
   } = useUIStore();
-
   const { setTargetZoom, setSearchTarget, setFocusedPlanet } = usePlanetStore();
 
   return (
@@ -34,19 +35,19 @@ function SettingsButtons({ children, ...props }: DivProps) {
       <div
         className={`flex select-none flex-col gap-3 transition-all relative ${isVisible ? "opacity-100 right-0" : "opacity-0 pointer-events-none -right-40"}`}
       >
-        <IconButton
+        <Button
           onClick={() => setIsInfoOpen(true)}
-          icon={<Image width={16} height={16} src={infoIcon} alt="Info" />}
+          icon={<Icon size={16} src={infoIcon} alt="Info" />}
         />
-        <IconButton
+        <Button
           onClick={() => setTargetZoom((prev) => Math.max(MIN_ZOOM, prev - 2))}
-          icon={<Image width={16} height={16} src={plusIcon} alt="Zoom In" />}
+          icon={<Icon size={16} src={plusIcon} alt="Zoom In" />}
         />
-        <IconButton
+        <Button
           onClick={() => setTargetZoom((prev) => Math.min(MAX_ZOOM, prev + 2))}
-          icon={<Image width={16} height={16} src={minusIcon} alt="Zoom Out" />}
+          icon={<Icon size={16} src={minusIcon} alt="Zoom Out" />}
         />
-        <IconButton
+        <Button
           onClick={() => {
             setIsFreeCam(true);
             setFocusedPlanet(null);
@@ -57,15 +58,12 @@ function SettingsButtons({ children, ...props }: DivProps) {
               closeOnClick: true,
               pauseOnHover: true,
               draggable: true,
-              progress: undefined,
               transition: Slide,
             });
           }}
-          icon={
-            <Image width={16} height={16} src={freecamIcon} alt="Free Camera" />
-          }
+          icon={<Icon size={16} src={freecamIcon} alt="Free Camera" />}
         />
-        <IconButton
+        <Button
           onClick={() => {
             if (!isFullscreen) {
               document.documentElement.requestFullscreen();
@@ -76,24 +74,23 @@ function SettingsButtons({ children, ...props }: DivProps) {
             }
           }}
           icon={
-            <Image
-              width={16}
-              height={16}
+            <Icon
+              size={16}
               src={isFullscreen ? smallscreenIcon : fullscreenIcon}
-              alt={`${isFullscreen ? "Smallscreen" : "Fullscreen"}`}
+              alt="Fullscreen"
             />
           }
         />
       </div>
-      <IconButton
+
+      <Button
         onClick={() => setIsVisible((prev) => !prev)}
         icon={
-          <Image
-            className={`transition-all ${isVisible ? "rotate-0" : "rotate-180"}`}
-            width={16}
-            height={16}
+          <Icon
+            size={16}
             src={optionsIcon}
             alt="Options"
+            className={`transition-all duration-300 ${isVisible ? "rotate-0" : "rotate-180"}`}
           />
         }
       />

@@ -1,60 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useUIStore } from "@/app/states/useUIStore";
 import { DEFAULT_TRANSITION_DURATION } from "../../constants/ui";
-
-//export later
-
-const ToggleSwitch = ({
-  label,
-  checked,
-  onChange,
-}: {
-  label: string;
-  checked: boolean;
-  onChange: () => void;
-}) => (
-  <>
-    <span className="text-sm text-white/80 font-medium">{label}</span>
-    <button
-      onClick={onChange}
-      className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${checked ? "bg-blue-500" : "bg-white/20"}`}
-    >
-      <motion.div
-        layout
-        className="w-4 h-4 bg-white rounded-full absolute top-1"
-        initial={false}
-        animate={{ left: checked ? "26px" : "4px" }}
-        transition={{
-          type: "spring",
-          stiffness: 500,
-          damping: 30,
-          duration: DEFAULT_TRANSITION_DURATION,
-        }}
-      />
-    </button>
-  </>
-);
-//export later
-const Keybind = ({
-  keys,
-  label,
-  color = "text-white",
-}: {
-  keys: string;
-  label: string;
-  color?: string;
-}) => (
-  <div className="text-sm text-white/80 flex items-center">
-    {keys && (
-      <span
-        className={`font-mono bg-white/10 px-2 py-1 rounded mr-3 text-xs text-center ${color}`}
-      >
-        {keys}
-      </span>
-    )}
-    {label}
-  </div>
-);
+import Switch from "./common/Switch";
+import Keybind from "./common/Keybind";
+import Button from "./common/Button";
+import { closeIcon } from "@/app/assets/icons";
+import Icon from "./common/Icon";
 
 export default function InfoModal() {
   const {
@@ -90,25 +41,12 @@ export default function InfoModal() {
             className="relative w-150 max-w-[90vw] max-h-[85vh] flex flex-col glassmorphism rounded-2xl text-white shadow-2xl overflow-hidden"
             onWheelCapture={(e) => e.stopPropagation()}
           >
-            <button
+            <Button
+              variant="ghost"
+              icon={<Icon src={closeIcon} alt="Close" />}
               onClick={() => setIsInfoOpen(false)}
               className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors cursor-pointer z-10"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+            />
 
             <div className="shrink-0 p-8 pb-4 border-b border-white/10">
               <h2 className="text-3xl font-bold mb-1 tracking-wider">
@@ -176,13 +114,13 @@ export default function InfoModal() {
               </div>
             </div>
 
-            <div className="shrink-0 p-6 px-8 border-t border-white/10 bg-black/20 flex items-center justify-between">
-              <ToggleSwitch
+            <div className="shrink-0 p-6 px-8 border-t border-white/10 bg-black/20 flex items-center justify-between gap-6">
+              <Switch
                 label="Show Orbital Paths"
                 checked={showOrbits}
                 onChange={() => setShowOrbits(!showOrbits)}
               />
-              <ToggleSwitch
+              <Switch
                 label="Show Planet Labels"
                 checked={showLabels}
                 onChange={() => setShowLabels(!showLabels)}

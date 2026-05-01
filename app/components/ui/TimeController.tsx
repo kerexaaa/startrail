@@ -1,54 +1,40 @@
-import IconButton from "./IconButton";
-import Image from "next/image";
-import slowIcon from "@/app/assets/icons/dark/slow.svg";
-import speedIcon from "@/app/assets/icons/dark/speed.svg";
-import pauseIcon from "@/app/assets/icons/dark/pause.svg";
-import playIcon from "@/app/assets/icons/dark/play.svg";
-import resetIcon from "@/app/assets/icons/dark/reset.svg";
+import Button from "./common/Button";
 import { useTimeController } from "@/app/hooks/useTimeController";
+import { slowIcon, speedIcon, pauseIcon, playIcon, resetIcon } from "@/app/assets/icons";
+import Icon from "./common/Icon";
 
 export default function TimeController() {
-  const { isPaused, FULL_STEPS, currentIndex, currentLabel, timeControls } =
-    useTimeController();
+  const { isPaused, FULL_STEPS, currentIndex, currentLabel, timeControls } = useTimeController();
 
   return (
     <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center justify-center gap-4 z-20">
-      <IconButton
+      <Button
         onClick={timeControls.handleSlowDown}
-        className={
-          currentIndex <= 0 || isPaused ? "opacity-50 cursor-not-allowed" : ""
-        }
-        icon={<Image src={slowIcon} alt="Slow" width={24} height={24} />}
+        disabled={currentIndex <= 0 || isPaused}
+        className={currentIndex <= 0 || isPaused ? "opacity-50 cursor-not-allowed" : ""}
+        icon={<Icon src={slowIcon} alt="Slow" />}
       />
 
       <div className="glassmorphism px-5 py-3 rounded min-w-40 text-center text-white select-none transition-all">
         {currentLabel}
       </div>
 
-      <IconButton
+      <Button
         onClick={timeControls.handleSpeedUp}
-        className={
-          currentIndex >= FULL_STEPS.length - 1 || isPaused
-            ? "opacity-50 cursor-not-allowed"
-            : ""
-        }
-        icon={<Image src={speedIcon} alt="Speed" width={24} height={24} />}
+        disabled={currentIndex >= FULL_STEPS.length - 1 || isPaused}
+        className={currentIndex >= FULL_STEPS.length - 1 || isPaused ? "opacity-50 cursor-not-allowed" : ""}
+        icon={<Icon src={speedIcon} alt="Speed" />}
       />
+      
       <div className="py-3 bg-white/50 w-px"></div>
-      <IconButton
+      
+      <Button
         onClick={timeControls.togglePause}
-        icon={
-          <Image
-            src={isPaused ? playIcon : pauseIcon}
-            alt={isPaused ? "Play" : "Pause"}
-            width={24}
-            height={24}
-          />
-        }
+        icon={<Icon src={isPaused ? playIcon : pauseIcon} alt={isPaused ? "Play" : "Pause"} />}
       />
-      <IconButton
+      <Button
         onClick={timeControls.handleReset}
-        icon={<Image src={resetIcon} alt="Reset" width={24} height={24} />}
+        icon={<Icon src={resetIcon} alt="Reset" />}
       />
     </div>
   );
