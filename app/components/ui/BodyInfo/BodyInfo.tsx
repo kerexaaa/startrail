@@ -1,11 +1,12 @@
 import { DEFAULT_TRANSITION_DURATION } from "../../../constants/index";
 import { usePlanetStore } from "@/app/states/usePlanetStore";
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
 import { useState } from "react";
-import dropdownIcon from "@/app/assets/icons/dark/dropdown.svg";
 import { useBodyInfo } from "@/app/hooks/useBodyInfo";
 import BodyInfoRow from "./BodyInfoRow";
+import Button from "../common/Button";
+import Icon from "../common/Icon";
+import { dropdownIcon } from "@/app/assets/icons";
 
 export default function BodyInfo() {
   const { focusedPlanet } = usePlanetStore();
@@ -32,16 +33,17 @@ export default function BodyInfo() {
             {info.type}
           </div>
 
-          <button
+          <Button
+            variant="ghost"
             onClick={() => setHidden(!hidden)}
-            className="absolute top-0 right-0 z-20 flex justify-center items-center hover:bg-white/10 transition-colors rounded-full cursor-pointer p-2 text-white/50 hover:text-white"
+            className="absolute top-0 right-0 z-20 rounded-full"
           >
-            <Image
+            <Icon
               src={dropdownIcon}
               alt="Toggle visibility"
-              className={`transition-all duration-300 ${!hidden ? "rotate-180" : "rotate-0"}`}
+              className={`transition-transform duration-300 ${!hidden ? "rotate-180" : "rotate-0"}`}
             />
-          </button>
+          </Button>
         </div>
 
         <AnimatePresence initial={false}>

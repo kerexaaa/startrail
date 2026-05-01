@@ -1,0 +1,15 @@
+export { default as swapIcon } from "./dark/swap.svg";
+export { default as speedIcon } from "./dark/speed.svg";
+export { default as smallscreenIcon } from "./dark/smallscreen.svg";
+export { default as slowIcon } from "./dark/slow.svg";
+export { default as resetIcon } from "./dark/reset.svg";
+export { default as plusIcon } from "./dark/plus.svg";
+export { default as playIcon } from "./dark/play.svg";
+export { default as pauseIcon } from "./dark/pause.svg";
+export { default as optionsIcon } from "./dark/options.svg";
+export { default as minusIcon } from "./dark/minus.svg";
+export { default as infoIcon } from "./dark/info.svg";
+export { default as fullscreenIcon } from "./dark/fullscreen.svg";
+export { default as freecamIcon } from "./dark/freecam.svg";
+export { default as dropdownIcon } from "./dark/dropdown.svg";
+export { default as closeIcon } from "./dark/close.svg";

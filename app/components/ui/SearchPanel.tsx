@@ -1,9 +1,9 @@
-import swapIcon from "@/app/assets/icons/dark/swap.svg";
+import { swapIcon } from "@/app/assets/icons/index";
 import FloatingInput from "./FloatingInput";
-import Image from "next/image";
 import { PLANETARY_BODIES } from "../../constants/index";
 import TelescopeData from "./TelescopeData/TelescopeData";
 import { useSearchPanel } from "@/app/hooks/useSearchPanel";
+import Icon from "./common/Icon";
 
 export default function SearchPanel() {
   const {
@@ -58,7 +58,7 @@ export default function SearchPanel() {
           className="mr-4 cursor-pointer p-2 button-hologram-hover rounded-full relative"
           onClick={handleSwap}
         >
-          <Image src={swapIcon} alt="Swap" width={24} height={24} />
+          <Icon src={swapIcon} alt="Swap" />
         </div>
       </div>
       <TelescopeData

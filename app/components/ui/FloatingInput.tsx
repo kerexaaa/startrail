@@ -1,9 +1,10 @@
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
 import { useRef } from "react";
-import dropdownIcon from "@/app/assets/icons/dark/dropdown.svg";
 import Dropdown from "../ui/Dropdown";
 import { DEFAULT_TRANSITION_DURATION } from "@/app/constants";
+import Input from "./common/Input";
+import Icon from "./common/Icon";
+import { dropdownIcon } from "@/app/assets/icons";
 
 interface FloatingInputProps {
   children: React.ReactNode;
@@ -46,7 +47,7 @@ export default function FloatingInput({
           </motion.label>
         )}
       </AnimatePresence>
-      <input
+      <Input
         onClick={(e) => {
           e.stopPropagation();
           onToggle();
@@ -74,10 +75,8 @@ export default function FloatingInput({
         }}
         className="flex justify-center items-center hover:bg-white/10 transition-colors rounded-full cursor-pointer p-2 relative user-select-none"
       >
-        <Image
+        <Icon
           src={dropdownIcon}
-          width={24}
-          height={24}
           alt="Input icon"
           className={`${isOpen ? "rotate-180" : ""} transition-transform duration-200`}
         />
