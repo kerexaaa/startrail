@@ -85,6 +85,7 @@ export function useAstroCalculations({
     setToValue("");
     setSearchTarget("");
     setFocusedPlanet(null);
+    toast.dismiss();
   };
 
   useEffect(() => {

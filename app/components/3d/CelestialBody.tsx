@@ -117,7 +117,6 @@ export default function CelestialBody({
               onHover={setHovered}
               isFocused={isFocused}
             >
-              <sphereGeometry args={[proxyRadius, 16, 16]} />
               <meshBasicMaterial transparent opacity={0} depthWrite={false} />
             </InteractionZone>
           </group>

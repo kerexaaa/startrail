@@ -94,11 +94,11 @@ export default function InfoModal() {
                     color="text-red-400"
                   />
                   <Keybind
-                    keys="F1"
+                    keys="Esc"
                     label="Exit Freecam"
                     color="text-red-400"
                   />
-                  <Keybind keys="Q" label="Exit Focus" color="text-red-400" />
+                  <Keybind keys="Esc" label="Exit Focus" color="text-red-400" />
                   <Keybind keys="" label="" color="transparent" />
                   <Keybind
                     keys="WASD"

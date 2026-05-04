@@ -52,7 +52,8 @@ function SettingsButtons({ children, ...props }: DivProps) {
             setIsFreeCam(true);
             setFocusedPlanet(null);
             setSearchTarget("");
-            toast("Press F1 to exit Freecam", {
+            toast.dismiss();
+            toast("Press ESC to exit Freecam", {
               autoClose: 2000,
               hideProgressBar: true,
               closeOnClick: true,
