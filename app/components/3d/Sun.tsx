@@ -6,13 +6,9 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import BodyName from "./BodyName";
 import { getBodyTextureUrls } from "@/app/utils/textures";
-import InteractionZone from "./InteractionZone";
-import {
-  MIN_CLICK_RADIUS,
-  SUN_RADIUS,
-  SUN_ROTATION_SPEED,
-} from "../../constants/index";
+import { SUN_RADIUS, SUN_ROTATION_SPEED } from "../../constants/index";
 import { useUIStore } from "@/app/states/useUIStore";
+import InteractionZone from "./InteractionZone";
 
 export default function Sun() {
   const sunRef = useRef<THREE.Group>(null);
@@ -41,19 +37,21 @@ export default function Sun() {
         name="Sun"
         onHover={setHovered}
         orbitGroupRef={sunRef}
-        proxyRadius={MIN_CLICK_RADIUS}
         radius={SUN_RADIUS}
+        proxyRadius={SUN_RADIUS}
       >
-        <sphereGeometry args={[SUN_RADIUS, 64, 64]} />
-        <BodyName
-          name={"Sun"}
-          isVisible={hovered}
-          isVIP={true}
-          radius={SUN_RADIUS}
-          showLabels={showLabels}
-        />
-        <meshBasicMaterial map={texture} />
-        {hovered && <Outlines thickness={1} color="red" />}
+        <mesh>
+          <sphereGeometry args={[SUN_RADIUS, 64, 64]} />
+          <meshBasicMaterial map={texture} />
+          {hovered && <Outlines thickness={1} color="red" />}
+          <BodyName
+            name={"Sun"}
+            isVisible={hovered}
+            isVIP={true}
+            radius={SUN_RADIUS}
+            showLabels={showLabels}
+          />
+        </mesh>
       </InteractionZone>
     </group>
   );

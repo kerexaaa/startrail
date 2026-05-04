@@ -1,10 +1,10 @@
 "use client";
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import Loader from "./components/ui/Loader";
 import { motion, AnimatePresence } from "framer-motion";
 import SettingsButtons from "./components/ui/SettingsButtons";
-import { Slide, toast } from "react-toastify";
+import { toast, Slide } from 'react-toastify';
 import SearchPanel from "./components/ui/SearchPanel";
 import { usePlanetStore } from "./states/usePlanetStore";
 import TimeController from "./components/ui/TimeController";
@@ -19,14 +19,21 @@ export default function Home() {
   const { isFreeCam, setIsLoading, isLoading } = useUIStore();
   const { focusedPlanet, searchTarget, focusZoom, setTargetZoom } =
     usePlanetStore();
+  const toastIdRef = useRef<string | null>(null);
 
   useIdleTimer();
   useAppHotkeys();
 
   useEffect(() => {
     if (focusedPlanet) {
-      toast(`Tracking ${searchTarget}. Press Q to exit`, {
-        toastId: "focus-toast",
+      if (toastIdRef.current) {
+        toast.dismiss(toastIdRef.current);
+      }
+
+      const newToastId = `focus-${Date.now()}`;
+      toastIdRef.current = newToastId;
+      toast(`Tracking ${searchTarget}. Press ESC to exit`, {
+        toastId: newToastId,
         autoClose: 2000,
         hideProgressBar: true,
         closeOnClick: true,

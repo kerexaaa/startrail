@@ -5,8 +5,16 @@ import { useUIStore } from "../states/useUIStore";
 import { MIN_ZOOM, MAX_ZOOM } from "../constants/index";
 
 export function useAppHotkeys() {
-  const { setFocusedPlanet, setTargetZoom, focusedPlanet } = usePlanetStore();
-  const { setIsFreeCam, setIsFullscreen } = useUIStore();
+  const { setFocusedPlanet, setTargetZoom, focusedPlanet, setSearchTarget } =
+    usePlanetStore();
+
+  const {
+    isFreeCam,
+    setIsFreeCam,
+    setIsFullscreen,
+    isInfoOpen,
+    setIsInfoOpen,
+  } = useUIStore();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -45,17 +53,34 @@ export function useAppHotkeys() {
         setTargetZoom((prev) => Math.min(100, prev + 2));
       }
 
-      if (event.code === "KeyQ" && focusedPlanet) {
-        setTargetZoom(50);
-        setFocusedPlanet(null);
-        toast.dismiss();
+      if (event.key === "Escape") {
+        if (isInfoOpen) {
+          setIsInfoOpen(false);
+          return;
+        }
+
+        if (isFreeCam) {
+          setIsFreeCam(false);
+          toast.dismiss();
+          return;
+        }
+
+        if (focusedPlanet) {
+          setTargetZoom(50);
+          setFocusedPlanet(null);
+          setSearchTarget("");
+          toast.dismiss();
+          return;
+        }
       }
     };
 
     const handleWheel = (event: WheelEvent) => {
       event.preventDefault();
       const delta = event.deltaY > 0 ? 1 : -1;
-      setTargetZoom((prev) => Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, prev + delta)));
+      setTargetZoom((prev) =>
+        Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, prev + delta)),
+      );
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -71,6 +96,10 @@ export function useAppHotkeys() {
     setTargetZoom,
     setIsFullscreen,
     setIsFreeCam,
+    setSearchTarget,
+    isFreeCam,
+    isInfoOpen,
+    setIsInfoOpen,
   ]);
 
   useEffect(() => {
