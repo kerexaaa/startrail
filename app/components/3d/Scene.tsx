@@ -28,9 +28,8 @@ export default function Scene() {
 
   return (
     <>
-      <ambientLight intensity={0.05} />
-      <pointLight args={["#fff", 500, 0]} position={[0, 0, 0]} />
-
+      <ambientLight intensity={0.03} />
+      <pointLight args={["#fff", 0.5, 0]} decay={0} position={[0, 0, 0]} />
       <Sun />
       <PlanetSystem />
       <Stars />

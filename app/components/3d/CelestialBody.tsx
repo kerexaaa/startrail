@@ -41,9 +41,20 @@ export default function CelestialBody({
   const bodyMeshRef = useRef<THREE.Mesh>(null);
 
   const [hovered, setHovered] = useState(false);
-  const { registerPlanetRef } = usePlanetStore();
-  const { showOrbits, showLabels } = useUIStore();
-  const { focusedPlanet, planetRefs } = usePlanetStore();
+  const { focusedPlanet, planetRefs, registerPlanetRef, setFocusedPlanet, setSearchTarget } =
+    usePlanetStore();
+  const { showOrbits, showLabels, isFreeCam } = useUIStore();
+
+  const handleFocus = () => {
+    if (isFreeCam) return;
+    if (orbitGroupRef.current) {
+      setFocusedPlanet(
+        orbitGroupRef.current,
+        Math.max(MIN_CLICK_RADIUS, radius * 3),
+      );
+    }
+    setSearchTarget(name);
+  };
 
   const proxyRadius = isGeneric
     ? radius * 2
@@ -89,6 +100,7 @@ export default function CelestialBody({
             radius={radius}
             showLabels={showLabels}
             isFocused={isFocused}
+            onLabelClick={handleFocus}
           />
           <group rotation={[0, 0, (tilt * Math.PI) / 180]}>
             <mesh ref={bodyMeshRef} name="planet">
@@ -107,7 +119,7 @@ export default function CelestialBody({
                   ringScales={ringScales}
                 />
               )}
-              {!isGeneric && hovered && <Outlines thickness={1} color="red" />}
+              {!isFocused && hovered && <Outlines thickness={1} color="red" />}
             </mesh>
             <InteractionZone
               name={name}
