@@ -4,7 +4,7 @@ import { Suspense, useEffect, useRef } from "react";
 import Loader from "./components/ui/Loader";
 import { motion, AnimatePresence } from "framer-motion";
 import SettingsButtons from "./components/ui/SettingsButtons";
-import { toast, Slide } from 'react-toastify';
+import { toast, Slide } from "react-toastify";
 import SearchPanel from "./components/ui/SearchPanel";
 import { usePlanetStore } from "./states/usePlanetStore";
 import TimeController from "./components/ui/TimeController";
@@ -57,7 +57,7 @@ export default function Home() {
 
   return (
     <main className="relative h-full w-full flex items-center justify-center bg-black overflow-hidden">
-      <Canvas camera={{ position: [10, 10, 10], fov: 50 }}>
+      <Canvas camera={{ position: [10, 10, 10], fov: 50 }} shadows>
         <Suspense fallback={<Handle />}>
           <Scene />
         </Suspense>
