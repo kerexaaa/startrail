@@ -32,13 +32,14 @@ export default function Rings({
   }, [radius, ringScales]);
 
   return (
-    <mesh rotation={[Math.PI / 2, 0, 0]} geometry={ringGeo}>
-      <meshBasicMaterial
+    <mesh rotation={[Math.PI / 2, 0, 0]} geometry={ringGeo} receiveShadow>
+      <meshLambertMaterial
         map={ringTexture}
         transparent={true}
         opacity={0.5}
         side={THREE.DoubleSide}
         depthWrite={false}
+        color={[7.5, 7.5, 7.5]}
       />
     </mesh>
   );
