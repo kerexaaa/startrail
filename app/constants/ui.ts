@@ -21,4 +21,51 @@ export const SPEED_STEPS = [
   { label: "5 years/sec", value: 365 * 5 },
 ];
 
+export interface KeybindInfo {
+  keys: string;
+  label: string;
+  color?: string;
+}
+
+export const APP_KEYBINDS: KeybindInfo[] = [
+  {
+    keys: "LMB",
+    label: "Focus (On body)",
+  },
+  {
+    keys: "Scroll",
+    label: "Zoom In/Out",
+  },
+  {
+    keys: "F",
+    label: "Enter/Exit Fullscreen",
+    color: "text-red-400",
+  },
+  {
+    keys: "Esc",
+    label: "Exit Freecam",
+    color: "text-red-400",
+  },
+  {
+    keys: "Esc",
+    label: "Exit Focus",
+    color: "text-red-400",
+  },
+  {
+    keys: "",
+    label: "",
+    color: "transparent",
+  },
+  {
+    keys: "WASD",
+    label: "Move Drone (Freecam Mode only)",
+    color: "text-blue-300",
+  },
+  {
+    keys: "LMB Hold",
+    label: "Rotate Drone (Freecam Mode only)",
+    color: "text-blue-300",
+  },
+];
+
 export const DEFAULT_TRANSITION_DURATION = 0.2;
