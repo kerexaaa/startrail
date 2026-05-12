@@ -3,11 +3,8 @@ import CelestialBody from "./CelestialBody";
 import MoonSystem from "./MoonSystem";
 import { PLANETS_CONFIG } from "../../constants/index";
 import { PlanetConfig } from "@/app/types/astronomy";
-import useFetchMoons from "@/app/hooks/useFetchMoons";
 
 export default function PlanetSystem() {
-  useFetchMoons();
-
   return (
     <>
       {PLANETS_CONFIG.map((planet: PlanetConfig) => (

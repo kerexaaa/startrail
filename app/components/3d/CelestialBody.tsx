@@ -1,16 +1,16 @@
 "use client";
 import { useTexture, Outlines } from "@react-three/drei";
-import { useEffect, useRef, useState, ReactNode, useMemo } from "react";
+import { useRef, ReactNode, useMemo } from "react";
 import * as THREE from "three";
 import OrbitPath from "./OrbitPath";
 import BodyName from "./BodyName";
-import { usePlanetStore } from "../../states/usePlanetStore";
-import { useUIStore } from "@/app/states/useUIStore";
-import { getBodyTextureUrls, getMoonTint } from "@/app/utils/textures";
 import Rings from "./Rings";
-import { MIN_CLICK_RADIUS, PLANETARY_BODIES } from "@/app/constants";
-import useCelestialPhysics from "@/app/hooks/useCelestialPhysics";
 import InteractionZone from "./InteractionZone";
+import { MIN_CLICK_RADIUS, PLANETARY_BODIES } from "@/app/constants";
+import { getBodyTextureUrls, getMoonTint } from "@/app/utils/textures";
+import { useUIStore } from "@/app/states/useUIStore";
+import useCelestialPhysics from "@/app/hooks/useCelestialPhysics";
+import useCelestialInteraction from "@/app/hooks/useCelestialInteraction";
 
 interface CelestialBodyProps {
   name: string;
@@ -40,37 +40,10 @@ export default function CelestialBody({
   const orbitGroupRef = useRef<THREE.Group>(null);
   const bodyMeshRef = useRef<THREE.Mesh>(null);
 
-  const [hovered, setHovered] = useState(false);
-  const { focusedPlanet, planetRefs, registerPlanetRef, setFocusedPlanet, setSearchTarget } =
-    usePlanetStore();
-  const { showOrbits, showLabels, isFreeCam } = useUIStore();
+  const { showOrbits, showLabels } = useUIStore();
 
-  const handleFocus = () => {
-    if (isFreeCam) return;
-    if (orbitGroupRef.current) {
-      setFocusedPlanet(
-        orbitGroupRef.current,
-        Math.max(MIN_CLICK_RADIUS, radius * 3),
-      );
-    }
-    setSearchTarget(name);
-  };
-
-  const proxyRadius = isGeneric
-    ? radius * 2
-    : Math.max(radius * 1.2, MIN_CLICK_RADIUS);
-  const segments = isGeneric ? 16 : 64;
-
-  const { bodyUrl, ringUrl, ringScales } = getBodyTextureUrls(name);
-  const bodyColor = useMemo(
-    () => (isGeneric ? getMoonTint(name) : "#ffffff"),
-    [isGeneric, name],
-  );
-  const texture = useTexture(bodyUrl);
-
-  useEffect(() => {
-    if (orbitGroupRef.current) registerPlanetRef(name, orbitGroupRef.current);
-  }, [name, registerPlanetRef]);
+  const { hovered, setHovered, isFocused, handleFocus } =
+    useCelestialInteraction(name, radius, orbitGroupRef);
 
   useCelestialPhysics({
     name,
@@ -82,58 +55,69 @@ export default function CelestialBody({
     bodyMeshRef,
   });
 
-  const isFocused = focusedPlanet === planetRefs[name];
+  const proxyRadius = isGeneric
+    ? radius * 2
+    : Math.max(radius * 1.2, MIN_CLICK_RADIUS);
+  const segments = isGeneric ? 16 : 64;
+  const { bodyUrl, ringUrl, ringScales } = getBodyTextureUrls(name);
+  const bodyColor = useMemo(
+    () => (isGeneric ? getMoonTint(name) : "#ffffff"),
+    [isGeneric, name],
+  );
+  const texture = useTexture(bodyUrl);
 
   return (
-    <>
-      <group rotation={[orbitTilt, 0, 0]}>
-        {showOrbits && distance > 0 && !isGeneric && (
-          <OrbitPath distance={distance} />
-        )}
+    <group rotation={[orbitTilt, 0, 0]}>
+      {showOrbits && distance > 0 && !isGeneric && (
+        <OrbitPath distance={distance} />
+      )}
 
-        <group ref={orbitGroupRef}>
-          {children}
-          <BodyName
-            name={name}
-            isVisible={hovered}
-            isVIP={!isGeneric && PLANETARY_BODIES.includes(name)}
-            radius={radius}
-            showLabels={showLabels}
-            isFocused={isFocused}
-            onLabelClick={handleFocus}
-          />
-          <group rotation={[0, 0, (tilt * Math.PI) / 180]}>
-            <mesh castShadow={!!ringUrl || isGeneric} ref={bodyMeshRef} name="planet">
-              <sphereGeometry args={[radius, segments, segments]} />
-              <meshStandardMaterial
-                map={texture}
-                color={bodyColor}
-                transparent={isGeneric}
-                opacity={1}
+      <group ref={orbitGroupRef}>
+        {children}
+        <BodyName
+          name={name}
+          isVisible={hovered}
+          isVIP={!isGeneric && PLANETARY_BODIES.includes(name)}
+          radius={radius}
+          showLabels={showLabels}
+          isFocused={isFocused}
+          onLabelClick={handleFocus}
+        />
+        <group rotation={[0, 0, (tilt * Math.PI) / 180]}>
+          <mesh
+            castShadow={!!ringUrl || isGeneric}
+            ref={bodyMeshRef}
+            name="planet"
+          >
+            <sphereGeometry args={[radius, segments, segments]} />
+            <meshStandardMaterial
+              map={texture}
+              color={bodyColor}
+              transparent={isGeneric}
+              opacity={1}
+            />
+
+            {ringUrl && ringScales && (
+              <Rings
+                radius={radius}
+                ringUrl={ringUrl}
+                ringScales={ringScales}
               />
-
-              {ringUrl && ringScales && (
-                <Rings
-                  radius={radius}
-                  ringUrl={ringUrl}
-                  ringScales={ringScales}
-                />
-              )}
-              {!isFocused && hovered && <Outlines thickness={1} color="red" />}
-            </mesh>
-            <InteractionZone
-              name={name}
-              radius={radius}
-              proxyRadius={proxyRadius}
-              orbitGroupRef={orbitGroupRef}
-              onHover={setHovered}
-              isFocused={isFocused}
-            >
-              <meshBasicMaterial transparent opacity={0} depthWrite={false} />
-            </InteractionZone>
-          </group>
+            )}
+            {!isFocused && hovered && <Outlines thickness={1} color="red" />}
+          </mesh>
+          <InteractionZone
+            name={name}
+            radius={radius}
+            proxyRadius={proxyRadius}
+            orbitGroupRef={orbitGroupRef}
+            onHover={setHovered}
+            isFocused={isFocused}
+          >
+            <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+          </InteractionZone>
         </group>
       </group>
-    </>
+    </group>
   );
 }

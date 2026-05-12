@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useUIStore } from "@/app/states/useUIStore";
-import { DEFAULT_TRANSITION_DURATION } from "../../constants/ui";
+import { APP_KEYBINDS, DEFAULT_TRANSITION_DURATION } from "../../constants/ui";
 import Switch from "./common/Switch";
 import Keybind from "./common/Keybind";
 import Button from "./common/Button";
@@ -86,30 +86,14 @@ export default function InfoModal() {
                   Controls & Keybinds
                 </h3>
                 <div className="grid grid-cols-2 gap-y-3 gap-x-6">
-                  <Keybind keys="LMB" label="Focus (On body)" />
-                  <Keybind keys="Scroll" label="Zoom In/Out" />
-                  <Keybind
-                    keys="F"
-                    label="Enter/Exit Fullscreen"
-                    color="text-red-400"
-                  />
-                  <Keybind
-                    keys="Esc"
-                    label="Exit Freecam"
-                    color="text-red-400"
-                  />
-                  <Keybind keys="Esc" label="Exit Focus" color="text-red-400" />
-                  <Keybind keys="" label="" color="transparent" />
-                  <Keybind
-                    keys="WASD"
-                    label="Move Drone (Freecam Mode only)"
-                    color="text-blue-300"
-                  />
-                  <Keybind
-                    keys="LMB Hold"
-                    label="Rotate Drone (Freecam Mode only)"
-                    color="text-blue-300"
-                  />
+                  {APP_KEYBINDS.map((kb, index) => (
+                    <Keybind
+                      key={index}
+                      keys={kb.keys}
+                      label={kb.label}
+                      color={kb.color}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
