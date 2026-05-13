@@ -82,13 +82,10 @@ export default function CelestialBody({
           showLabels={showLabels}
           isFocused={isFocused}
           onLabelClick={handleFocus}
+          onHover={setHovered}
         />
         <group rotation={[0, 0, (tilt * Math.PI) / 180]}>
-          <mesh
-            castShadow={!!ringUrl || isGeneric}
-            ref={bodyMeshRef}
-            name="planet"
-          >
+          <mesh castShadow={!!ringUrl} ref={bodyMeshRef} name="planet">
             <sphereGeometry args={[radius, segments, segments]} />
             <meshStandardMaterial
               map={texture}

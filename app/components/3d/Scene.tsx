@@ -9,17 +9,27 @@ export default function Scene() {
 
   return (
     <>
-      <ambientLight intensity={0.03} />
+      <ambientLight intensity={0.05} />
+
       <pointLight
-        args={["#fff", 0.5, 0]}
+        args={["#fff", 2.5, 0]}
         decay={0}
         position={[0, 0, 0]}
         castShadow
         shadow-mapSize={[2048, 2048]}
-        shadow-bias={-0.0001}
-        shadow-radius={5}
+        shadow-bias={-0.0005}
+        shadow-camera-far={650}
+        shadow-radius={1}
       />
-      <Stars />
+
+      <Stars
+        radius={3000}
+        depth={500}
+        count={10000}
+        factor={4}
+        saturation={0}
+        speed={1}
+      />
 
       <CameraRig />
 

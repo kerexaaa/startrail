@@ -2,11 +2,16 @@ import { useEffect } from "react";
 import { usePlanetStore } from "../states/usePlanetStore";
 import { toast } from "react-toastify";
 import { useUIStore } from "../states/useUIStore";
-import { MIN_ZOOM, MAX_ZOOM } from "../constants/index";
+import { MIN_ZOOM, MAX_ZOOM, ZOOM_SPEED_MULTIPLIER } from "../constants/index";
 
 export function useAppHotkeys() {
-  const { setFocusedPlanet, setTargetZoom, focusedPlanet, setSearchTarget } =
-    usePlanetStore();
+  const {
+    setFocusedPlanet,
+    setTargetZoom,
+    focusedPlanet,
+    focusZoom,
+    setSearchTarget,
+  } = usePlanetStore();
 
   const {
     isFreeCam,
@@ -77,10 +82,16 @@ export function useAppHotkeys() {
 
     const handleWheel = (event: WheelEvent) => {
       event.preventDefault();
-      const delta = event.deltaY > 0 ? 1 : -1;
-      setTargetZoom((prev) =>
-        Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, prev + delta)),
-      );
+
+      setTargetZoom((prevZoom) => {
+        const zoomDelta = prevZoom * ZOOM_SPEED_MULTIPLIER;
+
+        if (event.deltaY > 0) {
+          return Math.min(prevZoom + zoomDelta, MAX_ZOOM);
+        } else {
+          return Math.max(prevZoom - zoomDelta, MIN_ZOOM);
+        }
+      });
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -100,6 +111,7 @@ export function useAppHotkeys() {
     isFreeCam,
     isInfoOpen,
     setIsInfoOpen,
+    focusZoom,
   ]);
 
   useEffect(() => {

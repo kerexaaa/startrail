@@ -12,6 +12,7 @@ export default function Rings({
   ringScales: [number, number];
 }) {
   const ringTexture = useTexture(ringUrl);
+
   const ringGeo = useMemo(() => {
     const inner = radius * ringScales[0];
     const outer = radius * ringScales[1];
@@ -36,10 +37,13 @@ export default function Rings({
       <meshLambertMaterial
         map={ringTexture}
         transparent={true}
-        opacity={0.5}
+        opacity={0.6}
         side={THREE.DoubleSide}
         depthWrite={false}
-        color={[7.5, 7.5, 7.5]}
+        color={new THREE.Color(2.5, 2.5, 2.5)}
+        emissiveMap={ringTexture}
+        emissive={new THREE.Color("#ffffff")}
+        emissiveIntensity={0.15}
       />
     </mesh>
   );

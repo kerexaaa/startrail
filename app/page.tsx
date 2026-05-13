@@ -57,7 +57,11 @@ export default function Home() {
 
   return (
     <main className="relative h-full w-full flex items-center justify-center bg-black overflow-hidden">
-      <Canvas camera={{ position: [10, 10, 10], fov: 50 }} shadows>
+      <Canvas
+        dpr={[1, 1.5]}
+        camera={{ position: [0, 100, 200], fov: 68, near: 0.1, far: 10000 }}
+        shadows
+      >
         <Suspense fallback={<Handle />}>
           <Scene />
         </Suspense>
