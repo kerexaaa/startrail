@@ -3,16 +3,14 @@ import { usePlanetStore } from "@/app/states/usePlanetStore";
 import { getBodyTextureUrls } from "@/app/utils/textures";
 import {
   BASE_SPEED,
-  RADIUS_SCALE,
+  SIZE_SCALE,
   EARTH_RADIUS_KM,
-  EARTH_TO_MOON_DISTANCE_KM,
   GENERIC_MOON_RADIUS,
-  MOON_DISTANCE_SCALE,
   MOON_ORBIT_PERIOD,
-  RANDOM_OFFSET_RANGE,
   UNASSIGNED_MOON_RADIUS,
   YEAR_IN_DAYS,
 } from "../../constants/index";
+import { getJ2000Angle } from "@/app/utils/ephemeris";
 
 interface MoonSystemProps {
   planetId: string;
@@ -33,7 +31,7 @@ export default function MoonSystem({
       const name = moon.englishName || moon.name;
       const isGeneric =
         getBodyTextureUrls(name).bodyUrl.includes("generic_moon");
-      return !isGeneric || moon.meanRadius > 5;
+      return !isGeneric || moon.meanRadius > 15;
     });
 
   return (
@@ -43,16 +41,15 @@ export default function MoonSystem({
         const isGeneric =
           getBodyTextureUrls(name).bodyUrl.includes("generic_moon");
 
+        const trueRadius = (moon.meanRadius / EARTH_RADIUS_KM) * SIZE_SCALE;
         const radius = Math.max(
-          0.02,
-          (moon.meanRadius / EARTH_RADIUS_KM) *
-            RADIUS_SCALE *
+          0.1,
+          trueRadius *
             (isGeneric ? GENERIC_MOON_RADIUS : UNASSIGNED_MOON_RADIUS),
         );
 
         const distance =
-          planetRadius * MOON_DISTANCE_SCALE +
-          Math.pow(moon.semimajorAxis / EARTH_TO_MOON_DISTANCE_KM, 0.5) * 2.0;
+          planetRadius + 1.5 + Math.pow(moon.semimajorAxis / 80000, 0.7);
 
         const orbitalPeriod = Math.max(
           0.1,
@@ -60,8 +57,7 @@ export default function MoonSystem({
         );
         const travelSpeed = (YEAR_IN_DAYS / orbitalPeriod) * BASE_SPEED;
 
-        const randomOffset =
-          (name.length * RANDOM_OFFSET_RANGE) % (Math.PI * 2);
+        const startAngle = getJ2000Angle(orbitalPeriod);
         const orbitTilt = (moon.inclination * Math.PI) / 180;
 
         return (
@@ -73,7 +69,7 @@ export default function MoonSystem({
             rotationSpeed={1 / orbitalPeriod}
             travelSpeed={travelSpeed}
             orbitTilt={orbitTilt}
-            startAngle={randomOffset}
+            startAngle={startAngle}
             isGeneric={isGeneric}
           />
         );

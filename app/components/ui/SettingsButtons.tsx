@@ -11,7 +11,11 @@ import {
 import { Slide, toast } from "react-toastify";
 import { useUIStore } from "@/app/states/useUIStore";
 import { usePlanetStore } from "@/app/states/usePlanetStore";
-import { MIN_ZOOM, MAX_ZOOM } from "../../constants/index";
+import {
+  MIN_ZOOM,
+  MAX_ZOOM,
+  ZOOM_BUTTON_MULTIPLIER,
+} from "../../constants/index";
 import Icon from "./common/Icon";
 
 interface DivProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -40,11 +44,19 @@ function SettingsButtons({ children, ...props }: DivProps) {
           icon={<Icon size={16} src={infoIcon} alt="Info" />}
         />
         <Button
-          onClick={() => setTargetZoom((prev) => Math.max(MIN_ZOOM, prev - 2))}
+          onClick={() =>
+            setTargetZoom((prev) =>
+              Math.max(prev - prev * ZOOM_BUTTON_MULTIPLIER, MIN_ZOOM),
+            )
+          }
           icon={<Icon size={16} src={plusIcon} alt="Zoom In" />}
         />
         <Button
-          onClick={() => setTargetZoom((prev) => Math.min(MAX_ZOOM, prev + 2))}
+          onClick={() =>
+            setTargetZoom((prev) =>
+              Math.min(prev + prev * ZOOM_BUTTON_MULTIPLIER, MAX_ZOOM),
+            )
+          }
           icon={<Icon size={16} src={minusIcon} alt="Zoom Out" />}
         />
         <Button

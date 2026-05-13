@@ -41,7 +41,7 @@ export const usePlanetStore = create<PlanetStore>((set) => ({
   searchTarget: "",
   setSearchTarget: (name) => set({ searchTarget: name }),
 
-  timeMultiplier: 1,
+  timeMultiplier: 1 / 24,
   setTimeMultiplier: (multiplier) => set({ timeMultiplier: multiplier }),
 
   timeResetTrigger: 0,
