@@ -55,6 +55,7 @@ input {
     rgba(18, 18, 18, 0.43) 60%
   );
 }
+
 .glassmorphism::before {
   content: "";
   position: absolute;
@@ -138,4 +139,24 @@ input {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
+}
+
+.arrows-pole::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  bottom: 18px;
+  left: 26px;
+  width: 1px;
+  border-left: 1px dashed rgba(255, 255, 255, 0.3);
+}
+
+.arrows::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 26px;
+  width: 16px;
+  height: 1px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.3);
 }

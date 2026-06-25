@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useRef } from "react";
-import Dropdown from "../ui/Dropdown";
+import Dropdown from "./Dropdown/Dropdown";
 import { DEFAULT_TRANSITION_DURATION } from "@/app/constants";
 import Input from "./common/Input";
 import Icon from "./common/Icon";
