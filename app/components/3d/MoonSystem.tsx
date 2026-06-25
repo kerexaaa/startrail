@@ -31,7 +31,7 @@ export default function MoonSystem({
       const name = moon.englishName || moon.name;
       const isGeneric =
         getBodyTextureUrls(name).bodyUrl.includes("generic_moon");
-      return !isGeneric || moon.meanRadius > 15;
+      return !isGeneric || moon.meanRadius > 6;
     });
 
   return (
