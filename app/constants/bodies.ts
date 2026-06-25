@@ -1,5 +1,9 @@
 import { BodyDataType } from "../types/astronomy";
 
+export const LOAD_SCENE = true;
+
+export const MIN_MOON_MEAN_RADIUS = 6;
+
 export const PLANET_IDS = {
   Earth: "terre",
   Mars: "mars",

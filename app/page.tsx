@@ -14,12 +14,15 @@ import { useIdleTimer } from "./hooks/useIdleTimer";
 import { useAppHotkeys } from "./hooks/useAppHotkeys";
 import BodyInfo from "./components/ui/BodyInfo/BodyInfo";
 import InfoModal from "./components/ui/InfoModal";
+import { LOAD_SCENE } from "./constants";
+// import useFetchMoons from "./hooks/useFetchMoons";
 
 export default function Home() {
   const { isFreeCam, setIsLoading, isLoading } = useUIStore();
   const { focusedPlanet, searchTarget, focusZoom, setTargetZoom } =
     usePlanetStore();
   const toastIdRef = useRef<string | null>(null);
+  // useFetchMoons();
 
   useIdleTimer();
   useAppHotkeys();
@@ -57,27 +60,31 @@ export default function Home() {
 
   return (
     <main className="relative h-full w-full flex items-center justify-center bg-black overflow-hidden">
-      <Canvas
-        dpr={[1, 1.5]}
-        camera={{ position: [0, 100, 200], fov: 68, near: 0.1, far: 10000 }}
-        shadows
-      >
-        <Suspense fallback={<Handle />}>
-          <Scene />
-        </Suspense>
-      </Canvas>
-
-      <AnimatePresence>
-        {isLoading && (
-          <motion.div
-            className="absolute inset-0 z-50 flex items-center justify-center bg-black"
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
+      {LOAD_SCENE && (
+        <>
+          <Canvas
+            dpr={[1, 1.5]}
+            camera={{ position: [0, 100, 200], fov: 68, near: 0.1, far: 10000 }}
+            shadows
           >
-            <Loader />
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <Suspense fallback={<Handle />}>
+              <Scene />
+            </Suspense>
+          </Canvas>
+
+          <AnimatePresence>
+            {isLoading && (
+              <motion.div
+                className="absolute inset-0 z-50 flex items-center justify-center bg-black"
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                <Loader />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </>
+      )}
 
       <div
         className={`absolute inset-0 z-10 pointer-events-none transition-opacity duration-300 ${

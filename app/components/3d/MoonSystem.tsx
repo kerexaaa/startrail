@@ -11,6 +11,7 @@ import {
   YEAR_IN_DAYS,
 } from "../../constants/index";
 import { getJ2000Angle } from "@/app/utils/ephemeris";
+import { useFilteredMoons } from "@/app/hooks/useFilteredMoons";
 
 interface MoonSystemProps {
   planetId: string;
@@ -22,17 +23,10 @@ export default function MoonSystem({
   planetRadius,
 }: MoonSystemProps) {
   const { apiMoons } = usePlanetStore();
+  const { getValidMoons } = useFilteredMoons();
 
   if (!apiMoons || apiMoons.length === 0) return null;
-
-  const planetMoons = apiMoons
-    .filter((m) => m.aroundPlanet?.planet === planetId)
-    .filter((moon) => {
-      const name = moon.englishName || moon.name;
-      const isGeneric =
-        getBodyTextureUrls(name).bodyUrl.includes("generic_moon");
-      return !isGeneric || moon.meanRadius > 6;
-    });
+  const planetMoons = getValidMoons(apiMoons, planetId);
 
   return (
     <>
