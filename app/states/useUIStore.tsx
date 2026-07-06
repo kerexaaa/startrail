@@ -24,6 +24,14 @@ interface UIStore {
 
   showLabels: boolean;
   setShowLabels: (val: boolean) => void;
+
+  isMobileMenuOpen: boolean;
+  isMobileSearchOpen: boolean;
+  isMobileTimeControllerOpen: boolean;
+
+  setMobileMenuOpen: (val: boolean) => void;
+  setMobileSearchOpen: (val: boolean) => void;
+  setMobileTimeControllerOpen: (val: boolean) => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -53,4 +61,19 @@ export const useUIStore = create<UIStore>((set) => ({
 
   showLabels: true,
   setShowLabels: (val) => set({ showLabels: val }),
+
+  isMobileSearchOpen: false,
+  isMobileMenuOpen: false,
+  isMobileTimeControllerOpen: false,
+
+  setMobileMenuOpen: (val) =>
+    set({ isMobileMenuOpen: val, isMobileSearchOpen: false }),
+  setMobileSearchOpen: (val) =>
+    set({ isMobileSearchOpen: val, isMobileMenuOpen: false }),
+  setMobileTimeControllerOpen: (val) =>
+    set({
+      isMobileTimeControllerOpen: val,
+      isMobileMenuOpen: false,
+      isMobileSearchOpen: false,
+    }),
 }));

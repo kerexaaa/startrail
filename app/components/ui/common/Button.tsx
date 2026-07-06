@@ -17,7 +17,7 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const baseClasses =
-    "flex items-center justify-center rounded cursor-pointer outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed";
+    "flex items-center justify-center rounded-lg cursor-pointer outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed active:bg-white/20 active:scale-95 transition-all";
 
   const variantClasses = {
     glass:

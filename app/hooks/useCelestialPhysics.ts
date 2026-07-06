@@ -48,19 +48,22 @@ export default function useCelestialPhysics({
     return Math.atan2(vector.x, vector.z);
   }, [name]);
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     simTime.current += delta * timeMultiplier;
 
     const currentAngle =
       (startAngle === 0 ? initialAngle : startAngle) +
       simTime.current * travelSpeed;
 
-    if (orbitGroupRef?.current) {
-      orbitGroupRef.current.position.x = Math.sin(currentAngle) * distance;
-      orbitGroupRef.current.position.z = Math.cos(currentAngle) * distance;
+    if (orbitGroupRef.current) {
+      orbitGroupRef.current.position.set(
+        Math.sin(currentAngle) * distance,
+        0,
+        Math.cos(currentAngle) * distance,
+      );
     }
 
-    if (bodyMeshRef?.current) {
+    if (bodyMeshRef.current) {
       bodyMeshRef.current.rotation.y = simTime.current * rotationSpeed;
     }
   });

@@ -7,34 +7,46 @@ export default function TelescopeMode({
   astroData: AstroDataType & { mode: "telescope" };
 }) {
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className="bg-white/5 p-3 lg:p-4 rounded-xl grid grid-cols-2 gap-y-4 gap-x-3">
       <div>
-        <div className="text-xs text-white/50">Azimuth</div>
-        <div className="text-xl font-mono">{astroData.az.toFixed(2)}°</div>
+        <div className="text-xs lg:text-sm uppercase tracking-wider text-white/50 mb-1">
+          Azimuth
+        </div>
+        <div className="text-base lg:text-lg font-mono text-blue-300">
+          {astroData.az.toFixed(2)}°
+        </div>
       </div>
       <div>
-        <div className="text-xs text-white/50">Altitude</div>
-        <div className="text-xl font-mono">
+        <div className="text-xs lg:text-sm uppercase tracking-wider text-white/50 mb-1">
+          Altitude
+        </div>
+        <div className="text-base lg:text-lg font-mono text-blue-300">
           {astroData.alt.toFixed(2)}°
           {astroData.alt < 0 && (
-            <span className="text-red-400 text-[10px] block leading-tight mt-1">
+            <span className="text-red-400 font-sans tracking-wide uppercase text-xs lg:text-sm block leading-tight mt-1">
               Below horizon
             </span>
           )}
         </div>
       </div>
       <div>
-        <div className="text-xs text-white/50">Constellation</div>
-        <div className="text-xl font-mono">{astroData.constellation}</div>
+        <div className="text-xs lg:text-sm uppercase tracking-wider text-white/50 mb-1">
+          Constellation
+        </div>
+        <div className="text-base lg:text-lg font-mono text-blue-300 capitalize">
+          {astroData.constellation}
+        </div>
       </div>
-      <div id="magnitudeTooltip" className="w-fit">
-        <div className="text-xs text-white/50">Magnitude</div>
-        <div className="text-xl font-mono underline decoration-wavy">
+      <div id="magnitudeTooltip" className="w-fit cursor-help">
+        <div className="text-xs lg:text-sm uppercase tracking-wider text-white/50 mb-1">
+          Magnitude
+        </div>
+        <div className="text-base lg:text-lg font-mono text-blue-300 underline decoration-wavy decoration-white/30 underline-offset-4">
           {astroData.magnitude.toFixed(2)}
         </div>
         <Tooltip
           anchorSelect="#magnitudeTooltip"
-          className="z-50 max-w-xs text-center"
+          className="z-50 max-w-xs text-center text-xs lg:text-sm"
         >
           {astroData.magnitude < 1 &&
             "Very bright, easily visible to the naked eye."}

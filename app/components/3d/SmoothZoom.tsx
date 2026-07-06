@@ -25,43 +25,27 @@ export default function SmoothZoom() {
 
     if (focusedPlanet) {
       focusedPlanet.getWorldPosition(vWorldPos);
-
       controls.target.lerp(vWorldPos, ZOOM_LERP_FACTOR);
-
-      if (isUserIdle) {
-        tempOutDir.copy(vWorldPos).normalize();
-
-        const distance = targetZoom;
-
-        tempCinematicPos
-          .copy(vWorldPos)
-          .add(
-            tempDirection.set(
-              tempOutDir.x * distance,
-              distance * 0.5,
-              tempOutDir.z * distance + distance,
-            ),
-          );
-
-        camera.position.lerp(tempCinematicPos, ZOOM_LERP_FACTOR);
-      } else {
-        const newDistance = THREE.MathUtils.lerp(
-          currentDistance,
-          targetZoom,
-          ZOOM_LERP_FACTOR,
-        );
-
-        tempDirection
-          .copy(camera.position)
-          .sub(controls.target)
-          .normalize()
-          .multiplyScalar(newDistance);
-
-        camera.position.copy(controls.target).add(tempDirection);
-      }
     } else {
       controls.target.lerp(origin, ZOOM_LERP_FACTOR);
+    }
 
+    if (focusedPlanet && isUserIdle) {
+      tempOutDir.copy(vWorldPos).normalize();
+      const distance = targetZoom;
+
+      tempCinematicPos
+        .copy(vWorldPos)
+        .add(
+          tempDirection.set(
+            tempOutDir.x * distance,
+            distance * 0.5,
+            tempOutDir.z * distance + distance,
+          ),
+        );
+
+      camera.position.lerp(tempCinematicPos, ZOOM_LERP_FACTOR);
+    } else {
       const newDistance = THREE.MathUtils.lerp(
         currentDistance,
         targetZoom,

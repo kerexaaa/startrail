@@ -16,8 +16,14 @@ interface PlanetStore {
   timeMultiplier: number;
   setTimeMultiplier: (multiplier: number) => void;
 
+  multiplierSave: number;
+  setMultiplierSave: (val: number) => void;
+
   timeResetTrigger: number;
   triggerTimeReset: () => void;
+
+  isPaused: boolean;
+  setIsPaused: (val: boolean | ((prev: boolean) => boolean)) => void;
 
   targetZoom: number;
   setTargetZoom: (val: number | ((prev: number) => number)) => void;
@@ -44,11 +50,20 @@ export const usePlanetStore = create<PlanetStore>((set) => ({
   timeMultiplier: 1 / 24,
   setTimeMultiplier: (multiplier) => set({ timeMultiplier: multiplier }),
 
+  multiplierSave: 1,
+  setMultiplierSave: (val) => set({ multiplierSave: val }),
+
   timeResetTrigger: 0,
   triggerTimeReset: () =>
     set((state) => ({
       timeResetTrigger: state.timeResetTrigger + 1,
-      timeMultiplier: 1,
+      timeMultiplier: 1 / 24,
+    })),
+
+  isPaused: false,
+  setIsPaused: (val) =>
+    set((state) => ({
+      isPaused: typeof val === "function" ? val(state.isPaused) : val,
     })),
 
   targetZoom: 50,
