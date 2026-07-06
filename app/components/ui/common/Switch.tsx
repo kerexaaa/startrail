@@ -10,7 +10,9 @@ interface SwitchProps {
 export default function Switch({ label, checked, onChange }: SwitchProps) {
   return (
     <div className="flex items-center justify-between w-full">
-      <span className="text-sm text-white/80 font-medium">{label}</span>
+      <span className="text-xs lg:text-sm text-white/80 font-medium">
+        {label}
+      </span>
       <button
         type="button"
         onClick={onChange}

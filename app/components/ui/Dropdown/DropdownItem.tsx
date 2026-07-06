@@ -36,10 +36,10 @@ export default function DropdownItem({
       : matchingMoons;
 
   return (
-    <div className="mb-2 last:mb-0 relative">
+    <div className="mb-3 last:mb-0 relative">
       <Button
         onClick={() => onSelect(option)}
-        className="w-full text-left px-3 py-3 text-white/80 hover:text-white hover:bg-white/10 cursor-pointer transition-colors rounded-lg text-sm"
+        className="w-full text-left px-3 py-3 text-white/90 hover:text-white hover:bg-white/10 cursor-pointer transition-colors rounded-lg lg:text-base text-sm"
       >
         {option}
       </Button>
@@ -51,7 +51,7 @@ export default function DropdownItem({
               e.stopPropagation();
               setExpandedOption(isExpanded ? null : option);
             }}
-            className="flex justify-center items-center hover:bg-white/10 transition-colors rounded-lg cursor-pointer h-11 p-3 user-select-none absolute z-10 right-0 top-0"
+            className="flex justify-center items-center hover:bg-white/10 transition-colors rounded-lg cursor-pointer h-12 p-3 user-select-none absolute z-10 right-0 top-0"
           >
             <Icon
               src={dropdownIcon}
@@ -79,7 +79,7 @@ export default function DropdownItem({
                     <div key={moon} className="arrows relative">
                       <Button
                         onClick={() => onSelect(moon)}
-                        className="block w-[stretch] text-left ml-10.5 mt-2 mb-2 last:mb-0 p-2 text-white/70 hover:text-white hover:bg-white/10 cursor-pointer transition-colors rounded-lg text-sm"
+                        className="block w-[stretch] text-left ml-10.5 mt-2 mb-3 last:mb-0 p-2 text-white/60 hover:text-white hover:bg-white/10 cursor-pointer transition-colors rounded-lg text-xs lg:text-sm"
                       >
                         {moon}
                       </Button>

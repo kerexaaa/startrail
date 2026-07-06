@@ -1,4 +1,4 @@
-import { Outlines, useTexture } from "@react-three/drei";
+import { useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
@@ -15,11 +15,8 @@ export default function Sun() {
   const texture = useTexture(bodyUrl);
   const { showLabels } = useUIStore();
 
-  const { hovered, setHovered, isFocused, handleFocus } = useCelestialInteraction(
-    "Sun",
-    SUN_RADIUS,
-    sunRef
-  );
+  const { hovered, setHovered, isFocused, handleFocus } =
+    useCelestialInteraction("Sun", SUN_RADIUS, sunRef);
 
   useFrame(({ clock }) => {
     const time = clock.getElapsedTime();
@@ -39,11 +36,22 @@ export default function Sun() {
         isFocused={isFocused}
       >
         <mesh>
-          <sphereGeometry args={[SUN_RADIUS, 64, 64]} />
+          <sphereGeometry args={[SUN_RADIUS, 32, 32]} />
           <meshBasicMaterial map={texture} />
-          
-          {!isFocused && hovered && <Outlines thickness={1} color="red" />}
-          
+
+          {!isFocused && hovered && (
+            <mesh scale={1.01} raycast={() => null}>
+              <sphereGeometry args={[SUN_RADIUS, 32, 32]} />
+              <meshBasicMaterial
+                color="#4da6ff"
+                transparent
+                opacity={0.3}
+                blending={THREE.AdditiveBlending}
+                depthWrite={false}
+              />
+            </mesh>
+          )}
+
           <BodyName
             name={"Sun"}
             isVisible={hovered}

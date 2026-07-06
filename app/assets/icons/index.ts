@@ -13,3 +13,6 @@ export { default as fullscreenIcon } from "./dark/fullscreen.svg";
 export { default as freecamIcon } from "./dark/freecam.svg";
 export { default as dropdownIcon } from "./dark/dropdown.svg";
 export { default as closeIcon } from "./dark/close.svg";
+export { default as searchIcon } from "./dark/search.svg";
+export { default as menuIcon } from "./dark/menu.svg";
+export { default as timeIcon } from "./dark/time.svg";

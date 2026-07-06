@@ -1,5 +1,5 @@
 "use client";
-import { useTexture, Outlines } from "@react-three/drei";
+import { useTexture } from "@react-three/drei";
 import { useRef, ReactNode, useMemo } from "react";
 import * as THREE from "three";
 import OrbitPath from "./OrbitPath";
@@ -58,7 +58,7 @@ export default function CelestialBody({
   const proxyRadius = isGeneric
     ? radius * 2
     : Math.max(radius * 1.2, MIN_CLICK_RADIUS);
-  const segments = isGeneric ? 16 : 64;
+  const segments = isGeneric ? 16 : 32;
   const { bodyUrl, ringUrl, ringScales } = getBodyTextureUrls(name);
   const bodyColor = useMemo(
     () => (isGeneric ? getMoonTint(name) : "#ffffff"),
@@ -101,7 +101,18 @@ export default function CelestialBody({
                 ringScales={ringScales}
               />
             )}
-            {!isFocused && hovered && <Outlines thickness={1} color="red" />}
+            {!isFocused && hovered && (
+              <mesh scale={1.01} raycast={() => null}>
+                <sphereGeometry args={[radius, 32, 32]} />
+                <meshBasicMaterial
+                  color="#4da6ff"
+                  transparent
+                  opacity={0.3}
+                  blending={THREE.AdditiveBlending}
+                  depthWrite={false}
+                />
+              </mesh>
+            )}
           </mesh>
           <InteractionZone
             name={name}

@@ -29,6 +29,13 @@ export interface KeybindInfo {
   color?: string;
 }
 
+export const MOBILE_KEYBINDS = [
+  { keys: ["Tap"], label: "Focus (On body)", color: "bg-white/20" },
+  { keys: ["Pinch"], label: "Zoom In/Out", color: "bg-white/20" },
+  { keys: ["Drag"], label: "Move Camera", color: "bg-white/20" },
+  { keys: ["2-Finger Drag"], label: "Rotate Camera", color: "bg-white/20" },
+];
+
 export const APP_KEYBINDS: KeybindInfo[] = [
   {
     keys: "LMB",

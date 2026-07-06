@@ -5,9 +5,7 @@ import Loader from "./components/ui/Loader";
 import { motion, AnimatePresence } from "framer-motion";
 import SettingsButtons from "./components/ui/SettingsButtons";
 import { toast, Slide } from "react-toastify";
-import SearchPanel from "./components/ui/SearchPanel";
 import { usePlanetStore } from "./states/usePlanetStore";
-import TimeController from "./components/ui/TimeController";
 import { useUIStore } from "./states/useUIStore";
 import Scene from "./components/3d/Scene";
 import { useIdleTimer } from "./hooks/useIdleTimer";
@@ -15,18 +13,30 @@ import { useAppHotkeys } from "./hooks/useAppHotkeys";
 import BodyInfo from "./components/ui/BodyInfo/BodyInfo";
 import InfoModal from "./components/ui/InfoModal";
 import { LOAD_SCENE } from "./constants";
+import SearchButton from "./components/ui/SearchPanel/SearchButton";
+import MenuButton from "./components/ui/Menu/MenuButton";
+import TimeControllerWrapper from "./components/ui/TimeController/TimeControllerWrapper";
+import { useIsTouchDevice } from "./hooks/useIsTouchDevice";
+import ExitFreecamButton from "./components/ui/ExitFreecamButton";
 // import useFetchMoons from "./hooks/useFetchMoons";
 
 export default function Home() {
   const { isFreeCam, setIsLoading, isLoading } = useUIStore();
-  const { focusedPlanet, searchTarget, focusZoom, setTargetZoom } =
-    usePlanetStore();
+  const {
+    focusedPlanet,
+    searchTarget,
+    focusZoom,
+    setTargetZoom,
+    setFocusedPlanet,
+    setSearchTarget,
+  } = usePlanetStore();
   const toastIdRef = useRef<string | null>(null);
   // useFetchMoons();
+  const isTouch = useIsTouchDevice();
+  const exitHint = isTouch ? "Tap empty space to exit" : "Press ESC to exit";
 
   useIdleTimer();
   useAppHotkeys();
-
   useEffect(() => {
     if (focusedPlanet) {
       if (toastIdRef.current) {
@@ -35,7 +45,7 @@ export default function Home() {
 
       const newToastId = `focus-${Date.now()}`;
       toastIdRef.current = newToastId;
-      toast(`Tracking ${searchTarget}. Press ESC to exit`, {
+      toast(`Tracking ${searchTarget}. ${exitHint}`, {
         toastId: newToastId,
         autoClose: 2000,
         hideProgressBar: true,
@@ -63,6 +73,14 @@ export default function Home() {
       {LOAD_SCENE && (
         <>
           <Canvas
+            onPointerMissed={() => {
+              if (focusedPlanet) {
+                setFocusedPlanet(null);
+                setSearchTarget("");
+                setTargetZoom(50); // или дефолтный зум
+                toast.dismiss();
+              }
+            }}
             dpr={[1, 1.5]}
             camera={{ position: [0, 100, 200], fov: 68, near: 0.1, far: 10000 }}
             shadows
@@ -71,6 +89,8 @@ export default function Home() {
               <Scene />
             </Suspense>
           </Canvas>
+
+          {isFreeCam && isTouch && <ExitFreecamButton />}
 
           <AnimatePresence>
             {isLoading && (
@@ -93,8 +113,9 @@ export default function Home() {
       >
         <div className="pointer-events-auto">
           <SettingsButtons className="absolute bottom-8 right-8 flex flex-col gap-3 overflow-hidden" />
-          <SearchPanel />
-          <TimeController />
+          <SearchButton />
+          <TimeControllerWrapper />
+          <MenuButton />
           <BodyInfo />
           <InfoModal />
         </div>
