@@ -6,13 +6,15 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  overflow-y: hidden;
+  overflow: hidden;
+  height: 100dvh;
+  max-height: 100dvh;
 }
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --height: 100vh;
+  --height: 100dvh;
 }
 
 @theme inline {
