@@ -1,5 +1,12 @@
-@tailwind utilities;
 @import "tailwindcss";
+
+@variant hover {
+  @media (hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+}
 
 html,
 body {
@@ -9,6 +16,8 @@ body {
   overflow: hidden;
   height: 100dvh;
   max-height: 100dvh;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 :root {
@@ -111,18 +120,36 @@ input {
   opacity: 0;
 }
 
-.button-hologram-hover:hover {
-  box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.3);
-  background: linear-gradient(
-    215deg,
-    rgba(255, 255, 255, 0.2) 0%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
+@media (hover: hover) {
+  .button-hologram-hover:hover {
+    box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.3);
+    background: linear-gradient(
+      215deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+  }
+
+  .button-hologram-hover:hover::after {
+    opacity: 1;
+    transform: rotate(-45deg) translateY(100%);
+  }
 }
 
-.button-hologram-hover:hover::after {
-  opacity: 1;
-  transform: rotate(-45deg) translateY(100%);
+@media (hover: none) {
+  .button-hologram-hover:active {
+    box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.3);
+    background: linear-gradient(
+      215deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+  }
+
+  .button-hologram-hover:active::after {
+    opacity: 1;
+    transform: rotate(-45deg) translateY(100%);
+  }
 }
 
 .custom-scrollbar {
