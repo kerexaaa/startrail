@@ -18,6 +18,8 @@ import MenuButton from "./components/ui/Menu/MenuButton";
 import TimeControllerWrapper from "./components/ui/TimeController/TimeControllerWrapper";
 import { useIsTouchDevice } from "./hooks/useIsTouchDevice";
 import ExitFreecamButton from "./components/ui/ExitFreecamButton";
+import MobileJoystick from "./components/ui/MobileJoystick";
+import * as THREE from "three";
 // import useFetchMoons from "./hooks/useFetchMoons";
 
 export default function Home() {
@@ -31,6 +33,7 @@ export default function Home() {
     setSearchTarget,
   } = usePlanetStore();
   const toastIdRef = useRef<string | null>(null);
+  const prevFocusedPlanetRef = useRef<THREE.Group | null>(null);
   // useFetchMoons();
   const isTouch = useIsTouchDevice();
   const exitHint = isTouch ? "Tap empty space to exit" : "Press ESC to exit";
@@ -55,6 +58,17 @@ export default function Home() {
         transition: Slide,
       });
       setTargetZoom(focusZoom || 6);
+      prevFocusedPlanetRef.current = focusedPlanet;
+    } else {
+      if (prevFocusedPlanetRef.current) {
+        const pos = new THREE.Vector3();
+        prevFocusedPlanetRef.current.getWorldPosition(pos);
+        const distanceToSun = pos.length();
+        setTargetZoom(Math.max(150, distanceToSun * 1.5));
+        prevFocusedPlanetRef.current = null;
+      } else {
+        setTargetZoom(150);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusedPlanet]);
@@ -74,7 +88,7 @@ export default function Home() {
         <>
           <Canvas
             onPointerMissed={() => {
-              if (focusedPlanet) {
+              if (isTouch && focusedPlanet) {
                 setFocusedPlanet(null);
                 setSearchTarget("");
                 setTargetZoom(50); // или дефолтный зум
@@ -91,6 +105,9 @@ export default function Home() {
           </Canvas>
 
           {isFreeCam && isTouch && <ExitFreecamButton />}
+          <AnimatePresence>
+            {isFreeCam && isTouch && <MobileJoystick />}
+          </AnimatePresence>
 
           <AnimatePresence>
             {isLoading && (
@@ -107,12 +124,12 @@ export default function Home() {
       )}
 
       <div
-        className={`absolute inset-0 z-10 pointer-events-none transition-opacity duration-300 ${
+        className={`absolute inset-0 z-30 pointer-events-none transition-opacity duration-300 ${
           isFreeCam ? "opacity-0" : "opacity-100"
         }`}
       >
         <div className="pointer-events-auto">
-          <SettingsButtons className="absolute bottom-8 right-8 flex flex-col gap-3 overflow-hidden" />
+          <SettingsButtons className="absolute bottom-4 lg:bottom-8 right-4 lg:right-8 flex flex-col items-end gap-3" />
           <SearchButton />
           <TimeControllerWrapper />
           <MenuButton />

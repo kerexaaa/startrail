@@ -4,6 +4,7 @@ import * as THREE from "three";
 import SmoothZoom from "./SmoothZoom";
 import { useUIStore } from "@/app/states/useUIStore";
 import { MIN_ZOOM, MAX_ZOOM } from "../../constants/index";
+import MobileFreecamController from "./MobileFreecamController";
 
 const tempDir = new THREE.Vector3();
 const tempTarget = new THREE.Vector3();
@@ -32,6 +33,7 @@ export default function CameraRig() {
             makeDefault
           />
           <DroneLeveler />
+          <MobileFreecamController />
         </>
       ) : (
         <OrbitControls

@@ -94,12 +94,50 @@ export function useAppHotkeys() {
       });
     };
 
+    let initialPinchDistance: number | null = null;
+    let initialZoomValue = 50;
+
+    const handleTouchStart = (event: TouchEvent) => {
+      if (event.touches.length === 2) {
+        const t1 = event.touches[0];
+        const t2 = event.touches[1];
+        initialPinchDistance = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+        initialZoomValue = usePlanetStore.getState().targetZoom;
+      }
+    };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      if (event.touches.length === 2 && initialPinchDistance !== null) {
+        event.preventDefault();
+
+        const t1 = event.touches[0];
+        const t2 = event.touches[1];
+        const currentDistance = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+
+        if (initialPinchDistance > 0 && currentDistance > 0) {
+          const ratio = initialPinchDistance / currentDistance;
+          const newZoom = initialZoomValue * ratio;
+          setTargetZoom(Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newZoom)));
+        }
+      }
+    };
+
+    const handleTouchEnd = () => {
+      initialPinchDistance = null;
+    };
+
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("touchend", handleTouchEnd);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
     };
   }, [
     focusedPlanet,

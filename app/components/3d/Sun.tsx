@@ -39,18 +39,7 @@ export default function Sun() {
           <sphereGeometry args={[SUN_RADIUS, 32, 32]} />
           <meshBasicMaterial map={texture} />
 
-          {!isFocused && hovered && (
-            <mesh scale={1.01} raycast={() => null}>
-              <sphereGeometry args={[SUN_RADIUS, 32, 32]} />
-              <meshBasicMaterial
-                color="#4da6ff"
-                transparent
-                opacity={0.3}
-                blending={THREE.AdditiveBlending}
-                depthWrite={false}
-              />
-            </mesh>
-          )}
+
 
           <BodyName
             name={"Sun"}

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useUIStore } from "@/app/states/useUIStore";
+import { usePlanetStore } from "@/app/states/usePlanetStore";
 import {
   APP_KEYBINDS,
   DEFAULT_TRANSITION_DURATION,
@@ -21,6 +22,8 @@ export default function InfoModal() {
     setShowLabels,
     showLabels,
   } = useUIStore();
+
+  const { showSatellites, setShowSatellites } = usePlanetStore();
 
   const isTouchDevice = useIsTouchDevice();
 
@@ -121,7 +124,7 @@ export default function InfoModal() {
               </div>
             </div>
 
-            <div className="shrink-0 p-5 lg:p-6 text-xs lg:text-sm lg:px-8 border-t border-white/10 bg-black/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="shrink-0 p-5 lg:p-6 text-xs lg:text-sm lg:px-8 border-t border-white/10 bg-black/20 flex flex-wrap items-start sm:items-center justify-between gap-4">
               <Switch
                 label="Show Orbital Paths"
                 checked={showOrbits}
@@ -131,6 +134,11 @@ export default function InfoModal() {
                 label="Show Planet Labels"
                 checked={showLabels}
                 onChange={() => setShowLabels(!showLabels)}
+              />
+              <Switch
+                label="Show Satellites"
+                checked={showSatellites}
+                onChange={() => setShowSatellites(!showSatellites)}
               />
             </div>
           </motion.div>
