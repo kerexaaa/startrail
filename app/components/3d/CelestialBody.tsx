@@ -101,18 +101,6 @@ export default function CelestialBody({
                 ringScales={ringScales}
               />
             )}
-            {!isFocused && hovered && (
-              <mesh scale={1.01} raycast={() => null}>
-                <sphereGeometry args={[radius, 32, 32]} />
-                <meshBasicMaterial
-                  color="#4da6ff"
-                  transparent
-                  opacity={0.3}
-                  blending={THREE.AdditiveBlending}
-                  depthWrite={false}
-                />
-              </mesh>
-            )}
           </mesh>
           <InteractionZone
             name={name}

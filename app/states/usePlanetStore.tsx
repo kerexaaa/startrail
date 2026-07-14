@@ -30,6 +30,13 @@ interface PlanetStore {
 
   apiMoons: MoonData[];
   setApiMoons: (val: MoonData[]) => void;
+
+  showSatellites: boolean;
+  setShowSatellites: (val: boolean) => void;
+  joystickDelta: { x: number; y: number };
+  setJoystickDelta: (val: { x: number; y: number }) => void;
+  joystickVertical: number;
+  setJoystickVertical: (val: number) => void;
 }
 
 export const usePlanetStore = create<PlanetStore>((set) => ({
@@ -73,4 +80,13 @@ export const usePlanetStore = create<PlanetStore>((set) => ({
     })),
   apiMoons: [],
   setApiMoons: (val) => set({ apiMoons: val }),
+
+  showSatellites: true,
+  setShowSatellites: (val) => set({ showSatellites: val }),
+
+  joystickDelta: { x: 0, y: 0 },
+  setJoystickDelta: (val) => set({ joystickDelta: val }),
+
+  joystickVertical: 0,
+  setJoystickVertical: (val) => set({ joystickVertical: val }),
 }));

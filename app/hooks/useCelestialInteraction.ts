@@ -15,6 +15,7 @@ export default function useCelestialInteraction(
     planetRefs,
     registerPlanetRef,
     setFocusedPlanet,
+    searchTarget,
     setSearchTarget,
   } = usePlanetStore();
   const { isFreeCam } = useUIStore();
@@ -22,8 +23,15 @@ export default function useCelestialInteraction(
   useEffect(() => {
     if (orbitGroupRef.current) {
       registerPlanetRef(name, orbitGroupRef.current);
+      
+      if (searchTarget === name && focusedPlanet !== orbitGroupRef.current) {
+        setFocusedPlanet(
+          orbitGroupRef.current,
+          Math.max(MIN_CLICK_RADIUS, radius * 3),
+        );
+      }
     }
-  }, [name, registerPlanetRef, orbitGroupRef]);
+  }, [name, registerPlanetRef, orbitGroupRef, searchTarget, focusedPlanet, radius, setFocusedPlanet]);
 
   const handleFocus = () => {
     if (isFreeCam) return;

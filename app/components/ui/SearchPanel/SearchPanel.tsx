@@ -50,9 +50,9 @@ export default function SearchPanel({
           duration: DEFAULT_TRANSITION_DURATION,
         }}
         ref={panelRef}
-        className={`absolute flex-row items-center glassmorphism rounded-lg z-20 ${
-          isRouteActive && !isDesktop ? "hidden" : "flex"
-        } ${isDesktop ? "w-96" : "w-[calc(100dvw-32px)]"}`}
+        className={`absolute flex flex-row items-center glassmorphism rounded-lg z-20 ${
+          isDesktop ? "w-96" : "w-[calc(100dvw-32px)]"
+        }`}
       >
         {!isDesktop && (
           <div

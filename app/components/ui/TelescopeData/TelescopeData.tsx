@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { usePlanetStore } from "../../../states/usePlanetStore";
+import { useUIStore } from "../../../states/useUIStore";
 import { getBody, useAstroCalculations } from "../../../hooks/useAstroCalcs";
 import TelescopeDataSkeleton from "./TelescopeDataSkeleton";
 import SatellitesMode from "./SatellitesMode";
@@ -26,6 +27,7 @@ export default function TelescopeData({
   setToValue,
 }: TelescopeDataProps) {
   const { apiMoons } = usePlanetStore();
+  const { isMobileSearchOpen } = useUIStore();
   const { astroData, locationName, foundOriginPlanet, handleReset, isLoading } =
     useAstroCalculations({ fromValue, toValue, setToValue, setFromValue });
 
@@ -49,7 +51,9 @@ export default function TelescopeData({
       ) : showDataCard ? (
         <motion.div
           key="container"
-          className="absolute top-0 lg:top-36 left-0 z-10 w-full lg:w-80 pointer-events-none"
+          className={`absolute left-0 z-10 w-full lg:w-80 pointer-events-none transition-all duration-300 ${
+            isMobileSearchOpen ? "top-35" : "top-0"
+          } lg:top-36`}
         >
           <AnimatePresence mode="wait">
             {!isExpanded ? (

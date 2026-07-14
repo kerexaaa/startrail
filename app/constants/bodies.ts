@@ -1,6 +1,7 @@
 import { BodyDataType } from "../types/astronomy";
 
 export const LOAD_SCENE = true;
+export const LOAD_MOONS = false;
 
 export const MIN_MOON_MEAN_RADIUS = 6;
 
@@ -133,6 +134,46 @@ export const BODY_DATA: Record<string, BodyDataType> = {
     fact: "The only moon in the Solar System with a dense atmosphere and liquid lakes.",
     description:
       "Titan is the largest moon of Saturn and an extraordinary world enveloped in a thick, hazy atmosphere rich in nitrogen and organics. It is the only place besides Earth known to have stable bodies of liquid on its surface—though its lakes and seas are filled with liquid methane and ethane, not water.",
+  },
+  Phobos: {
+    type: "Martian Moon",
+    mass: { massValue: 1.065, massExponent: 16 },
+    temp: "-40 °C",
+    fact: "Orbiting Mars closer than any other moon orbits its planet in the solar system.",
+    description:
+      "Phobos is the larger and closer of the two natural satellites of Mars. It is a small, irregularly shaped object with a cratered surface, dominated by the massive Stickney crater.",
+  },
+  Deimos: {
+    type: "Martian Moon",
+    mass: { massValue: 1.476, massExponent: 15 },
+    temp: "-40.15 °C",
+    fact: "The smallest and outermost of Mars's two moons.",
+    description:
+      "Deimos is the smaller and more distant of the two moons of Mars. It is smoother and less heavily cratered than Phobos, covered with a thick layer of dust.",
+  },
+  Triton: {
+    type: "Cryovolcanic Moon",
+    mass: { massValue: 2.14, massExponent: 22 },
+    temp: "-235 °C",
+    fact: "The only large moon in the Solar System that orbits in the opposite direction of its planet's rotation.",
+    description:
+      "Triton is the largest natural satellite of Neptune. It is one of the coldest objects in the Solar System, covered in nitrogen ice, and is geologically active with active geysers erupting nitrogen gas.",
+  },
+  Titania: {
+    type: "Ice/Rock Moon",
+    mass: { massValue: 3.4, massExponent: 21 },
+    temp: "-203 °C",
+    fact: "The largest of the moons of Uranus.",
+    description:
+      "Titania is the largest moon of Uranus. Its surface is scarred by giant canyons and fault scarps, indicating ancient geological activity.",
+  },
+  Oberon: {
+    type: "Ice/Rock Moon",
+    mass: { massValue: 3.014, massExponent: 21 },
+    temp: "-203 °C",
+    fact: "The outermost major moon of Uranus.",
+    description:
+      "Oberon is the second-largest moon of Uranus. It has a heavily cratered surface covered in dark material, likely rich in carbon compounds.",
   },
 };
 
