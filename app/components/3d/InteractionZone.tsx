@@ -67,7 +67,7 @@ export default function InteractionZone({
         if (orbitGroupRef.current) {
           setFocusedPlanet(
             orbitGroupRef.current,
-            Math.max(MIN_CLICK_RADIUS, radius * 3),
+            Math.max(MIN_CLICK_RADIUS, radius * 6),
           );
         }
         setSearchTarget(name);
