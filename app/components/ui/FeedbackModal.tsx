@@ -133,24 +133,32 @@ export default function FeedbackModal() {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label className="text-sm text-gray-300">Message *</label>
+                  <div className="flex justify-between items-center text-gray-300">
+                    <label className="text-sm">Message *</label>
+                    <span className="text-xs">{message.length}/300</span>
+                  </div>
                   <textarea
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="What's on your mind?"
                     required
+                    maxLength={300}
                     rows={4}
                     className="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-white/30 transition-colors resize-none custom-scrollbar"
                   ></textarea>
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label className="text-sm text-gray-300">Contact (Optional)</label>
+                  <div className="flex justify-between items-center text-gray-300">
+                    <label className="text-sm">Contact (Optional)</label>
+                    <span className="text-xs">{contact.length}/100</span>
+                  </div>
                   <input
                     type="text"
                     value={contact}
                     onChange={(e) => setContact(e.target.value)}
                     placeholder="Discord tag, email, etc."
+                    maxLength={100}
                     className="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-white/30 transition-colors"
                   />
                 </div>
