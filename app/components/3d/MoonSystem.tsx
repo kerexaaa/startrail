@@ -9,10 +9,9 @@ import {
   MOON_ORBIT_PERIOD,
   UNASSIGNED_MOON_RADIUS,
   YEAR_IN_DAYS,
-  BODY_DATA,
 } from "../../constants/index";
 import { getJ2000Angle } from "@/app/utils/ephemeris";
-import { useFilteredMoons } from "@/app/hooks/useFilteredMoons";
+import { getPlanetMoons } from "@/app/utils/bodies";
 
 interface MoonSystemProps {
   planetId: string;
@@ -23,34 +22,10 @@ export default function MoonSystem({
   planetId,
   planetRadius,
 }: MoonSystemProps) {
-  const { apiMoons } = usePlanetStore();
-  const { getValidMoons } = useFilteredMoons();
+  const apiMoons = usePlanetStore((s) => s.apiMoons);
 
-  if (!apiMoons || apiMoons.length === 0) return null;
-  let planetMoons = getValidMoons(apiMoons, planetId);
-  if (planetId === "terre") {
-    planetMoons = planetMoons.filter(
-      (m) =>
-        m.englishName === "Moon" ||
-        m.name === "La Lune" ||
-        m.englishName === "La Lune"
-    );
-  } else {
-    const uniqueMoons = planetMoons.filter(
-      (m) => m.englishName in BODY_DATA || m.name in BODY_DATA
-    );
-    const genericMoons = planetMoons.filter(
-      (m) => !(m.englishName in BODY_DATA || m.name in BODY_DATA)
-    );
-
-    const limit = 10;
-    const combinedMoons = [...uniqueMoons];
-    for (const moon of genericMoons) {
-      if (combinedMoons.length >= limit) break;
-      combinedMoons.push(moon);
-    }
-    planetMoons = combinedMoons;
-  }
+  const planetMoons = getPlanetMoons(apiMoons, planetId);
+  if (planetMoons.length === 0) return null;
 
   return (
     <>

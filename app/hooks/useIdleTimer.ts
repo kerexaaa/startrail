@@ -3,7 +3,7 @@ import { useUIStore } from "../states/useUIStore";
 import { IDLE_TIMEOUT } from '../constants/index';
 
 export function useIdleTimer() {
-  const { setIsUserIdle } = useUIStore();
+  const setIsUserIdle = useUIStore((s) => s.setIsUserIdle);
 
   useEffect(() => {
     let idleTimer: NodeJS.Timeout;

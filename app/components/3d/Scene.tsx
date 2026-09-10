@@ -4,6 +4,8 @@ import CameraRig from "./CameraRig";
 import { Stars } from "@react-three/drei";
 import useFetchMoons from "@/app/hooks/useFetchMoons";
 
+const SHADOW_MAP_SIZE: [number, number] = [2048, 2048];
+
 export default function Scene() {
   useFetchMoons();
 
@@ -16,7 +18,7 @@ export default function Scene() {
         decay={0}
         position={[0, 0, 0]}
         castShadow
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={SHADOW_MAP_SIZE}
         shadow-bias={-0.0005}
         shadow-camera-far={650}
         shadow-radius={1}

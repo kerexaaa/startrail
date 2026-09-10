@@ -26,8 +26,8 @@ export default function TelescopeData({
   setFromValue,
   setToValue,
 }: TelescopeDataProps) {
-  const { apiMoons } = usePlanetStore();
-  const { isMobileSearchOpen } = useUIStore();
+  const apiMoons = usePlanetStore((s) => s.apiMoons);
+  const isMobileSearchOpen = useUIStore((s) => s.isMobileSearchOpen);
   const { astroData, locationName, foundOriginPlanet, handleReset, isLoading } =
     useAstroCalculations({ fromValue, toValue, setToValue, setFromValue });
 

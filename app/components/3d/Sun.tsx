@@ -13,7 +13,7 @@ export default function Sun() {
   const sunRef = useRef<THREE.Group>(null);
   const { bodyUrl } = getBodyTextureUrls("Sun");
   const texture = useTexture(bodyUrl);
-  const { showLabels } = useUIStore();
+  const showLabels = useUIStore((s) => s.showLabels);
 
   const { hovered, setHovered, isFocused, handleFocus } =
     useCelestialInteraction("Sun", SUN_RADIUS, sunRef);

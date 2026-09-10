@@ -4,7 +4,8 @@ import Button from "./common/Button";
 import { toast } from "react-toastify";
 
 export default function ExitFreecamButton() {
-  const { isFreeCam, setIsFreeCam } = useUIStore();
+  const isFreeCam = useUIStore((s) => s.isFreeCam);
+  const setIsFreeCam = useUIStore((s) => s.setIsFreeCam);
 
   return (
     <AnimatePresence>

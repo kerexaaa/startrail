@@ -8,8 +8,9 @@ import { AnimatePresence } from "framer-motion";
 
 export default function SearchButton() {
   // return;
-  const { isMobileSearchOpen, isMobileMenuOpen, setMobileSearchOpen } =
-    useUIStore();
+  const isMobileSearchOpen = useUIStore((s) => s.isMobileSearchOpen);
+  const isMobileMenuOpen = useUIStore((s) => s.isMobileMenuOpen);
+  const setMobileSearchOpen = useUIStore((s) => s.setMobileSearchOpen);
 
   return (
     <>

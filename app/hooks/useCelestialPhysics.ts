@@ -34,7 +34,8 @@ export default function useCelestialPhysics({
 }: UseCelestialPhysicsProps) {
   const simTime = useRef(0);
 
-  const { timeMultiplier, timeResetTrigger } = usePlanetStore();
+  const timeMultiplier = usePlanetStore((s) => s.timeMultiplier);
+  const timeResetTrigger = usePlanetStore((s) => s.timeResetTrigger);
 
   useEffect(() => {
     simTime.current = 0;

@@ -6,8 +6,9 @@ import { useUIStore } from "@/app/states/useUIStore";
 import { AnimatePresence } from "framer-motion";
 
 export default function MenuButton() {
-  const { setMobileMenuOpen, isMobileMenuOpen, isMobileSearchOpen } =
-    useUIStore();
+  const setMobileMenuOpen = useUIStore((s) => s.setMobileMenuOpen);
+  const isMobileMenuOpen = useUIStore((s) => s.isMobileMenuOpen);
+  const isMobileSearchOpen = useUIStore((s) => s.isMobileSearchOpen);
 
   return (
     <div className="absolute right-4 top-4 z-40 lg:hidden">

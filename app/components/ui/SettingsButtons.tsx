@@ -8,8 +8,8 @@ import {
   fullscreenIcon,
   smallscreenIcon,
   timeIcon,
+  feedbackIcon,
 } from "@/app/assets/icons/index";
-import { Slide, toast } from "react-toastify";
 import { useUIStore } from "@/app/states/useUIStore";
 import { usePlanetStore } from "@/app/states/usePlanetStore";
 import {
@@ -18,25 +18,21 @@ import {
   ZOOM_BUTTON_MULTIPLIER,
 } from "../../constants/index";
 import Icon from "./common/Icon";
-import { useIsTouchDevice } from "@/app/hooks/useIsTouchDevice";
+import { useSettingsActions } from "@/app/hooks/useSettingsActions";
 
 interface DivProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
 }
 
 function SettingsButtons({ children, ...props }: DivProps) {
-  const {
-    setIsFreeCam,
-    setIsFullscreen,
-    isFullscreen,
-    isVisible,
-    setIsVisible,
-    setIsInfoOpen,
-    isMobileTimeControllerOpen,
-    setMobileTimeControllerOpen,
-  } = useUIStore();
-  const { setTargetZoom, setSearchTarget, setFocusedPlanet } = usePlanetStore();
-  const isTouch = useIsTouchDevice();
+  const isVisible = useUIStore((s) => s.isVisible);
+  const setIsVisible = useUIStore((s) => s.setIsVisible);
+  const setIsInfoOpen = useUIStore((s) => s.setIsInfoOpen);
+  const setIsFeedbackOpen = useUIStore((s) => s.setIsFeedbackOpen);
+  const isMobileTimeControllerOpen = useUIStore((s) => s.isMobileTimeControllerOpen);
+  const setMobileTimeControllerOpen = useUIStore((s) => s.setMobileTimeControllerOpen);
+  const setTargetZoom = usePlanetStore((s) => s.setTargetZoom);
+  const { handleToggleFreecam, handleToggleFullscreen, isFullscreen } = useSettingsActions();
 
   return (
     <div {...props}>
@@ -71,38 +67,12 @@ function SettingsButtons({ children, ...props }: DivProps) {
         <div className="flex gap-3 justify-end">
           <Button
             className="hidden lg:block"
-            onClick={() => {
-              setIsFreeCam(true);
-              setFocusedPlanet(null);
-              setSearchTarget("");
-              toast.dismiss();
-              toast(
-                isTouch
-                  ? "Freecam Mode. Tap 'Exit' to close"
-                  : "Press ESC to exit Freecam",
-                {
-                  autoClose: 2000,
-                  hideProgressBar: true,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  transition: Slide,
-                },
-              );
-            }}
+            onClick={() => handleToggleFreecam(false)}
             icon={<Icon src={freecamIcon} alt="Free Camera" />}
           />
           <Button
             className="hidden lg:block"
-            onClick={() => {
-              if (!isFullscreen) {
-                document.documentElement.requestFullscreen();
-                setIsFullscreen(true);
-              } else {
-                document.exitFullscreen();
-                setIsFullscreen(false);
-              }
-            }}
+            onClick={() => handleToggleFullscreen(false)}
             icon={
               <Icon
                 src={isFullscreen ? smallscreenIcon : fullscreenIcon}
@@ -113,14 +83,19 @@ function SettingsButtons({ children, ...props }: DivProps) {
         </div>
       </div>
 
-      <div className="flex gap-3 justify-end items-center">
+      <div className="flex gap-3 justify-end items-end">
         <div
-          className={`transition-all duration-300 ${
+          className={`flex flex-col gap-0 lg:gap-3 transition-all duration-300 ${
             isVisible
               ? "opacity-100 translate-x-0 pointer-events-auto"
               : "opacity-0 translate-x-4 pointer-events-none"
           }`}
         >
+          <Button
+            className="hidden lg:block"
+            onClick={() => setIsFeedbackOpen(true)}
+            icon={<Icon src={feedbackIcon} alt="Feedback" />}
+          />
           <Button
             className="hidden lg:block"
             onClick={() => setIsInfoOpen(true)}

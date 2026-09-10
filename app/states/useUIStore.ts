@@ -19,6 +19,9 @@ interface UIStore {
   isInfoOpen: boolean;
   setIsInfoOpen: (val: boolean) => void;
 
+  isFeedbackOpen: boolean;
+  setIsFeedbackOpen: (val: boolean) => void;
+
   showOrbits: boolean;
   setShowOrbits: (val: boolean) => void;
 
@@ -55,6 +58,9 @@ export const useUIStore = create<UIStore>((set) => ({
 
   isInfoOpen: false,
   setIsInfoOpen: (val) => set({ isInfoOpen: val }),
+
+  isFeedbackOpen: false,
+  setIsFeedbackOpen: (val) => set({ isFeedbackOpen: val }),
 
   showOrbits: true,
   setShowOrbits: (val) => set({ showOrbits: val }),

@@ -1,6 +1,5 @@
 import { AU_IN_KM, DAY_IN_SECONDS } from "@/app/constants";
 import { AstroDataType } from "@/app/hooks/useAstroCalcs";
-// import { usePlanetStore } from "@/app/states/usePlanetStore";
 
 export default function InterplanetaryMode({
   astroData,

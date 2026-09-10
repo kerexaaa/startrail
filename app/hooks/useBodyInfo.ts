@@ -3,7 +3,8 @@ import { BODY_DATA, PLANET_IDS } from "../constants";
 import { usePlanetStore } from "../states/usePlanetStore";
 
 export function useBodyInfo() {
-  const { searchTarget, apiMoons } = usePlanetStore();
+  const searchTarget = usePlanetStore((s) => s.searchTarget);
+  const apiMoons = usePlanetStore((s) => s.apiMoons);
 
   return useMemo(() => {
     if (!searchTarget) return { info: null, name: null };
