@@ -3,15 +3,13 @@ import { SPEED_STEPS } from "../constants";
 import { usePlanetStore } from "../states/usePlanetStore";
 
 export function useTimeController() {
-  const {
-    timeMultiplier,
-    setTimeMultiplier,
-    triggerTimeReset,
-    isPaused,
-    setIsPaused,
-    multiplierSave,
-    setMultiplierSave,
-  } = usePlanetStore();
+  const timeMultiplier = usePlanetStore((s) => s.timeMultiplier);
+  const setTimeMultiplier = usePlanetStore((s) => s.setTimeMultiplier);
+  const triggerTimeReset = usePlanetStore((s) => s.triggerTimeReset);
+  const isPaused = usePlanetStore((s) => s.isPaused);
+  const setIsPaused = usePlanetStore((s) => s.setIsPaused);
+  const multiplierSave = usePlanetStore((s) => s.multiplierSave);
+  const setMultiplierSave = usePlanetStore((s) => s.setMultiplierSave);
 
   const FULL_STEPS = useMemo(() => {
     const negativeSteps = [...SPEED_STEPS].reverse().map((step) => ({

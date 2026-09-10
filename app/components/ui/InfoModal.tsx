@@ -14,16 +14,15 @@ import Icon from "./common/Icon";
 import { useIsTouchDevice } from "@/app/hooks/useIsTouchDevice";
 
 export default function InfoModal() {
-  const {
-    isInfoOpen,
-    setIsInfoOpen,
-    showOrbits,
-    setShowOrbits,
-    setShowLabels,
-    showLabels,
-  } = useUIStore();
+  const isInfoOpen = useUIStore((s) => s.isInfoOpen);
+  const setIsInfoOpen = useUIStore((s) => s.setIsInfoOpen);
+  const showOrbits = useUIStore((s) => s.showOrbits);
+  const setShowOrbits = useUIStore((s) => s.setShowOrbits);
+  const setShowLabels = useUIStore((s) => s.setShowLabels);
+  const showLabels = useUIStore((s) => s.showLabels);
 
-  const { showSatellites, setShowSatellites } = usePlanetStore();
+  const showSatellites = usePlanetStore((s) => s.showSatellites);
+  const setShowSatellites = usePlanetStore((s) => s.setShowSatellites);
 
   const isTouchDevice = useIsTouchDevice();
 

@@ -7,7 +7,6 @@ import BodyInfoRow from "./BodyInfoRow";
 import Button from "../common/Button";
 import Icon from "../common/Icon";
 import { closeIcon, dropdownIcon, resetIcon } from "@/app/assets/icons";
-import { useAstroCalculations } from "@/app/hooks/useAstroCalcs";
 
 const cardTransition = {
   type: "spring",
@@ -27,12 +26,10 @@ export default function BodyInfo() {
   const { focusedPlanet } = usePlanetStore();
   const { info, name } = useBodyInfo();
   const [isExpanded, setIsExpanded] = useState(false);
-  const { handleReset } = useAstroCalculations({
-    fromValue: "",
-    toValue: "",
-    setFromValue: () => {},
-    setToValue: () => {},
-  });
+  const handleReset = () => {
+    usePlanetStore.getState().setFocusedPlanet(null);
+    usePlanetStore.getState().setSearchTarget("");
+  };
 
   return (
     <AnimatePresence>

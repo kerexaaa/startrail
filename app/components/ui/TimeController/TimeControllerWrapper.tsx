@@ -4,8 +4,8 @@ import { useUIStore } from "@/app/states/useUIStore";
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function TimeControllerWrapper() {
-  const { isMobileTimeControllerOpen, setMobileTimeControllerOpen } =
-    useUIStore();
+  const isMobileTimeControllerOpen = useUIStore((s) => s.isMobileTimeControllerOpen);
+  const setMobileTimeControllerOpen = useUIStore((s) => s.setMobileTimeControllerOpen);
 
   return (
     <>

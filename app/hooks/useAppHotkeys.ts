@@ -5,21 +5,16 @@ import { useUIStore } from "../states/useUIStore";
 import { MIN_ZOOM, MAX_ZOOM, ZOOM_SPEED_MULTIPLIER } from "../constants/index";
 
 export function useAppHotkeys() {
-  const {
-    setFocusedPlanet,
-    setTargetZoom,
-    focusedPlanet,
-    focusZoom,
-    setSearchTarget,
-  } = usePlanetStore();
+  const setFocusedPlanet = usePlanetStore((s) => s.setFocusedPlanet);
+  const setTargetZoom = usePlanetStore((s) => s.setTargetZoom);
+  const focusedPlanet = usePlanetStore((s) => s.focusedPlanet);
+  const setSearchTarget = usePlanetStore((s) => s.setSearchTarget);
 
-  const {
-    isFreeCam,
-    setIsFreeCam,
-    setIsFullscreen,
-    isInfoOpen,
-    setIsInfoOpen,
-  } = useUIStore();
+  const isFreeCam = useUIStore((s) => s.isFreeCam);
+  const setIsFreeCam = useUIStore((s) => s.setIsFreeCam);
+  const setIsFullscreen = useUIStore((s) => s.setIsFullscreen);
+  const isInfoOpen = useUIStore((s) => s.isInfoOpen);
+  const setIsInfoOpen = useUIStore((s) => s.setIsInfoOpen);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -149,7 +144,6 @@ export function useAppHotkeys() {
     isFreeCam,
     isInfoOpen,
     setIsInfoOpen,
-    focusZoom,
   ]);
 
   useEffect(() => {

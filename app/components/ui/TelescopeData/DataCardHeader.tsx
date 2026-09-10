@@ -18,7 +18,9 @@ export default function DataCardHeader({
   setToValue,
   locationName,
 }: DataCardHeaderProps) {
-  const { planetRefs, setFocusedPlanet, setSearchTarget } = usePlanetStore();
+  const planetRefs = usePlanetStore((s) => s.planetRefs);
+  const setFocusedPlanet = usePlanetStore((s) => s.setFocusedPlanet);
+  const setSearchTarget = usePlanetStore((s) => s.setSearchTarget);
 
   return (
     <div className="text-sm lg:text-base text-white/50 border-b border-white/10 pb-4 pr-8">

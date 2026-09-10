@@ -8,7 +8,8 @@ import { motion } from "framer-motion";
 import { DEFAULT_TRANSITION_DURATION } from "@/app/constants";
 
 export default function Menu() {
-  const { setMobileMenuOpen, isMobileMenuOpen } = useUIStore();
+  const setMobileMenuOpen = useUIStore((s) => s.setMobileMenuOpen);
+  const isMobileMenuOpen = useUIStore((s) => s.isMobileMenuOpen);
 
   return (
     <>

@@ -11,8 +11,10 @@ const origin = new THREE.Vector3(0, 0, 0);
 const vWorldPos = new THREE.Vector3();
 
 export default function SmoothZoom() {
-  const { isUserIdle, isFreeCam } = useUIStore();
-  const { focusedPlanet, targetZoom } = usePlanetStore();
+  const isUserIdle = useUIStore((s) => s.isUserIdle);
+  const isFreeCam = useUIStore((s) => s.isFreeCam);
+  const focusedPlanet = usePlanetStore((s) => s.focusedPlanet);
+  const targetZoom = usePlanetStore((s) => s.targetZoom);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const controls = useThree((state) => state.controls as any);

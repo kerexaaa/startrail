@@ -6,12 +6,10 @@ export function useSearchPanel() {
   const [activeDropdown, setActiveDropdown] = useState<"from" | "to" | null>(
     null,
   );
-  const {
-    searchTarget: toValue,
-    setSearchTarget: setToValue,
-    planetRefs,
-    setFocusedPlanet,
-  } = usePlanetStore();
+  const toValue = usePlanetStore((s) => s.searchTarget);
+  const setToValue = usePlanetStore((s) => s.setSearchTarget);
+  const planetRefs = usePlanetStore((s) => s.planetRefs);
+  const setFocusedPlanet = usePlanetStore((s) => s.setFocusedPlanet);
 
   const panelRef = useRef<HTMLDivElement>(null);
 

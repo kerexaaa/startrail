@@ -4,7 +4,8 @@ import { usePlanetStore } from "../states/usePlanetStore";
 import { toast } from "react-toastify";
 
 export default function useFetchMoons() {
-  const { setApiMoons, apiMoons } = usePlanetStore();
+  const setApiMoons = usePlanetStore((s) => s.setApiMoons);
+  const apiMoons = usePlanetStore((s) => s.apiMoons);
   const [isLoadingMoons, setIsLoadingMoons] = useState(false);
 
   useEffect(() => {

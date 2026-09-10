@@ -1,9 +1,10 @@
 import { Suspense, useMemo } from "react";
 import CelestialBody from "./CelestialBody";
 import MoonSystem from "./MoonSystem";
-import { PLANETS_CONFIG, PLANET_IDS } from "../../constants/index";
+import { PLANETS_CONFIG } from "../../constants/index";
 import { PlanetConfig } from "@/app/types/astronomy";
 import { usePlanetStore } from "@/app/states/usePlanetStore";
+import { getEnglishPlanetName } from "@/app/utils/bodies";
 
 export default function PlanetSystem() {
   const showSatellites = usePlanetStore((state) => state.showSatellites);
@@ -16,10 +17,7 @@ export default function PlanetSystem() {
     const thisMoon = apiMoons.find((m) => m.englishName === searchTarget);
     if (!thisMoon?.aroundPlanet) return null;
 
-    const frenchId = thisMoon.aroundPlanet.planet;
-    return Object.keys(PLANET_IDS).find(
-      (key) => PLANET_IDS[key as keyof typeof PLANET_IDS] === frenchId,
-    );
+    return getEnglishPlanetName(thisMoon.aroundPlanet.planet);
   }, [searchTarget, apiMoons]);
 
   return (

@@ -20,7 +20,8 @@ function DroneLeveler() {
 }
 
 export default function CameraRig() {
-  const { isUserIdle, isFreeCam } = useUIStore();
+  const isUserIdle = useUIStore((s) => s.isUserIdle);
+  const isFreeCam = useUIStore((s) => s.isFreeCam);
 
   return (
     <>

@@ -2,7 +2,8 @@ import { useMemo } from "react";
 import useParentPlanetName from "@/app/hooks/useParentPlanetName";
 import { usePlanetStore } from "@/app/states/usePlanetStore";
 import { Html } from "@react-three/drei";
-import { BODY_DATA, PLANET_IDS } from "../../constants/index";
+import { BODY_DATA } from "../../constants/index";
+import { getEnglishPlanetName } from "@/app/utils/bodies";
 
 interface BodyNameProps {
   name: string;
@@ -45,13 +46,7 @@ export default function BodyName({
     if (!searchTarget || !apiMoons) return null;
     const thisMoon = apiMoons.find((m) => m.englishName === searchTarget);
     if (!thisMoon?.aroundPlanet) return null;
-
-    const frenchId = thisMoon.aroundPlanet.planet;
-    return (
-      Object.keys(PLANET_IDS).find(
-        (key) => PLANET_IDS[key as keyof typeof PLANET_IDS] === frenchId,
-      ) || null
-    );
+    return getEnglishPlanetName(thisMoon.aroundPlanet.planet);
   }, [searchTarget, apiMoons]);
 
   const isParentFocused =

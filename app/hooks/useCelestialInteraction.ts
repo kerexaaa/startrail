@@ -10,15 +10,14 @@ export default function useCelestialInteraction(
   orbitGroupRef: RefObject<THREE.Group | null>,
 ) {
   const [hovered, setHovered] = useState(false);
-  const {
-    focusedPlanet,
-    planetRefs,
-    registerPlanetRef,
-    setFocusedPlanet,
-    searchTarget,
-    setSearchTarget,
-  } = usePlanetStore();
-  const { isFreeCam } = useUIStore();
+  const focusedPlanet = usePlanetStore((s) => s.focusedPlanet);
+  const planetRefs = usePlanetStore((s) => s.planetRefs);
+  const registerPlanetRef = usePlanetStore((s) => s.registerPlanetRef);
+  const unregisterPlanetRef = usePlanetStore((s) => s.unregisterPlanetRef);
+  const setFocusedPlanet = usePlanetStore((s) => s.setFocusedPlanet);
+  const searchTarget = usePlanetStore((s) => s.searchTarget);
+  const setSearchTarget = usePlanetStore((s) => s.setSearchTarget);
+  const isFreeCam = useUIStore((s) => s.isFreeCam);
 
   useEffect(() => {
     if (orbitGroupRef.current) {
@@ -31,7 +30,10 @@ export default function useCelestialInteraction(
         );
       }
     }
-  }, [name, registerPlanetRef, orbitGroupRef, searchTarget, focusedPlanet, radius, setFocusedPlanet]);
+    return () => {
+      unregisterPlanetRef(name);
+    };
+  }, [name, registerPlanetRef, unregisterPlanetRef, orbitGroupRef, searchTarget, focusedPlanet, radius, setFocusedPlanet]);
 
   const handleFocus = () => {
     if (isFreeCam) return;

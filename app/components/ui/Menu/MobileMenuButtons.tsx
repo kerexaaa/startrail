@@ -6,25 +6,28 @@ import {
   fullscreenIcon,
   infoIcon,
   smallscreenIcon,
+  feedbackIcon,
 } from "@/app/assets/icons";
-import { Slide, toast } from "react-toastify";
-import { usePlanetStore } from "@/app/states/usePlanetStore";
-import { useIsTouchDevice } from "@/app/hooks/useIsTouchDevice";
+import { useSettingsActions } from "@/app/hooks/useSettingsActions";
 
 export default function MobileMenuButtons() {
-  const {
-    setIsInfoOpen,
-    setIsFreeCam,
-    setIsFullscreen,
-    isFullscreen,
-    setMobileMenuOpen,
-  } = useUIStore();
-  const isTouch = useIsTouchDevice();
-
-  const { setFocusedPlanet, setSearchTarget } = usePlanetStore();
+  const setIsInfoOpen = useUIStore((s) => s.setIsInfoOpen);
+  const setIsFeedbackOpen = useUIStore((s) => s.setIsFeedbackOpen);
+  const setMobileMenuOpen = useUIStore((s) => s.setMobileMenuOpen);
+  const { handleToggleFreecam, handleToggleFullscreen, isFullscreen } = useSettingsActions();
 
   return (
     <div className="p-4 flex flex-col gap-3">
+      <Button
+        className="text-base font-medium text-left"
+        onClick={() => {
+          setIsFeedbackOpen(true);
+          setMobileMenuOpen(false);
+        }}
+        icon={<Icon src={feedbackIcon} alt="Feedback" />}
+      >
+        Send Feedback
+      </Button>
       <Button
         className="text-base font-medium text-left"
         onClick={() => {
@@ -37,42 +40,14 @@ export default function MobileMenuButtons() {
       </Button>
       <Button
         className="text-base font-medium text-left"
-        onClick={() => {
-          setIsFreeCam(true);
-          setFocusedPlanet(null);
-          setSearchTarget("");
-          toast.dismiss();
-          setMobileMenuOpen(false);
-          toast(
-            isTouch
-              ? "Freecam Mode. Tap 'Exit' to close"
-              : "Press ESC to exit Freecam",
-            {
-              autoClose: 2000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              transition: Slide,
-            },
-          );
-        }}
+        onClick={() => handleToggleFreecam(true)}
         icon={<Icon src={freecamIcon} alt="Free Camera" />}
       >
         Freecam Mode
       </Button>
       <Button
         className="text-base font-medium text-left"
-        onClick={() => {
-          if (!isFullscreen) {
-            document.documentElement.requestFullscreen();
-            setIsFullscreen(true);
-          } else {
-            document.exitFullscreen();
-            setIsFullscreen(false);
-          }
-          setMobileMenuOpen(false);
-        }}
+        onClick={() => handleToggleFullscreen(true)}
         icon={
           <Icon
             src={isFullscreen ? smallscreenIcon : fullscreenIcon}

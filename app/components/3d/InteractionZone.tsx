@@ -1,8 +1,9 @@
 import { usePlanetStore } from "../../states/usePlanetStore";
 import { useUIStore } from "@/app/states/useUIStore";
-import { MIN_CLICK_RADIUS, PLANET_IDS } from "@/app/constants";
+import { MIN_CLICK_RADIUS } from "@/app/constants";
+import { getEnglishPlanetName } from "@/app/utils/bodies";
 import * as THREE from "three";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 
 interface InteractionZoneProps {
   name: string;
@@ -41,9 +42,7 @@ export default function InteractionZone({
     }
 
     const frenchId = targetMoon.aroundPlanet.planet;
-    const parentEnglishName = Object.keys(PLANET_IDS).find(
-      (key) => PLANET_IDS[key as keyof typeof PLANET_IDS] === frenchId,
-    );
+    const parentEnglishName = getEnglishPlanetName(frenchId);
 
     return (
       parentEnglishName === name ||
@@ -53,6 +52,12 @@ export default function InteractionZone({
 
   const activeRadius =
     isFocused || isTargetOurMoon ? radius * 1.05 : proxyRadius;
+
+  useEffect(() => {
+    return () => {
+      document.body.style.cursor = "auto";
+    };
+  }, []);
 
   return (
     <mesh

@@ -1,6 +1,9 @@
 import { useTexture } from "@react-three/drei";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import * as THREE from "three";
+
+const RING_COLOR = new THREE.Color(2.5, 2.5, 2.5);
+const RING_EMISSIVE = new THREE.Color("#ffffff");
 
 export default function Rings({
   radius,
@@ -32,6 +35,12 @@ export default function Rings({
     return geometry;
   }, [radius, ringScales]);
 
+  useEffect(() => {
+    return () => {
+      ringGeo.dispose();
+    };
+  }, [ringGeo]);
+
   return (
     <mesh rotation={[Math.PI / 2, 0, 0]} geometry={ringGeo} receiveShadow>
       <meshLambertMaterial
@@ -40,9 +49,9 @@ export default function Rings({
         opacity={0.6}
         side={THREE.DoubleSide}
         depthWrite={false}
-        color={new THREE.Color(2.5, 2.5, 2.5)}
+        color={RING_COLOR}
         emissiveMap={ringTexture}
-        emissive={new THREE.Color("#ffffff")}
+        emissive={RING_EMISSIVE}
         emissiveIntensity={0.15}
       />
     </mesh>

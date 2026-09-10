@@ -27,7 +27,8 @@ export default function SearchPanel({
     toValue,
   } = useSearchPanel();
 
-  const { isMobileSearchOpen, setMobileSearchOpen } = useUIStore();
+  const isMobileSearchOpen = useUIStore((s) => s.isMobileSearchOpen);
+  const setMobileSearchOpen = useUIStore((s) => s.setMobileSearchOpen);
   const isRouteActive = !!toValue;
 
   return (

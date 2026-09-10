@@ -40,7 +40,8 @@ export default function CelestialBody({
   const orbitGroupRef = useRef<THREE.Group>(null);
   const bodyMeshRef = useRef<THREE.Mesh>(null);
 
-  const { showOrbits, showLabels } = useUIStore();
+  const showOrbits = useUIStore((s) => s.showOrbits);
+  const showLabels = useUIStore((s) => s.showLabels);
 
   const { hovered, setHovered, isFocused, handleFocus } =
     useCelestialInteraction(name, radius, orbitGroupRef);

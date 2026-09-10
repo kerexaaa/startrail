@@ -16,3 +16,4 @@ export { default as closeIcon } from "./dark/close.svg";
 export { default as searchIcon } from "./dark/search.svg";
 export { default as menuIcon } from "./dark/menu.svg";
 export { default as timeIcon } from "./dark/time.svg";
+export { default as feedbackIcon } from "./dark/feedback.svg";

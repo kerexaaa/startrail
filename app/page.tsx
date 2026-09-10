@@ -12,6 +12,7 @@ import { useIdleTimer } from "./hooks/useIdleTimer";
 import { useAppHotkeys } from "./hooks/useAppHotkeys";
 import BodyInfo from "./components/ui/BodyInfo/BodyInfo";
 import InfoModal from "./components/ui/InfoModal";
+import FeedbackModal from "./components/ui/FeedbackModal";
 import { LOAD_SCENE } from "./constants";
 import SearchButton from "./components/ui/SearchPanel/SearchButton";
 import MenuButton from "./components/ui/Menu/MenuButton";
@@ -20,18 +21,28 @@ import { useIsTouchDevice } from "./hooks/useIsTouchDevice";
 import ExitFreecamButton from "./components/ui/ExitFreecamButton";
 import MobileJoystick from "./components/ui/MobileJoystick";
 import * as THREE from "three";
-// import useFetchMoons from "./hooks/useFetchMoons";
+import { WebGLErrorBoundary } from "./components/ui/WebGLErrorBoundary";
+
+const TEMP_POS = new THREE.Vector3();
+
+function LoadingHandle() {
+  const setIsLoading = useUIStore((state) => state.setIsLoading);
+  useEffect(() => {
+    setIsLoading(true);
+    return () => setIsLoading(false);
+  }, [setIsLoading]);
+  return null;
+}
 
 export default function Home() {
-  const { isFreeCam, setIsLoading, isLoading } = useUIStore();
-  const {
-    focusedPlanet,
-    searchTarget,
-    focusZoom,
-    setTargetZoom,
-    setFocusedPlanet,
-    setSearchTarget,
-  } = usePlanetStore();
+  const isFreeCam = useUIStore((s) => s.isFreeCam);
+  const isLoading = useUIStore((s) => s.isLoading);
+  const focusedPlanet = usePlanetStore((s) => s.focusedPlanet);
+  const searchTarget = usePlanetStore((s) => s.searchTarget);
+  const focusZoom = usePlanetStore((s) => s.focusZoom);
+  const setTargetZoom = usePlanetStore((s) => s.setTargetZoom);
+  const setFocusedPlanet = usePlanetStore((s) => s.setFocusedPlanet);
+  const setSearchTarget = usePlanetStore((s) => s.setSearchTarget);
   const toastIdRef = useRef<string | null>(null);
   const prevFocusedPlanetRef = useRef<THREE.Group | null>(null);
   // useFetchMoons();
@@ -61,9 +72,8 @@ export default function Home() {
       prevFocusedPlanetRef.current = focusedPlanet;
     } else {
       if (prevFocusedPlanetRef.current) {
-        const pos = new THREE.Vector3();
-        prevFocusedPlanetRef.current.getWorldPosition(pos);
-        const distanceToSun = pos.length();
+        prevFocusedPlanetRef.current.getWorldPosition(TEMP_POS);
+        const distanceToSun = TEMP_POS.length();
         setTargetZoom(Math.max(150, distanceToSun * 1.5));
         prevFocusedPlanetRef.current = null;
       } else {
@@ -73,36 +83,29 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusedPlanet]);
 
-  const Handle = () => {
-    useEffect(() => {
-      setIsLoading(true);
-      return () => setIsLoading(false);
-    }, []);
-
-    return null;
-  };
-
   return (
     <main className="relative h-full w-full flex items-center justify-center bg-black overflow-hidden">
       {LOAD_SCENE && (
         <>
-          <Canvas
-            onPointerMissed={() => {
-              if (isTouch && focusedPlanet) {
-                setFocusedPlanet(null);
-                setSearchTarget("");
-                setTargetZoom(50); // или дефолтный зум
-                toast.dismiss();
-              }
-            }}
-            dpr={[1, 1.5]}
-            camera={{ position: [0, 100, 200], fov: 68, near: 0.1, far: 10000 }}
-            shadows
-          >
-            <Suspense fallback={<Handle />}>
-              <Scene />
-            </Suspense>
-          </Canvas>
+          <WebGLErrorBoundary>
+            <Canvas
+              onPointerMissed={() => {
+                if (isTouch && focusedPlanet) {
+                  setFocusedPlanet(null);
+                  setSearchTarget("");
+                  setTargetZoom(50); // или дефолтный зум
+                  toast.dismiss();
+                }
+              }}
+              dpr={[1, 1.5]}
+              camera={{ position: [0, 100, 200], fov: 68, near: 0.1, far: 10000 }}
+              shadows
+            >
+              <Suspense fallback={<LoadingHandle />}>
+                <Scene />
+              </Suspense>
+            </Canvas>
+          </WebGLErrorBoundary>
 
           {isFreeCam && isTouch && <ExitFreecamButton />}
           <AnimatePresence>
@@ -135,6 +138,7 @@ export default function Home() {
           <MenuButton />
           <BodyInfo />
           <InfoModal />
+          <FeedbackModal />
         </div>
       </div>
     </main>

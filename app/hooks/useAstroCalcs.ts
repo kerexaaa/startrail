@@ -5,9 +5,9 @@ import { usePlanetStore } from "../states/usePlanetStore";
 import {
   AU_IN_KM,
   BODY_DATA,
-  PLANET_IDS,
   SPEED_OF_LIGHT_KM_S,
 } from "../constants/index";
+import { getEnglishPlanetName } from "../utils/bodies";
 
 export type AstroDataType =
   | {
@@ -62,10 +62,7 @@ export function useAstroCalculations({
     const moon = apiMoons.find((item) => item.englishName === val);
     if (moon?.aroundPlanet) {
       const frenchId = moon.aroundPlanet.planet;
-      const englishName = Object.keys(PLANET_IDS).find(
-        (key) => PLANET_IDS[key as keyof typeof PLANET_IDS] === frenchId,
-      );
-      return englishName || frenchId;
+      return getEnglishPlanetName(frenchId) || frenchId;
     }
     return "";
   };
@@ -74,10 +71,11 @@ export function useAstroCalculations({
     null,
   );
   const [astroData, setAstroData] = useState<AstroDataType | null>(null);
-  const { setSearchTarget, setFocusedPlanet } = usePlanetStore();
+  const setSearchTarget = usePlanetStore((s) => s.setSearchTarget);
+  const setFocusedPlanet = usePlanetStore((s) => s.setFocusedPlanet);
   const [locationName, setLocationName] = useState("My Location");
   const [isLoading, setIsLoading] = useState(false);
-  const { apiMoons } = usePlanetStore();
+  const apiMoons = usePlanetStore((s) => s.apiMoons);
 
   const handleReset = () => {
     setAstroData(null);
@@ -124,16 +122,23 @@ export function useAstroCalculations({
           try {
             const res = await fetch(
               `https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&zoom=10`,
+              {
+                headers: {
+                  "User-Agent": "Startrail-3D-App/1.0 (https://github.com/kerexaaa/startrail)",
+                },
+              },
             );
             const data = await res.json();
             const city =
-              data.address.city ||
-              data.address.town ||
-              data.address.state ||
+              data.address?.city ||
+              data.address?.town ||
+              data.address?.state ||
               "";
             if (isMounted) {
               setLocationName(
-                city ? `${city}, ${data.address.country}` : "GPS Location",
+                city && data.address?.country
+                  ? `${city}, ${data.address.country}`
+                  : "GPS Location",
               );
             }
           } catch {

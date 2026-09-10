@@ -1,15 +1,13 @@
 import { useMemo, useState } from "react";
 import { usePlanetStore } from "../states/usePlanetStore";
-import { useFilteredMoons } from "./useFilteredMoons";
-import { PLANETS_CONFIG, BODY_DATA } from "../constants";
+import { PLANETS_CONFIG } from "../constants";
 import { MoonData } from "../types/astronomy";
+import { getPlanetMoons } from "../utils/bodies";
 
 type GroupedBodies = { planetName: string; moons: string[] };
 
 export default function useDropdownLogic() {
-  const { apiMoons } = usePlanetStore();
-  const { getValidMoons } = useFilteredMoons();
-
+  const apiMoons = usePlanetStore((s) => s.apiMoons);
   const [expandedOption, setExpandedOption] = useState<string | null>(null);
 
   const groupedBodies = useMemo(() => {
@@ -21,32 +19,7 @@ export default function useDropdownLogic() {
       if (!planet.planetId) {
         return;
       }
-      let validMoons = getValidMoons(apiMoons, planet.planetId);
-
-      if (planet.planetId === "terre") {
-        validMoons = validMoons.filter(
-          (m) =>
-            m.englishName === "Moon" ||
-            m.name === "La Lune" ||
-            m.englishName === "La Lune"
-        );
-      } else {
-        const uniqueMoons = validMoons.filter(
-          (m) => m.englishName in BODY_DATA || m.name in BODY_DATA
-        );
-        const genericMoons = validMoons.filter(
-          (m) => !(m.englishName in BODY_DATA || m.name in BODY_DATA)
-        );
-
-        const limit = 10;
-        const combinedMoons = [...uniqueMoons];
-        for (const moon of genericMoons) {
-          if (combinedMoons.length >= limit) break;
-          combinedMoons.push(moon);
-        }
-        validMoons = combinedMoons;
-      }
-
+      const validMoons = getPlanetMoons(apiMoons, planet.planetId);
       const moonNames = validMoons.map(
         (moon: MoonData) => moon.englishName || moon.name,
       );
@@ -54,7 +27,7 @@ export default function useDropdownLogic() {
       groups.push({ planetName: planet.name, moons: moonNames });
     });
     return groups;
-  }, [apiMoons, getValidMoons]);
+  }, [apiMoons]);
 
   return { groupedBodies, expandedOption, setExpandedOption };
 }

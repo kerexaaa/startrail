@@ -9,6 +9,7 @@ interface PlanetStore {
 
   planetRefs: Record<string, THREE.Group>;
   registerPlanetRef: (name: string, ref: THREE.Group) => void;
+  unregisterPlanetRef: (name: string) => void;
 
   searchTarget: string;
   setSearchTarget: (target: string) => void;
@@ -50,6 +51,11 @@ export const usePlanetStore = create<PlanetStore>((set) => ({
     set((state) => ({
       planetRefs: { ...state.planetRefs, [name]: ref },
     })),
+  unregisterPlanetRef: (name) =>
+    set((state) => {
+      const { [name]: _, ...rest } = state.planetRefs;
+      return { planetRefs: rest };
+    }),
 
   searchTarget: "",
   setSearchTarget: (name) => set({ searchTarget: name }),
