@@ -8,6 +8,17 @@ export const ZOOM_LERP_FACTOR = 0.06;
 export const ZOOM_SPEED_MULTIPLIER = 0.15;
 export const ZOOM_BUTTON_MULTIPLIER = 0.1;
 
+/** Default zoom when no planet is focused (overview) */
+export const DEFAULT_ZOOM = 150;
+/** Fallback zoom when focusing a planet without explicit focusZoom */
+export const FALLBACK_FOCUS_ZOOM = 6;
+/** Minimum zoom distance when unfocusing (prevents snapping too close to Sun) */
+export const UNFOCUS_MIN_ZOOM = 150;
+/** Zoom multiplier for unfocus: distanceToSun * this value */
+export const UNFOCUS_ZOOM_MULTIPLIER = 1.5;
+/** Default zoom for "pointer missed" on mobile (tap empty space) */
+export const MOBILE_DISMISS_ZOOM = 50;
+
 export const SPEED_STEPS = [
   { label: "1 hour/sec", value: 1 / 24 },
   { label: "6 hours/sec", value: 0.25 },

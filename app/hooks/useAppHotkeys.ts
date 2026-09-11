@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { usePlanetStore } from "../states/usePlanetStore";
 import { toast } from "react-toastify";
 import { useUIStore } from "../states/useUIStore";
-import { MIN_ZOOM, MAX_ZOOM, ZOOM_SPEED_MULTIPLIER } from "../constants/index";
+import { MIN_ZOOM, MAX_ZOOM, ZOOM_SPEED_MULTIPLIER, MOBILE_DISMISS_ZOOM } from "../constants/index";
 
 export function useAppHotkeys() {
   const setFocusedPlanet = usePlanetStore((s) => s.setFocusedPlanet);
@@ -66,7 +66,7 @@ export function useAppHotkeys() {
         }
 
         if (focusedPlanet) {
-          setTargetZoom(50);
+          setTargetZoom(MOBILE_DISMISS_ZOOM);
           setFocusedPlanet(null);
           setSearchTarget("");
           toast.dismiss();
