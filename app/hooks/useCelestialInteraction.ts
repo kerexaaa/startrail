@@ -44,6 +44,7 @@ export default function useCelestialInteraction(
       );
     }
     setSearchTarget(name);
+    navigator.vibrate?.(10);
   };
 
   const isFocused = focusedPlanet === planetRefs[name];
