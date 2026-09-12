@@ -20,6 +20,8 @@ export default function InfoModal() {
   const setShowOrbits = useUIStore((s) => s.setShowOrbits);
   const setShowLabels = useUIStore((s) => s.setShowLabels);
   const showLabels = useUIStore((s) => s.showLabels);
+  const hapticEnabled = useUIStore((s) => s.hapticEnabled);
+  const setHapticEnabled = useUIStore((s) => s.setHapticEnabled);
 
   const showSatellites = usePlanetStore((s) => s.showSatellites);
   const setShowSatellites = usePlanetStore((s) => s.setShowSatellites);
@@ -139,6 +141,13 @@ export default function InfoModal() {
                 checked={showSatellites}
                 onChange={() => setShowSatellites(!showSatellites)}
               />
+              {isTouchDevice && (
+                <Switch
+                  label="Haptic Feedback"
+                  checked={hapticEnabled}
+                  onChange={() => setHapticEnabled(!hapticEnabled)}
+                />
+              )}
             </div>
           </motion.div>
         </div>

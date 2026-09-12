@@ -34,9 +34,6 @@ export function useSearchPanel() {
   const handleToSelect = (val: string) => {
     setToValue(val);
     setActiveDropdown(null);
-    if (planetRefs[val]) {
-      setFocusedPlanet(planetRefs[val]);
-    }
   };
 
   const handleSwap = () => {
@@ -46,9 +43,7 @@ export function useSearchPanel() {
     setFromValue(oldTo);
     setToValue(oldFrom);
 
-    if (planetRefs[oldFrom]) {
-      setFocusedPlanet(planetRefs[oldFrom]);
-    } else {
+    if (!planetRefs[oldFrom]) {
       setFocusedPlanet(null);
     }
   };

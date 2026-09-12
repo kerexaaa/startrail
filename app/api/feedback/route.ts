@@ -12,6 +12,20 @@ export async function POST(req: Request) {
       );
     }
 
+    if (message.length > 300) {
+      return NextResponse.json(
+        { error: "Message must be 300 characters or less" },
+        { status: 400 },
+      );
+    }
+
+    if (contact && contact.length > 100) {
+      return NextResponse.json(
+        { error: "Contact info must be 100 characters or less" },
+        { status: 400 },
+      );
+    }
+
     const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
 
     if (!webhookUrl) {

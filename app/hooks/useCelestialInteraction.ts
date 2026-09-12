@@ -26,7 +26,7 @@ export default function useCelestialInteraction(
       if (searchTarget === name && focusedPlanet !== orbitGroupRef.current) {
         setFocusedPlanet(
           orbitGroupRef.current,
-          Math.max(MIN_CLICK_RADIUS, radius * 3),
+          Math.max(MIN_CLICK_RADIUS, radius * 6),
         );
       }
     }
@@ -40,10 +40,11 @@ export default function useCelestialInteraction(
     if (orbitGroupRef.current) {
       setFocusedPlanet(
         orbitGroupRef.current,
-        Math.max(MIN_CLICK_RADIUS, radius * 3),
+        Math.max(MIN_CLICK_RADIUS, radius * 6),
       );
     }
     setSearchTarget(name);
+    if (useUIStore.getState().hapticEnabled) navigator.vibrate?.(10);
   };
 
   const isFocused = focusedPlanet === planetRefs[name];

@@ -13,7 +13,7 @@ import { useAppHotkeys } from "./hooks/useAppHotkeys";
 import BodyInfo from "./components/ui/BodyInfo/BodyInfo";
 import InfoModal from "./components/ui/InfoModal";
 import FeedbackModal from "./components/ui/FeedbackModal";
-import { LOAD_SCENE } from "./constants";
+import { LOAD_SCENE, FALLBACK_FOCUS_ZOOM, UNFOCUS_MIN_ZOOM, UNFOCUS_ZOOM_MULTIPLIER, DEFAULT_ZOOM, MOBILE_DISMISS_ZOOM } from "./constants";
 import SearchButton from "./components/ui/SearchPanel/SearchButton";
 import MenuButton from "./components/ui/Menu/MenuButton";
 import TimeControllerWrapper from "./components/ui/TimeController/TimeControllerWrapper";
@@ -68,16 +68,16 @@ export default function Home() {
         draggable: true,
         transition: Slide,
       });
-      setTargetZoom(focusZoom || 6);
+      setTargetZoom(focusZoom || FALLBACK_FOCUS_ZOOM);
       prevFocusedPlanetRef.current = focusedPlanet;
     } else {
       if (prevFocusedPlanetRef.current) {
         prevFocusedPlanetRef.current.getWorldPosition(TEMP_POS);
         const distanceToSun = TEMP_POS.length();
-        setTargetZoom(Math.max(150, distanceToSun * 1.5));
+        setTargetZoom(Math.max(UNFOCUS_MIN_ZOOM, distanceToSun * UNFOCUS_ZOOM_MULTIPLIER));
         prevFocusedPlanetRef.current = null;
       } else {
-        setTargetZoom(150);
+        setTargetZoom(DEFAULT_ZOOM);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,7 +93,7 @@ export default function Home() {
                 if (isTouch && focusedPlanet) {
                   setFocusedPlanet(null);
                   setSearchTarget("");
-                  setTargetZoom(50); // или дефолтный зум
+                  setTargetZoom(MOBILE_DISMISS_ZOOM);
                   toast.dismiss();
                 }
               }}

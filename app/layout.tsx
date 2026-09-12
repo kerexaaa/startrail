@@ -9,11 +9,23 @@ import { ToastContainer } from "react-toastify";
 const InterFont = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Startrail",
-  description: "track your stars",
-  robots: {
-    index: false,
-    follow: false,
+  title: "Startrail | Interactive Solar System",
+  description: "An interactive, 3D visualization of the Solar System. Explore planets, moons, and astronomical data in real-time.",
+  metadataBase: new URL("https://startrail.codes"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Startrail | Interactive Solar System",
+    description: "An interactive, 3D visualization of the Solar System. Explore planets, moons, and astronomical data in real-time.",
+    url: "https://startrail.codes",
+    siteName: "Startrail",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Startrail | Interactive Solar System",
+    description: "An interactive, 3D visualization of the Solar System. Explore planets, moons, and astronomical data in real-time.",
   },
 };
 

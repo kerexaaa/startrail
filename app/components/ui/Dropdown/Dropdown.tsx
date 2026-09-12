@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import DropdownItem from "./DropdownItem";
 import useDropdownLogic from "@/app/hooks/useDropdownLogic";
@@ -18,6 +19,36 @@ export default function Dropdown({
   const { expandedOption, groupedBodies, setExpandedOption } =
     useDropdownLogic();
 
+  const searchValue = value.toLowerCase();
+
+  const filteredNodes = useMemo(() => {
+    return options
+      .map((option) => {
+        const targetGroup = groupedBodies.find(
+          (g) => g.planetName === option,
+        );
+        const isPlanetMatch = option
+          .toLowerCase()
+          .includes(searchValue);
+        const matchingMoons = targetGroup
+          ? targetGroup.moons.filter((m) =>
+              m.toLowerCase().includes(searchValue),
+            )
+          : [];
+
+        return {
+          option,
+          targetGroup,
+          isPlanetMatch,
+          matchingMoons,
+          hasMoons: targetGroup && targetGroup.moons.length > 0,
+        };
+      })
+      .filter(
+        (node) => node.isPlanetMatch || node.matchingMoons.length > 0,
+      );
+  }, [options, searchValue, groupedBodies]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -30,68 +61,34 @@ export default function Dropdown({
           onWheelCapture={(e) => e.stopPropagation()}
         >
           <div className="max-h-[40dvh] lg:max-h-80 overflow-y-auto custom-scrollbar p-3">
-            {(() => {
-              const searchValue = value.toLowerCase();
-
-              const filteredNodes = options
-                .map((option) => {
-                  const targetGroup = groupedBodies.find(
-                    (g) => g.planetName === option,
-                  );
-                  const isPlanetMatch = option
-                    .toLowerCase()
-                    .includes(searchValue);
-                  const matchingMoons = targetGroup
-                    ? targetGroup.moons.filter((m) =>
-                        m.toLowerCase().includes(searchValue),
-                      )
-                    : [];
-
-                  return {
-                    option,
-                    targetGroup,
-                    isPlanetMatch,
-                    matchingMoons,
-                    hasMoons: targetGroup && targetGroup.moons.length > 0,
-                  };
-                })
-                .filter(
-                  (node) => node.isPlanetMatch || node.matchingMoons.length > 0,
-                );
-
-              if (filteredNodes.length === 0) {
-                return (
-                  <div className="p-3 text-center text-white/50 text-base">
-                    No bodies found...
-                  </div>
-                );
-              }
-
-              return filteredNodes.map(
+            {filteredNodes.length === 0 ? (
+              <div className="p-3 text-center text-white/50 text-base">
+                No bodies found...
+              </div>
+            ) : (
+              filteredNodes.map(
                 ({
                   option,
                   targetGroup,
                   isPlanetMatch,
                   matchingMoons,
                   hasMoons,
-                }) => {
-                  return (
-                    <DropdownItem
-                      expandedOption={expandedOption}
-                      hasMoons={hasMoons}
-                      isPlanetMatch={isPlanetMatch}
-                      matchingMoons={matchingMoons}
-                      onSelect={onSelect}
-                      option={option}
-                      searchValue={searchValue}
-                      setExpandedOption={setExpandedOption}
-                      targetGroup={targetGroup}
-                      key={option}
-                    />
-                  );
-                },
-              );
-            })()}
+                }) => (
+                  <DropdownItem
+                    expandedOption={expandedOption}
+                    hasMoons={hasMoons}
+                    isPlanetMatch={isPlanetMatch}
+                    matchingMoons={matchingMoons}
+                    onSelect={onSelect}
+                    option={option}
+                    searchValue={searchValue}
+                    setExpandedOption={setExpandedOption}
+                    targetGroup={targetGroup}
+                    key={option}
+                  />
+                ),
+              )
+            )}
           </div>
         </motion.div>
       )}

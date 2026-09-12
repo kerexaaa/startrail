@@ -28,6 +28,9 @@ interface UIStore {
   showLabels: boolean;
   setShowLabels: (val: boolean) => void;
 
+  hapticEnabled: boolean;
+  setHapticEnabled: (val: boolean) => void;
+
   isMobileMenuOpen: boolean;
   isMobileSearchOpen: boolean;
   isMobileTimeControllerOpen: boolean;
@@ -67,6 +70,9 @@ export const useUIStore = create<UIStore>((set) => ({
 
   showLabels: true,
   setShowLabels: (val) => set({ showLabels: val }),
+
+  hapticEnabled: true,
+  setHapticEnabled: (val) => set({ hapticEnabled: val }),
 
   isMobileSearchOpen: false,
   isMobileMenuOpen: false,
