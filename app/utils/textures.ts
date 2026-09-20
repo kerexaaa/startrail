@@ -18,6 +18,7 @@ const BODY_MANIFEST: Record<string, BodyTexturesConfig> = {
   saturn: { hasTexture: true, hasRings: true, ringScales: [1.2, 2.4] },
   uranus: { hasTexture: true, hasRings: true, ringScales: [1.6, 2.0] },
   neptune: { hasTexture: true, hasRings: false },
+  pluto: { hasTexture: true, hasRings: false },
   moon: { hasTexture: true, hasRings: false },
   europa: { hasTexture: true, hasRings: false },
   titan: { hasTexture: true, hasRings: false },

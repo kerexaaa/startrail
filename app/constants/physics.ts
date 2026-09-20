@@ -92,4 +92,13 @@ export const PLANETS_CONFIG: PlanetConfig[] = [
     travelSpeed: (1 / 165) * BASE_SPEED,
     tilt: 28.3,
   },
+  {
+    name: "Pluto",
+    planetId: PLANET_IDS.Pluto,
+    distance: SUN_RADIUS + 39.48 * DISTANCE_SCALE,
+    radius: 0.186 * SIZE_SCALE,
+    rotationSpeed: -1 / 6.387,
+    travelSpeed: (1 / 248) * BASE_SPEED,
+    tilt: 122.5,
+  },
 ];
