@@ -32,6 +32,8 @@ export interface PlanetConfig {
   rotationSpeed: number;
   travelSpeed: number;
   tilt: number;
+  eccentricity: number;
+  inclination: number;
 }
 
 export interface BodyDataType {

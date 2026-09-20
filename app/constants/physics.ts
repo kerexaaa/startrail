@@ -28,6 +28,8 @@ export const PLANETS_CONFIG: PlanetConfig[] = [
     rotationSpeed: 1 / 58.6,
     travelSpeed: (1 / 0.24) * BASE_SPEED,
     tilt: 0.03,
+    eccentricity: 0.2056,
+    inclination: 7.0,
   },
   {
     name: "Venus",
@@ -37,6 +39,8 @@ export const PLANETS_CONFIG: PlanetConfig[] = [
     rotationSpeed: -1 / 243,
     travelSpeed: (1 / 0.61) * BASE_SPEED,
     tilt: 177.3,
+    eccentricity: 0.0068,
+    inclination: 3.4,
   },
   {
     name: "Earth",
@@ -46,6 +50,8 @@ export const PLANETS_CONFIG: PlanetConfig[] = [
     rotationSpeed: 1,
     travelSpeed: 1 * BASE_SPEED,
     tilt: 23.4,
+    eccentricity: 0.0167,
+    inclination: 0.0,
   },
   {
     name: "Mars",
@@ -55,6 +61,8 @@ export const PLANETS_CONFIG: PlanetConfig[] = [
     rotationSpeed: 1 / 1.03,
     travelSpeed: (1 / 1.88) * BASE_SPEED,
     tilt: 25.2,
+    eccentricity: 0.0934,
+    inclination: 1.8,
   },
   {
     name: "Jupiter",
@@ -64,6 +72,8 @@ export const PLANETS_CONFIG: PlanetConfig[] = [
     rotationSpeed: 1 / 0.41,
     travelSpeed: (1 / 11.86) * BASE_SPEED,
     tilt: 3.1,
+    eccentricity: 0.0489,
+    inclination: 1.3,
   },
   {
     name: "Saturn",
@@ -73,6 +83,8 @@ export const PLANETS_CONFIG: PlanetConfig[] = [
     rotationSpeed: 1 / 0.45,
     travelSpeed: (1 / 29.4) * BASE_SPEED,
     tilt: 26.7,
+    eccentricity: 0.0565,
+    inclination: 2.5,
   },
   {
     name: "Uranus",
@@ -82,6 +94,8 @@ export const PLANETS_CONFIG: PlanetConfig[] = [
     rotationSpeed: -1 / 0.72,
     travelSpeed: (1 / 84) * BASE_SPEED,
     tilt: 97.8,
+    eccentricity: 0.0457,
+    inclination: 0.8,
   },
   {
     name: "Neptune",
@@ -91,6 +105,8 @@ export const PLANETS_CONFIG: PlanetConfig[] = [
     rotationSpeed: 1 / 0.67,
     travelSpeed: (1 / 165) * BASE_SPEED,
     tilt: 28.3,
+    eccentricity: 0.0113,
+    inclination: 1.8,
   },
   {
     name: "Pluto",
@@ -100,5 +116,7 @@ export const PLANETS_CONFIG: PlanetConfig[] = [
     rotationSpeed: -1 / 6.387,
     travelSpeed: (1 / 248) * BASE_SPEED,
     tilt: 122.5,
+    eccentricity: 0.2488,
+    inclination: 17.1,
   },
 ];
