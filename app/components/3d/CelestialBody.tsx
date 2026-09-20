@@ -22,6 +22,7 @@ interface CelestialBodyProps {
   orbitTilt?: number;
   startAngle?: number;
   isGeneric?: boolean;
+  eccentricity?: number;
   children?: ReactNode;
 }
 
@@ -35,6 +36,7 @@ export default function CelestialBody({
   orbitTilt = 0,
   isGeneric = false,
   startAngle = 0,
+  eccentricity = 0,
   children,
 }: CelestialBodyProps) {
   const orbitGroupRef = useRef<THREE.Group>(null);
@@ -52,6 +54,7 @@ export default function CelestialBody({
     rotationSpeed,
     travelSpeed,
     startAngle,
+    eccentricity,
     orbitGroupRef,
     bodyMeshRef,
   });
@@ -70,7 +73,7 @@ export default function CelestialBody({
   return (
     <group rotation={[orbitTilt, 0, 0]}>
       {showOrbits && distance > 0 && !isGeneric && (
-        <OrbitPath distance={distance} />
+        <OrbitPath distance={distance} eccentricity={eccentricity} />
       )}
 
       <group ref={orbitGroupRef}>

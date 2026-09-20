@@ -1,5 +1,6 @@
 import Sun from "./Sun";
 import PlanetSystem from "./PlanetSystem";
+import AsteroidBelt from "./AsteroidBelt";
 import CameraRig from "./CameraRig";
 import { Stars } from "@react-three/drei";
 import useFetchMoons from "@/app/hooks/useFetchMoons";
@@ -37,6 +38,7 @@ export default function Scene() {
 
       <Sun />
       <PlanetSystem />
+      <AsteroidBelt />
     </>
   );
 }

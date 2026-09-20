@@ -38,6 +38,8 @@ export default function PlanetSystem() {
             rotationSpeed={planet.rotationSpeed}
             travelSpeed={planet.travelSpeed}
             tilt={planet.tilt}
+            eccentricity={planet.eccentricity}
+            orbitTilt={(planet.inclination * Math.PI) / 180}
           >
             {shouldRenderMoons && planet.planetId && (
               <Suspense fallback={null}>
