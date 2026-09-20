@@ -24,12 +24,8 @@ interface UseCelestialPhysicsProps {
   > | null>;
 }
 
-/**
- * Solves Kepler's equation M = E - e*sin(E) for eccentric anomaly E
- * using Newton-Raphson iteration (converges in 3-5 steps for e < 0.3).
- */
 function solveKepler(meanAnomaly: number, eccentricity: number): number {
-  let E = meanAnomaly; // initial guess
+  let E = meanAnomaly;
   for (let i = 0; i < 6; i++) {
     E = E - (E - eccentricity * Math.sin(E) - meanAnomaly) / (1 - eccentricity * Math.cos(E));
   }
@@ -63,24 +59,20 @@ export default function useCelestialPhysics({
     return Math.atan2(vector.x, vector.z);
   }, [name]);
 
-  // Pre-calculate ellipse parameters (semi-major, semi-minor, focal offset)
-  const a = distance; // semi-major axis
-  const b = a * Math.sqrt(1 - eccentricity * eccentricity); // semi-minor axis
-  const focalOffset = a * eccentricity; // Sun at focus
+  const a = distance;
+  const b = a * Math.sqrt(1 - eccentricity * eccentricity);
+  const focalOffset = a * eccentricity;
 
   useFrame((_, delta) => {
     simTime.current += delta * timeMultiplier;
 
-    // Mean anomaly (uniform angular rate)
     const M =
       (startAngle === 0 ? initialAngle : startAngle) +
       simTime.current * travelSpeed;
 
     if (eccentricity > 0.001) {
-      // Solve Kepler's equation for eccentric anomaly
       const E = solveKepler(M, eccentricity);
 
-      // Elliptical position with Sun at one focus
       if (orbitGroupRef.current) {
         orbitGroupRef.current.position.set(
           a * Math.cos(E) - focalOffset,
@@ -89,7 +81,6 @@ export default function useCelestialPhysics({
         );
       }
     } else {
-      // Near-circular: skip Kepler solver for performance
       if (orbitGroupRef.current) {
         orbitGroupRef.current.position.set(
           Math.sin(M) * distance,

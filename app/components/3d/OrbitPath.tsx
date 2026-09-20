@@ -13,14 +13,13 @@ export default function OrbitPath({
   eccentricity = 0,
 }: OrbitPathProps) {
   const points = useMemo(() => {
-    const a = distance; // большая полуось
-    const b = a * Math.sqrt(1 - eccentricity * eccentricity); // малая полуось
-    const focalOffset = a * eccentricity; // Смещение фокуса (Солнца)
+    const a = distance;
+    const b = a * Math.sqrt(1 - eccentricity * eccentricity);
+    const focalOffset = a * eccentricity;
 
     const pts: THREE.Vector3[] = [];
     for (let i = 0; i <= ORBIT_SEGMENTS; i++) {
       const theta = (i / ORBIT_SEGMENTS) * Math.PI * 2;
-      // Параметрическое уравнение эллипса со смещением
       const x = a * Math.cos(theta) - focalOffset;
       const z = b * Math.sin(theta);
       pts.push(new THREE.Vector3(x, 0, z));
