@@ -12,6 +12,7 @@ export const PLANET_IDS = {
   Saturn: "saturne",
   Uranus: "uranus",
   Neptune: "neptune",
+  Pluto: "pluton",
 };
 
 export const BODY_DATA: Record<string, BodyDataType> = {
@@ -175,6 +176,14 @@ export const BODY_DATA: Record<string, BodyDataType> = {
     description:
       "Oberon is the second-largest moon of Uranus. It has a heavily cratered surface covered in dark material, likely rich in carbon compounds.",
   },
+  Pluto: {
+    type: "Dwarf Planet",
+    mass: { massValue: 1.303, massExponent: 22 },
+    temp: "-230 °C",
+    fact: "Was classified as the ninth planet from 1930 until its reclassification as a dwarf planet in 2006.",
+    description:
+      "Pluto is a dwarf planet in the Kuiper Belt, a ring of icy bodies beyond Neptune. Despite its small size—smaller than Earth's Moon—Pluto has a complex surface with nitrogen ice plains, towering water-ice mountains, and a thin atmosphere that expands and contracts as it moves along its highly eccentric orbit. NASA's New Horizons flyby in 2015 revealed a stunningly diverse and geologically active world.",
+  },
 };
 
 export const PLANETARY_BODIES = [
@@ -188,4 +197,5 @@ export const PLANETARY_BODIES = [
   "Saturn",
   "Uranus",
   "Neptune",
+  "Pluto",
 ];

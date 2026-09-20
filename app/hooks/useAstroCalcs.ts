@@ -41,6 +41,7 @@ export const getBody = (name: string): Astronomy.Body | null => {
     Saturn: Astronomy.Body.Saturn,
     Uranus: Astronomy.Body.Uranus,
     Neptune: Astronomy.Body.Neptune,
+    Pluto: Astronomy.Body.Pluto,
   };
   return map[name] || null;
 };

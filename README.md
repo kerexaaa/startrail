@@ -9,7 +9,7 @@
 
 **Startrail** is a highly performant, interactive 3D web application that simulates our Solar System. Built with modern web technologies, it features mathematically accurate planetary positions, seamless cinematic camera controls, and an optimized WebGL rendering loop.
 
-> **[Live Demo](https://startrail-iota.vercel.app/)**
+> **[Live Demo](https://startrail.codes/)**
 
 ## Key Features
 
@@ -42,9 +42,6 @@ To run this project locally:
    ```bash
    npm run dev
 4. Open http://localhost:3000 in your browser.
-
-(Upcoming Features)
-- Mobile responsiveness and touch-friendly controls.
 
 Author:
 [GitHub](https://github.com/kerexaaa)
