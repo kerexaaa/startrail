@@ -30,11 +30,9 @@ export async function POST(req: Request) {
 
     if (!webhookUrl) {
       console.warn("DISCORD_WEBHOOK_URL is not set in environment variables.");
-      // In development, we can mock a success response if the webhook is not set up yet.
       return NextResponse.json({ success: true, mocked: true });
     }
 
-    // Colors mapping for different feedback types
     const colors: Record<string, number> = {
       "Bug Report": 16711680, // Red
       "Feature Request": 65280, // Green

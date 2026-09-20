@@ -65,7 +65,7 @@ export default function MobileFreecamController() {
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
     };
-  }, []); // Ref does not change, dependencies can be empty
+  }, []);
 
   useFrame((state, delta) => {
     const camera = state.camera;
