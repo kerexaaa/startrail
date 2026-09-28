@@ -3,59 +3,72 @@ import { MoonData } from "../types/astronomy";
 import { usePlanetStore } from "../states/usePlanetStore";
 import { toast } from "react-toastify";
 
+let inFlight: Promise<MoonData[]> | null = null;
+
+function fetchMoons(): Promise<MoonData[]> {
+  if (inFlight) return inFlight;
+
+  inFlight = (async () => {
+    const response = await fetch("/api/opendata");
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!data || !Array.isArray(data.bodies)) {
+      throw new Error("Invalid data format received from API");
+    }
+
+    return data.bodies as MoonData[];
+  })();
+
+  inFlight.catch(() => {
+    inFlight = null;
+  });
+
+  return inFlight;
+}
+
 export default function useFetchMoons() {
   const setApiMoons = usePlanetStore((s) => s.setApiMoons);
   const apiMoons = usePlanetStore((s) => s.apiMoons);
-  const [isLoadingMoons, setIsLoadingMoons] = useState(false);
+  const setHydrated = usePlanetStore((s) => s.setHydrated);
+  const [ready, setReady] = useState(
+    () => usePlanetStore.persist?.hasHydrated?.() ?? true,
+  );
 
   useEffect(() => {
+    if (ready) return;
+    return usePlanetStore.persist.onFinishHydration(() => {
+      setHydrated(true);
+      setReady(true);
+    });
+  }, [ready, setHydrated]);
+
+  useEffect(() => {
+    if (!ready) return;
+
     if (apiMoons.length !== 0) return;
 
     let isMounted = true;
 
-    const fetchMoons = async () => {
-      setIsLoadingMoons(true);
-      try {
-        const response = await fetch("/api/opendata");
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (!data || !Array.isArray(data.bodies)) {
-          throw new Error("Invalid data format received from API");
-        }
-
-        const validMoons = data.bodies as MoonData[];
-
-        const filteredMoons = validMoons.filter(
-          (item) => item.englishName && !item.englishName.includes("/"),
-        );
-
-        if (isMounted) {
-          setApiMoons(filteredMoons);
-        }
-      } catch (err) {
+    fetchMoons()
+      .then((moons) => {
+        if (isMounted) setApiMoons(moons);
+      })
+      .catch((err) => {
         console.error("Error fetching moons:", err);
         if (isMounted) {
-          toast.error(`Failed to load moons data`, { toastId: "api-error" });
-          setApiMoons([]);
+          toast.error("Failed to load moons data", { toastId: "api-error" });
         }
-      } finally {
-        if (isMounted) {
-          setIsLoadingMoons(false);
-        }
-      }
-    };
-
-    fetchMoons();
+      });
 
     return () => {
       isMounted = false;
     };
-  }, [apiMoons.length, setApiMoons]);
+  }, [ready, apiMoons.length, setApiMoons]);
 
-  return { isLoadingMoons };
+  return { isReady: ready };
 }

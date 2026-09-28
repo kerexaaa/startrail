@@ -1,6 +1,8 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 import * as THREE from "three";
 import { MoonData } from "../types/astronomy";
+import { MOONS_STORAGE_KEY } from "../constants";
 
 interface PlanetStore {
   focusedPlanet: THREE.Group | null;
@@ -32,6 +34,11 @@ interface PlanetStore {
   apiMoons: MoonData[];
   setApiMoons: (val: MoonData[]) => void;
 
+  hydrating: boolean;
+  setHydrating: (val: boolean) => void;
+  hydrated: boolean;
+  setHydrated: (val: boolean) => void;
+
   showSatellites: boolean;
   setShowSatellites: (val: boolean) => void;
   joystickDelta: { x: number; y: number };
@@ -40,59 +47,74 @@ interface PlanetStore {
   setJoystickVertical: (val: number) => void;
 }
 
-export const usePlanetStore = create<PlanetStore>((set) => ({
-  focusedPlanet: null,
-  focusZoom: 50,
-  setFocusedPlanet: (planet, zoom) =>
-    set({ focusedPlanet: planet, focusZoom: zoom }),
+export const usePlanetStore = create<PlanetStore>()(
+  persist(
+    (set) => ({
+      focusedPlanet: null,
+      focusZoom: 50,
+      setFocusedPlanet: (planet, zoom) =>
+        set({ focusedPlanet: planet, focusZoom: zoom }),
 
-  planetRefs: {},
-  registerPlanetRef: (name, ref) =>
-    set((state) => ({
-      planetRefs: { ...state.planetRefs, [name]: ref },
-    })),
-  unregisterPlanetRef: (name) =>
-    set((state) => {
-      const { [name]: _, ...rest } = state.planetRefs;
-      return { planetRefs: rest };
-    }),
+      planetRefs: {},
+      registerPlanetRef: (name, ref) =>
+        set((state) => ({
+          planetRefs: { ...state.planetRefs, [name]: ref },
+        })),
+      unregisterPlanetRef: (name) =>
+        set((state) => {
+          const { [name]: _, ...rest } = state.planetRefs;
+          return { planetRefs: rest };
+        }),
 
-  searchTarget: "",
-  setSearchTarget: (name) => set({ searchTarget: name }),
+      searchTarget: "",
+      setSearchTarget: (name) => set({ searchTarget: name }),
 
-  timeMultiplier: 1 / 24,
-  setTimeMultiplier: (multiplier) => set({ timeMultiplier: multiplier }),
-
-  multiplierSave: 1,
-  setMultiplierSave: (val) => set({ multiplierSave: val }),
-
-  timeResetTrigger: 0,
-  triggerTimeReset: () =>
-    set((state) => ({
-      timeResetTrigger: state.timeResetTrigger + 1,
       timeMultiplier: 1 / 24,
-    })),
+      setTimeMultiplier: (multiplier) => set({ timeMultiplier: multiplier }),
 
-  isPaused: false,
-  setIsPaused: (val) =>
-    set((state) => ({
-      isPaused: typeof val === "function" ? val(state.isPaused) : val,
-    })),
+      multiplierSave: 1,
+      setMultiplierSave: (val) => set({ multiplierSave: val }),
 
-  targetZoom: 50,
-  setTargetZoom: (val) =>
-    set((state) => ({
-      targetZoom: typeof val === "function" ? val(state.targetZoom) : val,
-    })),
-  apiMoons: [],
-  setApiMoons: (val) => set({ apiMoons: val }),
+      timeResetTrigger: 0,
+      triggerTimeReset: () =>
+        set((state) => ({
+          timeResetTrigger: state.timeResetTrigger + 1,
+          timeMultiplier: 1 / 24,
+        })),
 
-  showSatellites: true,
-  setShowSatellites: (val) => set({ showSatellites: val }),
+      isPaused: false,
+      setIsPaused: (val) =>
+        set((state) => ({
+          isPaused: typeof val === "function" ? val(state.isPaused) : val,
+        })),
 
-  joystickDelta: { x: 0, y: 0 },
-  setJoystickDelta: (val) => set({ joystickDelta: val }),
+      targetZoom: 50,
+      setTargetZoom: (val) =>
+        set((state) => ({
+          targetZoom: typeof val === "function" ? val(state.targetZoom) : val,
+        })),
+      apiMoons: [],
+      setApiMoons: (val) => set({ apiMoons: val }),
 
-  joystickVertical: 0,
-  setJoystickVertical: (val) => set({ joystickVertical: val }),
-}));
+      hydrating: false,
+      setHydrating: (val) => set({ hydrating: val }),
+      hydrated: false,
+      setHydrated: (val) => set({ hydrated: val }),
+
+      showSatellites: true,
+      setShowSatellites: (val) => set({ showSatellites: val }),
+
+      joystickDelta: { x: 0, y: 0 },
+      setJoystickDelta: (val) => set({ joystickDelta: val }),
+
+      joystickVertical: 0,
+      setJoystickVertical: (val) => set({ joystickVertical: val }),
+    }),
+    {
+      name: MOONS_STORAGE_KEY,
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ apiMoons: state.apiMoons }),
+      version: 1,
+    },
+  ),
+);
