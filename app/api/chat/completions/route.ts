@@ -3,17 +3,6 @@ import OpenAI from 'openai';
 
 export const runtime = 'edge';
 
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    },
-  });
-}
-
 export async function POST(req: Request) {
   try {
     const authHeader = req.headers.get('authorization');
@@ -29,14 +18,14 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const response = await openai.chat.completions.create({
-      model: body.model || 'minimax-m3.1-flash', // Дефолт на твою модель
+      model: body.model || 'minimax-m3.1-flash',
       messages: body.messages,
       stream: body.stream,
       temperature: body.temperature ?? 0.7,
     });
 
     if (body.stream) {
-      return new Response(response.toReadableStream(), {
+      return new Response((response as any).toReadableStream(), {
         headers: {
           'Content-Type': 'text/event-stream',
           'Cache-Control': 'no-cache',
@@ -51,7 +40,7 @@ export async function POST(req: Request) {
     });
 
   } catch (error) {
-    console.error('Ошибка API:', error);
+    console.error('API error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
