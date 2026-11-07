@@ -1,7 +1,17 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
 
 export const runtime = 'edge';
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  });
+}
 
 export async function POST(req: Request) {
   try {
@@ -10,37 +20,32 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const openai = new OpenAI({
-      baseURL: process.env.CHINESE_API_BASE_URL, 
-      apiKey: process.env.CHINESE_API_KEY,       
-    });
-
     const body = await req.json();
 
-    const response = await openai.chat.completions.create({
-      model: body.model || 'minimax-m3.1-flash',
-      messages: body.messages,
-      stream: body.stream,
-      temperature: body.temperature ?? 0.7,
+    const aiResponse = await fetch(`${process.env.CHINESE_API_BASE_URL}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.CHINESE_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: body.model || 'minimax-m3.1-flash',
+        messages: body.messages,
+        stream: body.stream,
+        temperature: body.temperature ?? 0.7,
+      })
     });
 
-    if (body.stream) {
-      return new Response((response as any).toReadableStream(), {
-        headers: {
-          'Content-Type': 'text/event-stream',
-          'Cache-Control': 'no-cache',
-          'Connection': 'keep-alive',
-          'Access-Control-Allow-Origin': '*',
-        },
-      });
-    }
-
-    return NextResponse.json(response, {
-      headers: { 'Access-Control-Allow-Origin': '*' }
+    return new Response(aiResponse.body, {
+      status: aiResponse.status,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': aiResponse.headers.get('Content-Type') || 'application/json',
+      }
     });
 
   } catch (error) {
-    console.error('API error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    console.error('Ошибка API:', error);
+    return NextResponse.json({ error: 'Internal Proxy Error' }, { status: 500 });
   }
 }
